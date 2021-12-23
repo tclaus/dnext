@@ -1,0 +1,17 @@
+%nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+  .container-fluid
+    %a.navbar-brand{href:"#"}
+      Societas Diaspora
+    %button.navbar-toggler{type:"button", data:{bs_toggle:"collapse", bs_target:"#navbarSupportedContent"}, aria_controls:"navbarSupportedContent", aria_expanded: "false", aria_label: "Toggle navigation"}
+      %span.navbar-toggler-icon
+    .collapse.navbar-collapse#navbarSupportedContent
+      %ul.navbar-nav.me-auto.mb-2.mb-lg-0
+        %li.nav-item
+          %a.nav-link.active{aria_current:"page", href:"#"}
+            Stream
+        %li.nav-item
+          %a.nav-link{href:"#"}
+            Meine Aktivitäten
+      %form.d-flex
+        %input.form-contro.me-2{type: "search", placeholder:"Search", aria_label: "Search"}
+        %button.btn.btn-outline-success{type: "submit"} Search
