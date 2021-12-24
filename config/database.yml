@@ -63,6 +63,7 @@ test:
   database: dnext_test
   host: localhost
   username: "diaspora"
+  password: "diaspora"
 
 
 # As with config/credentials.yml, you never want to store sensitive information,
