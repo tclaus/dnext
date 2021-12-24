@@ -1,0 +1,2 @@
+class StatusMessage < Post
+end
