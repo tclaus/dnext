@@ -33,3 +33,7 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# Configuration
+config/diaspora.yml
+config/database.yml
