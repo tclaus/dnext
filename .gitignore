@@ -33,3 +33,11 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# Configuration
+config/diaspora.yml
+config/database.yml
+
+# Idea workspace
+**/.idea/workspace.xml
+**/.idea/tasks.xml

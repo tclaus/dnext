@@ -24,9 +24,6 @@ default: &default
 development:
   <<: *default
   database: dnext_development
-  host: localhost
-  username: "diaspora"
-  password: "diaspora"
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -61,9 +58,6 @@ development:
 test:
   <<: *default
   database: dnext_test
-  host: localhost
-  username: "diaspora"
-  password: "diaspora"
 
 
 # As with config/credentials.yml, you never want to store sensitive information,
@@ -89,5 +83,5 @@ test:
 production:
   <<: *default
   database: dnext_production
-  username: <%= ENV["DNEXT_DATABASE_USERNAME"] %>
-  password: <%= ENV["DNEXT_DATABASE_PASSWORD"] %>
+  # username: <%= ENV["DNEXT_DATABASE_USERNAME"] %>
+  # password: <%= ENV["DNEXT_DATABASE_PASSWORD"] %>
