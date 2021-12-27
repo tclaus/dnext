@@ -1,8 +1,47 @@
+@import "light_colors";
+
 .stream-element {
   margin-bottom: 20px;
   border: 1px solid #ddd;
-  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 
-  background-color: #fff;
+  background-color: $color6;
   padding: 10px;
+
+  a {
+    text-decoration: none;
+  }
+
+  .img {
+    margin-right: 10px;
+    display: inline;
+  }
+
+  .avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+  }
+
+  .person-name {
+    display: inline;
+  }
+
+  .timeago {
+    color: $color3;
+  }
+
+  .bd {
+    overflow: hidden;
+  }
+
+  // A normal post
+  .status_message {
+
+  }
+
+  // A post shared by someone else. It embeds the original post
+  .reshare {
+    border-left: 2px solid #ddd;
+  }
 }

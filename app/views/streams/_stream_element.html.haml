@@ -1,2 +1,10 @@
 %article{id: dom_id(post), class: "stream-element"}
-  = post.text
+  %div
+    = link_to "/people/#{post.author.guid}", class: "img hovercardable" do
+      = image_tag(post.author.avatar_small, class: "avatar")
+    .person-name
+      = link_to post.author.full_name,  "/people/#{post.author.guid}", class: "author-name"
+    = local_time post.created_at, class: "timeago"
+    = time_tag post.created_at, class: "timeago"
+  %div{class: post.type}
+    = post.text
