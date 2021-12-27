@@ -1,27 +1,28 @@
 class StreamsController < ApplicationController
+  include Pagy::Backend
+
   def public
     stream_responder(Stream::Public)
   end
 
+  def local_public
+
+  end
+
   private
 
-  def stream_responder(stream_klass = nil)
-    @stream ||= stream_klass.new(current_user, max_time: max_time) if stream_klass.present?
+  def stream_responder(stream_builder = nil)
+    @stream_builder_object = stream_builder.new
+    @pagy, @stream = pagy(@stream_builder_object.stream_posts)
 
-    respond_with do |format|
+    respond_to do |format|
       format.html { render 'streams/main_stream' }
-      format.mobile { render 'streams/main_stream' }
-      format.json do
-        render json: @stream.stream_posts.map { |p|
-                       LastThreeCommentsDecorator.new(PostPresenter.new(p, current_user))
-                     }
-      end
+      format.json {
+        render json: {
+          entries: render_to_string(partial: "stream_elements",
+                                    formats: [:html]),
+          pagination: view_context.pagy_nav(@pagy) } }
     end
   end
 
-  def save_selected_aspects
-    return unless params[:a_ids].present?
-
-    session[:a_ids] = params[:a_ids]
-  end
 end

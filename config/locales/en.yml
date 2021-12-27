@@ -31,3 +31,8 @@
 
 en:
   hello: "Hello world"
+  streams:
+    public:
+      title: "Public Stream"
+    multi:
+      title: "Stream"

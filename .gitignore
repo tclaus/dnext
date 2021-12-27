@@ -37,3 +37,7 @@
 # Configuration
 config/diaspora.yml
 config/database.yml
+
+# Idea workspace
+**/.idea/workspace.xml
+**/.idea/tasks.xml
