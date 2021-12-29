@@ -27,8 +27,9 @@
     display: inline;
   }
 
-  .timeago {
-    color: $color3;
+  .post-head-text {
+    font-size: 0.9em;
+    color: $color4;
   }
 
   .bd {
@@ -36,12 +37,26 @@
   }
 
   // A normal post
-  .status_message {
+  .status-message {
 
   }
 
-  // A post shared by someone else. It embeds the original post
-  .reshare {
+  .root-stream-element {
     border-left: 2px solid #ddd;
+    margin-top: 5px;
+    margin-left: 20px;
+
+    .status-message {
+      margin-left: 20px;
+    }
   }
+
+  .post-sub-headline {
+    margin-left: 20px;
+  }
+}
+
+.stream-element-footer {
+  margin-top: 10px;
+  font-size: 0.9em;
 }

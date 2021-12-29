@@ -14,4 +14,7 @@ class Post < ApplicationRecord
       and posts.public = true")
   }
 
+  def post_type
+    self.class.name
+  end
 end

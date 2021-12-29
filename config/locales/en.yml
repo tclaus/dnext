@@ -36,3 +36,4 @@ en:
       title: "Public Stream"
     multi:
       title: "Stream"
+  via: "via: %{provider}"

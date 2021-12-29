@@ -1,0 +1,10 @@
+.stream-element-footer
+  -if (post.provider_display_name.present?)
+    %strong
+      = t("via", provider: post.provider_display_name)
+  %div
+    = link_to t("post-actions.like"),"#", rel: "nofollow", role:"button"
+    &#8231
+    = link_to t("post-actions.comment"),"#", rel: "nofollow", role:"button"
+    &#8231
+    = link_to t("post-actions.share"),"#", rel: "nofollow", role:"button"
