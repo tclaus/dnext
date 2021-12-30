@@ -17,4 +17,8 @@ class Post < ApplicationRecord
   def post_type
     self.class.name
   end
+
+  def rendered_message
+    Diaspora::MessageRenderer.new(text).markdownified
+  end
 end

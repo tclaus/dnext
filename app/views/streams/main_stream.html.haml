@@ -1,4 +1,4 @@
-.container-fluid
+.container-lg
   .row
     - # This is the left sidebar
     .col-md-3
@@ -8,6 +8,7 @@
             = link_to t("streams.multi.title"), streams_public_path
     - # This is the main content
     .col-md-9
-      .stream-container
-        %h2= @stream_builder_object.title
-        = render "stream", stream: @stream
+      %main
+        .stream-container
+          %h2= @stream_builder_object.title
+          = render "stream", stream: @stream

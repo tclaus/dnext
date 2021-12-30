@@ -99,6 +99,7 @@ GEM
       tilt
     i18n (1.8.11)
       concurrent-ruby (~> 1.0)
+    idn-ruby (0.1.4)
     importmap-rails (1.0.1)
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
@@ -166,6 +167,7 @@ GEM
       zeitwerk (~> 2.5)
     rainbow (3.0.0)
     rake (13.0.6)
+    redcarpet (3.5.1)
     redis (4.5.1)
     regexp_parser (2.2.0)
     reline (0.2.7)
@@ -211,8 +213,14 @@ GEM
     turbo-rails (1.0.0)
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
+    twitter-text (3.1.0)
+      idn-ruby
+      unf (~> 0.1.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.8)
     unicode-display_width (2.1.0)
     web-console (4.2.0)
       actionview (>= 6.0.0)
@@ -248,6 +256,7 @@ DEPENDENCIES
   pg (~> 1.1)
   puma (~> 5.0)
   rails (~> 7.0.0)
+  redcarpet (~> 3.5, >= 3.5.1)
   redis (~> 4.0)
   rubocop (~> 1.24)
   sassc-rails
@@ -255,6 +264,7 @@ DEPENDENCIES
   sprockets-rails
   stimulus-rails
   turbo-rails
+  twitter-text (= 3.1.0)
   tzinfo-data
   web-console
   webdrivers

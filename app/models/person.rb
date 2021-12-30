@@ -6,7 +6,7 @@ class Person < ApplicationRecord
   belongs_to :pod
 
   has_one :profile, dependent: :destroy
-  delegate :last_name, :full_name, :image_url, :tag_string, :bio, :location,
+  delegate :first_name, :last_name, :full_name, :image_url, :tag_string, :bio, :location,
            :gender, :birthday, :formatted_birthday, :tags, :searchable,
            :public_details?, to: :profile
 
