@@ -51,8 +51,11 @@ gem "sassc-rails"
 gem 'bootstrap', '~> 5.1.3'
 gem 'haml'
 
+# Pagination / infinite scroller support in stream
 gem 'pagy', '~> 5.6', '>= 5.6.6'
 gem 'local_time'
+gem 'redcarpet', '~> 3.5', '>= 3.5.1'
+gem 'twitter-text', '3.1.0'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
