@@ -45,3 +45,7 @@ en:
     likes: "%{count} Likes"
     comments: "%{count} Comments"
     shares: "%{count} Shares"
+  post:
+    visibility:
+      global: "Post is globally visible"
+      limited: "Post has limited audience"
