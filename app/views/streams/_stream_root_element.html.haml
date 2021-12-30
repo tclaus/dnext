@@ -1,16 +1,9 @@
-%article{id: dom_id(post), class: "stream-element"}
-  %div
+%div{id: dom_id(post), class: "root-stream-element"}
+  %div.post-sub-headline
     = link_to "/people/#{post.author.guid}", class: "img hovercardable" do
       = image_tag(post.author.avatar_small, class: "avatar", alt: post.author.diaspora_handle)
     .person-name
       = link_to post.author.full_name,  "/people/#{post.author.guid}", class: "author-name"
     = local_time post.created_at, class: "post-head-text"
-    %span.post-head-text
-      = range_tag(post)
   %div{class: classify(post.type)}
-    - if post.type === "Reshare"
-      = post.text
-      = render "stream_root_element", post: post.root
-    - else
-      = post.text
-  = render "stream_footer", post: post
+    = post.text

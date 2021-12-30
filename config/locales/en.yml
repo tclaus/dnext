@@ -36,3 +36,12 @@ en:
       title: "Public Stream"
     multi:
       title: "Stream"
+  via: "via: %{provider}"
+  post-actions:
+    like: "Like"
+    comment: "Comment"
+    share: "Share"
+  post-status:
+    likes: "%{count} Likes"
+    comments: "%{count} Comments"
+    shares: "%{count} Shares"

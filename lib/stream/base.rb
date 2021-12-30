@@ -42,7 +42,7 @@ module Stream
     end
 
     def ordered_posts
-      posts.order(:created_at)
+      posts.order(created_at: :desc)
     end
 
     protected
