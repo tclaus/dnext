@@ -59,4 +59,16 @@
 .stream-element-footer {
   margin-top: 10px;
   font-size: 0.9em;
+
+  .post-actions {
+    border-top: 1px solid lightgray;
+    margin: 15px 0 0 10px;
+    padding-top: 10px;
+  }
+
+  .post-interactions {
+    border-top: 1px solid lightgray;
+    margin: 15px 0 0 10px;
+    padding: 5px 0 5px 0;
+  }
 }
