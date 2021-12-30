@@ -12,9 +12,11 @@ module ApplicationHelper
   def range_tag(post, *args)
 
     if post.public?
-      content = '<i class="bi bi-globe" role="img" arial-label="global visibility"></i>'
+      visibility = t("post.visibility.global")
+      content = "<i class=\"bi bi-globe\" role=\"img\" aria-label=\"#{visibility}\"></i>"
     else
-      content = '<i class="bi bi-people-fill"></i>'
+      visibility = t("post.visibility.limited")
+      content = "<i class=\"bi bi-people-fill\" role=\"img\" aria-label=\"#{visibility}\"></i>"
     end
 
     content_tag("span", content.html_safe, args)
