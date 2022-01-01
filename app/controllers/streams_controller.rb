@@ -5,9 +5,7 @@ class StreamsController < ApplicationController
     stream_responder(Stream::Public)
   end
 
-  def local_public
-
-  end
+  def local_public; end
 
   private
 
@@ -17,12 +15,13 @@ class StreamsController < ApplicationController
 
     respond_to do |format|
       format.html { render 'streams/main_stream' }
-      format.json {
+      format.json do
         render json: {
-          entries: render_to_string(partial: "stream_elements",
+          entries: render_to_string(partial: 'stream_elements',
                                     formats: [:html]),
-          pagination: view_context.pagy_nav(@pagy) } }
+          pagination: view_context.pagy_nav(@pagy)
+        }
+      end
     end
   end
-
 end
