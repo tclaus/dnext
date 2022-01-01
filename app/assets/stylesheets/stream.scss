@@ -81,21 +81,21 @@
 
 .opengraph-container {
   width: 100%;
+  background-color: #f0f0f0;
   display: block;
   text-decoration: none;
   font-style: normal;
   margin: 10px 0 10px 0;
-  border-top: solid 1px #ddd;
-  border-bottom: solid 1px #ddd;
+  border: solid 1px #ddd;
+  // border-bottom:solid 1 px #ddd;
   padding: 10px 0 5px 0;
   overflow: hidden;
 
   .thumb {
     float: left;
-    margin: 5px 5px 5px 0;
+    margin: 5px 0 5px 0;
     // max-width: 150px;
     padding-right: 5px;
-
   }
 
   .og-title {
