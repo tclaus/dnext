@@ -54,7 +54,7 @@
   .post-sub-headline {
     margin-left: 20px;
   }
-  
+
   img {
     display: inline;
     max-width: 100%;
@@ -76,5 +76,33 @@
     border-top: 1px solid lightgray;
     margin: 15px 0 0 10px;
     padding: 5px 0 5px 0;
+  }
+}
+
+.opengraph-container {
+  width: 100%;
+  display: block;
+  text-decoration: none;
+  font-style: normal;
+  margin: 10px 0 10px 0;
+  border-top: solid 1px #ddd;
+  border-bottom: solid 1px #ddd;
+  padding: 10px 0 5px 0;
+  overflow: hidden;
+
+  .thumb {
+    float: left;
+    margin: 5px 5px 5px 0;
+    // max-width: 150px;
+    padding-right: 5px;
+
+  }
+
+  .og-title {
+    font-weight: bold;
+  }
+
+  a {
+    color: $color1;
   }
 }

@@ -1,0 +1,15 @@
+- unless post.o_embed_cache
+  - if post.open_graph_cache.present?
+    .opengraph-container
+      .thumb
+        - if post.open_graph_cache.video_url
+          .video-overlay
+            = image_tag open_graph_cache.image
+            = #Overlay!
+        - else
+          = image_tag post.open_graph_cache.image
+        = link_to post.open_graph_cache.url, target: :blank do
+          %p.og-title
+            = post.open_graph_cache.title
+          %p.og-description
+            = truncate(post.open_graph_cache.description, length: 250, separator: " ")
