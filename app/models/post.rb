@@ -4,6 +4,7 @@ class Post < ApplicationRecord
   belongs_to :open_graph_cache, optional: true
 
   scope :all_public, lambda {
+    includes({author: :profile})
     left_outer_joins(author: [:pod])
       .where("(pods.blocked = false or pods.blocked is null)")
       .where(public: true)

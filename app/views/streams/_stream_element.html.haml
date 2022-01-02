@@ -9,5 +9,6 @@
       = render "stream_root_element", post: post.root
     - else
       = post.rendered_message.html_safe
+      = render "oembed", post: post
       = render "opengraph", post: post
   = render "stream_footer", post: post
