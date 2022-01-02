@@ -14,7 +14,7 @@ class OEmbedCache < ApplicationRecord
   end
 
   def fetch_and_save_oembed_data!
-    response = OEmbed::Providers.get(url, {maxwidth: 420, maxheight: 420, frame: 1, iframe: 1})
+    response = OEmbed::Providers.get(url, {maxwidth: 560, maxheight: 560, frame: 1, iframe: 1})
   rescue => e
     # noop
   else
