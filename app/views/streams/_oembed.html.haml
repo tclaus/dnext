@@ -1,0 +1,8 @@
+- if post.o_embed_cache
+  .oembed
+    .container
+      .row.align-items-start
+        .col-lg
+        .col-md-6
+          = o_embed_html(post.o_embed_cache)
+        .col-lg

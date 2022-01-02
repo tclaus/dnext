@@ -1,6 +1,7 @@
 %div{id: dom_id(post), class: "root-stream-element"}
   %div.post-sub-headline
     = render "stream_post_author", author: post.author, created_at: post.created_at
-    = local_time post.created_at, class: "post-head-text"
   %div{class: classify(post.type)}
     = post.rendered_message.html_safe
+    = render "oembed", post: post
+    = render "opengraph", post: post
