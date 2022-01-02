@@ -38,7 +38,7 @@ jobs:
       # Add or Replace any other security checks here
       - name: Run security checks
         run: |
-          bin/bundler-audit --update
+          bin/bundle exec bundler-audit
           bin/brakeman -q -w2
       # Add or Replace any other Linters here
       - name: Run linters
