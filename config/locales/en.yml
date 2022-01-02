@@ -49,3 +49,5 @@ en:
     visibility:
       global: "Post is globally visible"
       limited: "Post has limited audience"
+  tags:
+    name_too_long: "Please make your tag name fewer than %{count} characters. Right now it is %{current_length} characters"
