@@ -1,4 +1,7 @@
 class Post < ApplicationRecord
+  include Diaspora::Commentable
+
+  belongs_to :commentable, class_name: "Comment", touch: true, polymorphic: true, counter_cache: true
   belongs_to :author, class_name: "Person", inverse_of: :posts, optional: true
   belongs_to :o_embed_cache, optional: true
   belongs_to :open_graph_cache, optional: true

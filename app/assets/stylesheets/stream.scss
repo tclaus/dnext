@@ -13,7 +13,7 @@
   }
 
   .img {
-    margin-right: 10px;
+    margin-right: 5px;
     display: inline;
   }
 
@@ -21,6 +21,11 @@
     width: 50px;
     height: 50px;
     border-radius: 5px;
+
+    .small {
+      height: 35px;
+      width: 35px;
+    }
   }
 
   .person-name {
@@ -59,6 +64,16 @@
     display: inline;
     max-width: 100%;
     height: auto;
+  }
+}
+
+.comments {
+  margin-left: 10px;
+  padding: 10px 0;
+
+  .comment {
+    border-top: 1px dotted #ddd;
+    padding-top: 10px;
   }
 }
 

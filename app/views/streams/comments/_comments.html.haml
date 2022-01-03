@@ -1,0 +1,4 @@
+- unless comments.empty?
+  .comments
+    - comments.each do |comment|
+      = render "streams/comments/comment", comment: comment
