@@ -12,3 +12,4 @@
       = render "oembed", post: post
       = render "opengraph", post: post
   = render "stream_footer", post: post
+  = render "streams/comments/comments", comments: post.last_three_comments
