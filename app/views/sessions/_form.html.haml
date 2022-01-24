@@ -1,0 +1,26 @@
+= form_for resource, as:           resource_name,
+                     url:          session_path(resource_name),
+                     html:         {class: "block-form"},
+                     data: { turbo: false },
+                     autocomplete: "off" do |f|
+  %fieldset
+    %i.entypo-user
+    = f.text_field :username,
+                   placeholder: t("registrations.new.username"),
+                   class: "input-block-level form-control",
+                   required: true,
+                   pattern: "[A-Za-z0-9_.@\-]+",
+                   autocapitalize: "none",
+                   autocorrect: "off",
+                   autofocus: true,
+                   value: prefilled_username,
+                   aria: {labelledby: "usernameLabel"}
+    %i.entypo-lock
+    = f.password_field :password,
+                       placeholder: t("registrations.new.password"),
+                       class: "input-block-level form-control",
+                       required: true,
+                       autocapitalize: "none",
+                       autocorrect: "off",
+                       aria: {labelledby: "passwordLabel"}
+  = f.submit t("devise.sessions.new.sign_in"), class: "btn btn-large btn-block btn-primary"

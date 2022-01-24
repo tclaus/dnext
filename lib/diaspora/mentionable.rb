@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
 module Diaspora::Mentionable
-
   # Regex for finding mention markup in plain text:
-  #   "message @{user@pod.net} text"
+  #   "message @{users@pod.net} text"
   # It can also contain a name, which gets used as the link text:
-  #   "message @{User Name; user@pod.net} text"
-  #   will yield "User Name" and "user@pod.net"
-  REGEX = /@\{(?:([^\}]+?); )?([^\} ]+)\}/
+  #   "message @{User Name; users@pod.net} text"
+  #   will yield "User Name" and "users@pod.net"
+  REGEX = /@\{(?:([^}]+?); )?([^} ]+)\}/
 
   # Class attribute that will be added to all mention html links
   PERSON_HREF_CLASS = "mention hovercardable"
@@ -19,7 +18,7 @@ module Diaspora::Mentionable
   end
 
   # Takes a message text and returns the text with mentions in (html escaped)
-  # plain text or formatted with html markup linking to user profiles.
+  # plain text or formatted with html markup linking to users profiles.
   # default is html output.
   #
   # @param [String] text containing mentions

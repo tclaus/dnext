@@ -1,0 +1,18 @@
+!!!
+%html{lang: I18n.locale.to_s}
+  %head
+    %title
+      Dnext
+  %meta{name:"viewport", content:"width=device-width,initial-scale=1"}
+  = csrf_meta_tags
+  = csp_meta_tag
+
+  = stylesheet_link_tag "application", "data-turbo-track": "reload"
+  = javascript_importmap_tags
+  %link{rel:"stylesheet", href:"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"}
+
+  %body{class: "page-#{controller_name} action-#{action_name}"}
+    = render 'layouts/header'
+    = render "layouts/flash_messages"
+    = content_for?(:content) ? yield(:content) : yield
+    = yield :after_content

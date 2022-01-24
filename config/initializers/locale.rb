@@ -1,0 +1,2 @@
+AVAILABLE_LANGUAGES = {"en" => "English"}
+AVAILABLE_LANGUAGE_CODES = ["en"]

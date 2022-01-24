@@ -186,7 +186,7 @@ development:
     autofollow_on_join_user: ''
 production:
   server:
-    listen: 'unix:tmp/diaspora.sock'
+    listen: 'unix:tmp/dnext.sock'
 test:
   environment:
     url: 'http://localhost:9887/'

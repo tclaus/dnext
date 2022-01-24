@@ -1,0 +1,49 @@
+= form_for(resource, url: registration_path(resource_name),
+  data: { turbo: false },
+  html: {class: "form-horizontal block-form", autocomplete: "off"}) do |f|
+
+  %fieldset
+    = f.label :email, t("registrations.new.email"), class: "visually-hidden control-label", id: "emailLabel"
+    %i.entypo-mail
+    = f.email_field :email,
+                    autofocus:   true,
+                    class:       "input-block-level form-control",
+                    data:        {content: t("users.edit.your_email_private")},
+                    placeholder: t("registrations.new.email"),
+                    required:    true,
+                    title:       t("registrations.new.enter_email"),
+                    aria:        {labelledby: "emailLabel"}
+    %i.entypo-user
+    = f.label :email, t("registrations.new.username"), class: "visually-hidden control-label", id: "usernameLabel"
+    = f.text_field :username,
+                   class:       "input-block-level form-control",
+                   placeholder: t("registrations.new.username"),
+                   title:       t("registrations.new.enter_username"),
+                   required:    true,
+                   pattern:     "[A-Za-z0-9_.\-]+",
+                   aria:        {labelledby: "usernameLabel"}
+    %i.entypo-lock
+    = f.label :email, t("egistrations.new.password"), class: "visually-hidden control-label", id: "passwordLabel"
+    = f.password_field :password,
+                       class:       "input-block-level form-control",
+                       placeholder: t("registrations.new.password"),
+                       title:       t("registrations.new.enter_password"),
+                       required:    true,
+                       pattern:     "......+",
+                       aria:        {labelledby: "passwordLabel"}
+    %i.entypo-lock
+    = f.password_field :password_confirmation,
+                       class:       "input-block-level form-control",
+                       placeholder: t("registrations.new.password_confirmation"),
+                       title:       t("registrations.new.enter_password_again"),
+                       required:    true,
+                       pattern:     "......+",
+                       aria:        {labelledby: "passwordConfirmationLabel"}
+
+    = f.invisible_captcha :subtitle
+  - if AppConfig.settings.terms.enable?
+    %p.terms.text-center#terms
+      = t('registrations.new.terms', terms_link: link_to(t('registrations.new.terms_link'), terms_path, target: "_blank")).html_safe
+
+  = f.submit t("registrations.new.sign_up"), class: "btn btn-block btn-large btn-primary",
+    data: {disable_with: t("registrations.new.submitting")}

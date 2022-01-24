@@ -37,6 +37,7 @@
 # Configuration
 config/diaspora.toml
 config/database.yml
+config/initializers/secret_token.rb
 
 # Idea workspace
 **/.idea/workspace.xml

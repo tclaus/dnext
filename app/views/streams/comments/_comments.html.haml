@@ -1,4 +1,5 @@
-- unless comments.empty?
-  .comments
-    - comments.each do |comment|
-      = render "streams/comments/comment", comment: comment
+- if user_signed_in?
+  - unless comments.empty?
+    .comments
+      - comments.each do |comment|
+        = render "streams/comments/comment", comment: comment

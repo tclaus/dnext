@@ -1,19 +1,5 @@
 # PostgreSQL. Versions 9.3 and up are supported.
-#
-# Install the pg driver:
-#   gem install pg
-# On macOS with Homebrew:
-#   gem install pg -- --with-pg-config=/usr/local/bin/pg_config
-# On macOS with MacPorts:
-#   gem install pg -- --with-pg-config=/opt/local/lib/postgresql84/bin/pg_config
-# On Windows:
-#   gem install pg
-#       Choose the win32 build.
-#       Install PostgreSQL and put its /bin directory on your path.
-#
-# Configure Using Gemfile
-# gem "pg"
-#
+
 default: &default
   adapter: postgresql
   encoding: unicode
@@ -31,7 +17,7 @@ development:
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
   # When left blank, postgres will use the default role. This is
-  # the same name as the operating system user running Rails.
+  # the same name as the operating system users running Rails.
   #username: dnext
 
   # The password associated with the postgres role (username).
@@ -46,7 +32,7 @@ development:
   # If your server runs on a different port number, change accordingly.
   #port: 5432
 
-  # Schema search path. The server defaults to $user,public
+  # Schema search path. The server defaults to $users,public
   #schema_search_path: myapp,sharedapp,public
 
   # Minimum log levels, in increasing order:

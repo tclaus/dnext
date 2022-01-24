@@ -13,7 +13,7 @@ module Diaspora
 
       # @return [String] The model's guid.
       def set_guid
-        self.guid = UUID.generate(:compact) if guid.blank?
+        self.guid = SecureRandom.hex if guid.blank?
       end
     end
   end
