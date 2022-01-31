@@ -1,6 +1,6 @@
-require_relative 'boot'
+require_relative "boot"
 
-require 'rails/all'
+require "rails/all"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -17,6 +17,15 @@ module Diaspora
     # in config/environments, which are processed later.
     #
     # config.time_zone = "Central Time (US & Canada)"
-    config.eager_load_paths << Rails.root.join('lib')
+    config.eager_load_paths << Rails.root.join("lib")
+
+    # Setup action mailer early
+    config.action_mailer.default_url_options = {
+      # host: AppConfig.pod_uri.authority,
+      # protocol: AppConfig.pod_uri.scheme
+    }
   end
 end
+
+# Rails.application.routes.default_url_options[:host] = AppConfig.pod_uri.host
+# Rails.application.routes.default_url_options[:port] = AppConfig.pod_uri.port

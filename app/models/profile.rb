@@ -3,17 +3,13 @@ class Profile < ApplicationRecord
 
   def image_url(size: :thumb_large, fallback_to_default: true)
     result = if size == :thumb_medium && self[:image_url_medium]
-               self[:image_url_medium]
-             elsif size == :thumb_small && self[:image_url_small]
-               self[:image_url_small]
-             else
-               self[:image_url]
-             end
-    if result
-      result
+      self[:image_url_medium]
+    elsif size == :thumb_small && self[:image_url_small]
+      self[:image_url_small]
     else
-      ActionController::Base.helpers.image_path("user/default.png")
+      self[:image_url]
     end
+    result || ActionController::Base.helpers.image_path("users/default.png")
   end
 
   def image_url=(url)

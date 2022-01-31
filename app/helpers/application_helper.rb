@@ -1,5 +1,4 @@
 module ApplicationHelper
-
   # Changes Ruby Class names to CSS class names. Example: StatusMessage => status_message
   # @param [String] name
   # @return [String]
@@ -10,7 +9,6 @@ module ApplicationHelper
   # For the post range this function returns a icon for global, limited or personal visible posts
   # @return span tag with icon for posts range
   def range_tag(post, *args)
-
     if post.public?
       visibility = t("post.visibility.global")
       content = "<i class=\"bi bi-globe\" role=\"img\" aria-label=\"#{visibility}\"></i>"
@@ -20,5 +18,26 @@ module ApplicationHelper
     end
 
     content_tag("span", content.html_safe, args)
+  end
+
+  def pod_name
+    AppConfig.settings.pod_name
+  end
+
+  def pod_version
+    AppConfig.version.number
+  end
+
+  def source_url
+    AppConfig.settings.source_url.presence || "#{root_path.chomp("/")}/source.tar.gz"
+  end
+
+  def flash_messages
+    flash.map do |name, msg|
+      klass = flash_class name
+      content_tag(:div, msg, class: "flash-body expose") do
+        content_tag(:div, msg, class: "flash-message message alert alert-#{klass}", role: "alert")
+      end
+    end.join(" ").html_safe
   end
 end

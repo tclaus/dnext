@@ -1,0 +1,7 @@
+%li= link_to t("layouts.header.code") + " " + pod_version,
+  source_url.to_s,
+  title: t("layouts.application.source_package")
+- if AppConfig.settings.terms.enable?
+  %li= link_to t("_terms"), terms_path
+- unless AppConfig.admins.podmin_email.nil?
+  %li= mail_to AppConfig.admins.podmin_email, t("_podmin_mail")

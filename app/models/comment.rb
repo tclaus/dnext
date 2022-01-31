@@ -1,5 +1,6 @@
 class Comment < ApplicationRecord
   include Diaspora::Fields::Author
+  include Diaspora::Fields::Guid
   include Diaspora::Commentable
   include Diaspora::Taggable
 

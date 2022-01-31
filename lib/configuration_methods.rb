@@ -47,7 +47,7 @@ module Configuration
     def show_service?(service, user)
       return false unless self["services.#{service}.enable"]
 
-      # Return true only if 'authorized' is true or equal to user username
+      # Return true only if 'authorized' is true or equal to users username
       (user && self["services.#{service}.authorized"] == user.username) ||
         self["services.#{service}.authorized"] == true
     end

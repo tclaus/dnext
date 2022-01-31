@@ -5,10 +5,10 @@ module PeopleHelper
 
   def search_header
     if search_query.blank?
-      content_tag(:h2, t('people.index.no_results'))
+      content_tag(:h2, t("people.index.no_results"))
     else
-      content_tag(:h2, id: 'search_title') do
-        t('people.index.results_for', search_term: content_tag(:span, search_query, class: 'term')).html_safe + looking_for_tag_link
+      content_tag(:h2, id: "search_title") do
+        t("people.index.results_for", search_term: content_tag(:span, search_query, class: "term")).html_safe + looking_for_tag_link
       end
     end
   end
@@ -31,7 +31,10 @@ module PeopleHelper
 
   def person_image_tag(person, size = :thumb_small)
     return "" if person.nil? || person.profile.nil?
-    image_tag(person.profile.image_url(size: size), alt: person.name, class: "avatar img-responsive center-block",
+    tag_class = "avatar img-responsive center-block"
+    tag_class += " avatar-small" if size == :thumb_small
+
+    image_tag(person.profile.image_url(size: size), alt: person.name, class: tag_class,
               title: person.name, "data-person_id": person.id)
   end
 
@@ -42,7 +45,7 @@ module PeopleHelper
     else
       css_class = person_link_class(person, opts[:class])
       remote_or_hovercard_link = Rails.application.routes.url_helpers.person_path(person).html_safe
-      "<a href='#{remote_or_hovercard_link}' class='#{css_class}' #{('target=' + opts[:target]) if opts[:target]}>
+      "<a href='#{remote_or_hovercard_link}' class='#{css_class}' #{("target=" + opts[:target]) if opts[:target]}>
       #{person_image_tag(person, opts[:size])}
       </a>".html_safe
     end
@@ -50,13 +53,13 @@ module PeopleHelper
 
   # Rails.application.routes.url_helpers is needed since this is indirectly called from a model
   def local_or_remote_person_path(person, opts = {})
-    opts.merge!(:protocol => AppConfig.pod_uri.scheme, :host => AppConfig.pod_uri.authority)
+    opts.merge!(protocol: AppConfig.pod_uri.scheme, host: AppConfig.pod_uri.authority)
     absolute = opts.delete(:absolute)
 
     if person.local?
       username = person.username
-      unless username.include?('.')
-        opts.merge!(:username => username)
+      unless username.include?(".")
+        opts.merge!(username: username)
         if absolute
           return Rails.application.routes.url_helpers.user_profile_url(opts)
         else
@@ -66,9 +69,9 @@ module PeopleHelper
     end
 
     if absolute
-      return Rails.application.routes.url_helpers.person_url(person, opts)
+      Rails.application.routes.url_helpers.person_url(person, opts)
     else
-      return Rails.application.routes.url_helpers.person_path(person, opts)
+      Rails.application.routes.url_helpers.person_path(person, opts)
     end
   end
 

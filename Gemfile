@@ -58,6 +58,7 @@ gem "pagy", "~> 5.6", ">= 5.6.6"
 # Rendering
 gem "open_graph_reader", "~> 0.7.2"
 gem "ruby-oembed", "~> 0.15.0"
+gem "entypo-rails", github: "wangliyao/entypo-rails" # Entypo-Rails can not directly used for Rails > 6
 
 # Markdown renderer
 gem "redcarpet", "~> 3.5", ">= 3.5.1"
@@ -70,10 +71,27 @@ gem "toml-rb", "~> 2.1.0"
 
 gem "acts-as-taggable-on", github: "mbleigh/acts-as-taggable-on"
 
+# Uris and HTTP
+gem "addressable", "~> 2.8"
+
+# Authentication
+gem "devise", "~>4.8.1"
+gem "devise-i18n", "~> 1.10", ">= 1.10.1"
+gem "devise_last_seen"
+# gem "devise-two-factor", github: "kivanio/devise-two-factor" # Rails 7 support currently not included in main
+
+gem "rqrcode", "~> 2.1"
+#
+# Captcha
+
+gem "invisible_captcha", "~> 2.0"
+
+# frozen_string_literal: true
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri mingw x64_mingw]
   gem "dotenv", "~> 2.7", ">= 2.7.6"
+  gem "rspec-rails", "~> 5.1"
 end
 
 group :development do
