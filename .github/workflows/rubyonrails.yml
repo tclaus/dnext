@@ -46,6 +46,8 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
+      - name: Install system dependencies
+        run: sudo apt update && sudo apt install -y build-essential curl git gsfonts imagemagick libcurl4-openssl-dev libidn11-dev libmagickwand-dev libssl-dev libxml2-dev libxslt1-dev
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Install Ruby and gems
