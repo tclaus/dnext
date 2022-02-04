@@ -9,7 +9,7 @@ class Block < ApplicationRecord
   validate :not_blocking_yourself
 
   def not_blocking_yourself
-    if self.user.person.id == self.person_id
+    if user.person.id == person_id
       errors[:person_id] << "stop blocking yourself!"
     end
   end

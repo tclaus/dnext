@@ -5,15 +5,13 @@ require "bundler/setup"
 require "configurate"
 require "configurate/provider/toml"
 
-rails_env = ENV["RAILS_ENV"] || ENV["RACK_ENV"] || "development"
-
 module Rails
   def self.root
     @__root ||= Pathname.new File.expand_path("../../", __FILE__)
   end
 end
 
-require Rails.root.join "lib", "configuration_methods"
+require Rails.root.join "lib", "configuration", "methods"
 
 rails_env = ENV["RAILS_ENV"] || ENV["RACK_ENV"] || "development"
 config_dir = Rails.root.join("config").to_s

@@ -26,6 +26,7 @@ module Diaspora
     }
   end
 end
+# Rails.autoloaders.log!
 
 # Rails.application.routes.default_url_options[:host] = AppConfig.pod_uri.host
 # Rails.application.routes.default_url_options[:port] = AppConfig.pod_uri.port

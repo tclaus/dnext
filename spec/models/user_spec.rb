@@ -58,8 +58,16 @@ describe User, type: :model do
 
   describe "#destroy" do
     it "raises error" do
+      params = {
+        username: "Ohai",
+        email: "ohai@example.com",
+        password: "password",
+        password_confirmation: "password"
+      }
+      user = User.build(params)
+
       expect {
-        users(:alice).destroy
+        user.destroy
       }.to raise_error "Never destroy users!"
     end
   end

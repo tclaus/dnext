@@ -61,22 +61,12 @@ module Configuration
       settings.enable_local_posts_stream == "everyone"
     end
 
+    # Generates a new token file if non exists
     def secret_token
-      if heroku?
-        return ENV["SECRET_TOKEN"] if ENV["SECRET_TOKEN"]
-
-        warn "FATAL: Running on Heroku with SECRET_TOKEN unset"
-        warn "       Run heroku config:add SECRET_TOKEN=#{SecureRandom.hex(40)}"
-        abort
-      else
-        token_file = File.expand_path(
-          "../config/initializers/secret_token.rb",
-          File.dirname(__FILE__)
-        )
-        system "DISABLE_SPRING=1 bin/rake generate:secret_token" unless File.exist? token_file
-        require token_file
-        Diaspora::Application.config.secret_key_base
-      end
+      token_file = Rails.root.join("config", "initializers", "secret_token.rb")
+      system "bin/rake generate:secret_token" unless File.exist? token_file
+      require token_file
+      Diaspora::Application.config.secret_key_base
     end
 
     def version_string
@@ -89,14 +79,9 @@ module Configuration
 
     def git_available?
       return @git_available unless @git_available.nil?
-
-      if heroku?
-        @git_available = false
-      else
-        `which git`
-        `git status 2> /dev/null` if $?.success?
-        @git_available = $?.success?
-      end
+      `which git`
+      `git status 2> /dev/null` if $?.success?
+      @git_available = $?.success?
     end
 
     def git_revision
