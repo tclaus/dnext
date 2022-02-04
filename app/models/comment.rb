@@ -3,6 +3,8 @@ class Comment < ApplicationRecord
   include Diaspora::Fields::Guid
   include Diaspora::Commentable
   include Diaspora::Taggable
+  include Diaspora::Relayable
+  include Reference::Source
 
   belongs_to :commentable, class_name: "Comment", touch: true, polymorphic: true, counter_cache: true
   has_one :signature, class_name: "CommentSignature", dependent: :delete
@@ -14,6 +16,7 @@ class Comment < ApplicationRecord
   delegate :author_name, to: :parent, prefix: true
 
   validates :text, presence: true, length: {maximum: 65535}
+  has_many :reports, as: :reportable
 
   acts_as_taggable_on :tags
   extract_tags_from :text

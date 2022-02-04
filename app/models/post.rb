@@ -5,6 +5,7 @@ class Post < ApplicationRecord
   belongs_to :author, class_name: "Person", inverse_of: :posts, optional: true
   belongs_to :o_embed_cache, optional: true
   belongs_to :open_graph_cache, optional: true
+  has_many :reports, as: :reportable
 
   scope :all_public, lambda {
     includes({author: :profile})

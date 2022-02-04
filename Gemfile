@@ -109,6 +109,7 @@ end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
+  gem "factory_bot_rails", "~> 6.2"
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
