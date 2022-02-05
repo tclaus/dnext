@@ -17,9 +17,9 @@ Eye.application("diaspora") do
     puma_command = "bin/bundle exec puma -C config/puma.rb"
 
     if rails_env == "production"
-      start_command "#{puma_command} -D"
+      start_command "#{puma_command} &"
       daemonize false
-      restart_command "kill -USR2 {PID}"
+      restart_command "kill -USR1 {PID}"
       restart_grace 10.seconds
     else
       start_command puma_command
