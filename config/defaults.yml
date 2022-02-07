@@ -40,7 +40,7 @@ defaults:
         sql: false
         federation: false
   server:
-    listen: '0.0.0.0:3000'
+    listen: 'tcp://0.0.0.0:3000'
     rails_environment: 'development'
     pid: "tmp/pids/web.pid"
     stderr_log:
@@ -186,7 +186,7 @@ development:
     autofollow_on_join_user: ''
 production:
   server:
-    listen: 'unix:tmp/dnext.sock'
+    listen: 'unix://tmp/dnext.sock'
 test:
   environment:
     url: 'http://localhost:9887/'

@@ -162,10 +162,10 @@
 ## Settings affecting how ./script/server behaves.
 [configuration.server]
 
-## Where the appserver should listen to (default="unix:tmp/dnext.sock")
-#listen = "unix:tmp/dnext.sock"
-#listen = "unix:/run/diaspora/diaspora.sock"
-#listen = "127.0.0.1:3000"
+## Where the appserver should listen to (default="unix://tmp/dnext.sock")
+#listen = "unix://tmp/diaspora.sock"
+#listen = "unix:///run/diaspora/diaspora.sock"
+#listen = "tcp://127.0.0.1:3000"
 
 ## Set the path for the PID file of the unicorn master process (default=tmp/pids/web.pid)
 #pid = "tmp/pids/web.pid"
