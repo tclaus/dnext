@@ -2,4 +2,4 @@
   = image_tag(author.avatar_small, class: "avatar small", alt: author.diaspora_handle)
   .person-name
     = link_to author_full_name(author),  "/people/#{author.guid}", class: "author-name"
-  = local_time created_at, class: "post-head-text"
+  = local_time_ago created_at, class: "post-head-text"
