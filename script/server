@@ -208,5 +208,6 @@ else
   echo "with $workers Sidekiq worker(s)."
 fi
 echo ""
+echo "You should run puma as systemctl service."
 
 exec bin/bundle exec puma -C config/puma.rb
