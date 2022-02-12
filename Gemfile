@@ -52,13 +52,13 @@ gem "bootstrap", "~> 5.1.3"
 gem "haml"
 
 # Pagination / infinite scroller support in stream
-gem "local_time"
 gem "pagy", "~> 5.6", ">= 5.6.6"
 
 # Rendering
 gem "open_graph_reader", "~> 0.7.2"
 gem "ruby-oembed", "~> 0.15.0"
 gem "entypo-rails", github: "wangliyao/entypo-rails" # Entypo-Rails can not directly used for Rails > 6
+gem "local_time"
 
 # Markdown renderer
 gem "redcarpet", "~> 3.5", ">= 3.5.1"
