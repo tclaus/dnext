@@ -1,6 +1,8 @@
 require "rails_helper"
 
 describe User, type: :model do
+  include ActiveJob::TestHelper
+
   describe ".build" do
     context "with valid parameters" do
       before do
@@ -69,6 +71,15 @@ describe User, type: :model do
       expect {
         user.destroy
       }.to raise_error "Never destroy users!"
+    end
+  end
+
+  describe "send password instructions" do
+    it "should send instructions async" do
+      user = FactoryBot.create(:user)
+      assert_enqueued_with(job: ResetPasswordJob, args: [user]) do
+        user.send_reset_password_instructions
+      end
     end
   end
 end

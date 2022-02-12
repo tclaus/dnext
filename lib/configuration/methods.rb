@@ -15,7 +15,7 @@ module Configuration
         puts "WARNING: pod url #{url} is not a legal URI"
       end
 
-      @pod_uri.scheme = "https" if environment.require_ssl?
+      @pod_uri.scheme = "https" if Rails.env.production?
       @pod_uri.path = "/"
 
       @pod_uri.dup

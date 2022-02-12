@@ -24,9 +24,9 @@ module Diaspora
       # host: AppConfig.pod_uri.authority,
       # protocol: AppConfig.pod_uri.scheme
     }
+    config.active_job.queue_adapter = :sidekiq
   end
 end
-# Rails.autoloaders.log!
 
-# Rails.application.routes.default_url_options[:host] = AppConfig.pod_uri.host
-# Rails.application.routes.default_url_options[:port] = AppConfig.pod_uri.port
+Rails.application.routes.default_url_options[:host] = AppConfig.pod_uri.host
+Rails.application.routes.default_url_options[:port] = AppConfig.pod_uri.port

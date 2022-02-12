@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  # attr_encrypted :otp_secret, if: false, prefix: "plain_"
+  encrypts :otp_secret
 
   # Include default devise modules. Others available are:
   devise :database_authenticatable, :registerable,
@@ -156,6 +156,18 @@ class User < ApplicationRecord
     # Diaspora::Federation::Dispatcher.build(sender, conversation).dispatch if conversation.save
   end
 
+  def encryption_key
+    OpenSSL::PKey::RSA.new(serialized_private_key)
+  end
+
+  # Copy the method provided by Devise to be able to call it later
+  # from a Sidekiq job
+  alias_method :send_reset_password_instructions!, :send_reset_password_instructions
+
+  def send_reset_password_instructions
+    ResetPasswordJob.perform_later(self)
+  end
+
   def strip_and_downcase_username
     if username.present?
       username.strip!
@@ -184,5 +196,19 @@ class User < ApplicationRecord
 
   def moderator?
     false
+  end
+
+  ######### Mailer #######################
+  def mail(job, *args)
+    return unless job.present?
+    pref = job.to_s.gsub("Workers::Mail::", "").underscore
+    if disable_mail == false && !user_preferences.exists?(email_type: pref)
+      job.perform_async(*args)
+    end
+  end
+
+  def send_confirm_email
+    return if unconfirmed_email.blank?
+    Workers::Mail::ConfirmEmail.perform_async(id)
   end
 end

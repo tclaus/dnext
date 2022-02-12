@@ -2,6 +2,7 @@
 
 class RegistrationsController < Devise::RegistrationsController
   before_action :check_registrations_open_or_valid_invite!, except: :registrations_closed
+  layout "with_header_with_footer"
 
   def create
     @user = User.build(user_params)

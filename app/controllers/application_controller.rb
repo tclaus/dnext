@@ -3,6 +3,7 @@
 class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   protect_from_forgery except: :receive, with: :exception, prepend: true
+  layout "with_header_with_footer"
 
   rescue_from ActionController::InvalidAuthenticityToken do
     if user_signed_in?
@@ -13,8 +14,6 @@ class ApplicationController < ActionController::Base
     flash[:error] = I18n.t("error_messages.csrf_token_fail")
     redirect_to new_user_session_path format: request[:format]
   end
-
-  layout "with_header_with_footer"
 
   def set_diaspora_header
     headers["X-Diaspora-Version"] = AppConfig.version_string
