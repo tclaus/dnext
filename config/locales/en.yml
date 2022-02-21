@@ -106,6 +106,13 @@ en:
     sessions:
       new:
         sign_in: "Sign In"
+    passwords:
+      new:
+        email: "Email"
+        send_password_instructions: "Send instructions to reset password"
+    shared:
+      links:
+        sign_in: "Sign In"
   users:
     edit:
       your_email_private: "EMAIL"

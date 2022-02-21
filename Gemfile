@@ -89,6 +89,9 @@ gem "rqrcode", "~> 2.1"
 
 gem "invisible_captcha", "~> 2.0"
 
+# Background processing
+gem "sidekiq", "~> 6.4", ">= 6.4.1"
+
 # frozen_string_literal: true
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
