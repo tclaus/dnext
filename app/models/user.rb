@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  # attr_encrypted :otp_secret, if: false, prefix: "plain_"
+  encrypts :otp_secret
 
   # Include default devise modules. Others available are:
   devise :database_authenticatable, :registerable,
@@ -156,12 +156,16 @@ class User < ApplicationRecord
     # Diaspora::Federation::Dispatcher.build(sender, conversation).dispatch if conversation.save
   end
 
+  def encryption_key
+    OpenSSL::PKey::RSA.new(serialized_private_key)
+  end
+
   # Copy the method provided by Devise to be able to call it later
   # from a Sidekiq job
   alias_method :send_reset_password_instructions!, :send_reset_password_instructions
 
   def send_reset_password_instructions
-    ::Workers::ResetPassword.perform_async(id)
+    ResetPasswordJob.perform_later(self)
   end
 
   def strip_and_downcase_username
