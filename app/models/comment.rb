@@ -1,9 +1,12 @@
 class Comment < ApplicationRecord
+  include Diaspora::Commentable
+  include Diaspora::Federated::Base
   include Diaspora::Fields::Author
   include Diaspora::Fields::Guid
-  include Diaspora::Commentable
-  include Diaspora::Taggable
+  include Diaspora::Likeable
+  include Diaspora::MentionsContainer
   include Diaspora::Relayable
+  include Diaspora::Taggable
   include Reference::Source
 
   belongs_to :commentable, class_name: "Comment", touch: true, polymorphic: true, counter_cache: true

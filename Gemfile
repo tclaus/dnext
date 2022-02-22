@@ -91,6 +91,8 @@ gem "invisible_captcha", "~> 2.0"
 
 # Background processing
 gem "sidekiq", "~> 6.4", ">= 6.4.1"
+# Federation
+gem 'diaspora_federation', '~> 0.2', github: "SuperTux88/diaspora_federation" # bunp for newer version
 
 # frozen_string_literal: true
 group :development, :test do
@@ -98,6 +100,7 @@ group :development, :test do
   gem "debug", platforms: %i[mri mingw x64_mingw]
   gem "dotenv", "~> 2.7", ">= 2.7.6"
   gem "rspec-rails", "~> 5.1"
+  gem 'fixture_builder', '~> 0.5.2'
 end
 
 group :development do
@@ -119,4 +122,6 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
+  gem "webmock",           "3.14.0", require: false
+  # gem "diaspora_federation-test", "0.2.7"
 end
