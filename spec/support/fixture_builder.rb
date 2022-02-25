@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative "../helper_methods"
 
 def create_basic_users
   # Users
@@ -13,7 +14,7 @@ def create_basic_users
   bobs_aspect = bob.aspects.where(name: 'generic').first
   FactoryBot.create(:aspect, name: 'empty', user: bob)
 
-  connect_users(bob, bobs_aspect, alice, alices_aspect)
+  HelperMethods::connect_users(bob, bobs_aspect, alice, alices_aspect)
   connect_users(bob, bobs_aspect, eve, eves_aspect)
 
   # Set up friends - 2 local, 1 remote
@@ -40,7 +41,7 @@ end
 FixtureBuilder.configure do |fbuilder|
   # rebuild fixtures automatically when these files change:
   fbuilder.files_to_check += Dir[
-    'app/models/*.rb', 'lib/**/*.rb', 'spec/factories/*.rb', 'spec/support/fixture_builder.rb'
+    'app/models/*.rb', 'lib/**/*.rb', 'spec/factories/*.rb', 'spec/fixture_builder.rb'
   ] - ['lib/diaspora/exporter.rb']
 
   # now declare objects

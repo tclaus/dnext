@@ -24,7 +24,6 @@ require "webmock/rspec"
 # require "shoulda/matchers"
 require "diaspora_federation/schemas"
 
-include HelperMethods
 
 Dir["#{File.dirname(__FILE__)}/shared_behaviors/**/*.rb"].each do |f|
   require f
