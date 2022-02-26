@@ -8,15 +8,15 @@ class Profile < ApplicationRecord
   attr_accessor :tag_string
   acts_as_ordered_taggable
   extract_tags_from :tag_string
-  validates :tag_list, length: {maximum: 5}
+  validates :tag_list, length: { maximum: 5 }
 
   before_save :strip_names
   after_validation :strip_names
 
-  validates :first_name, length: {maximum: 32}
-  validates :last_name, length: {maximum: 32}
-  validates :location, length: {maximum: 255}
-  validates :gender, length: {maximum: 255}
+  validates :first_name, length: { maximum: 32 }
+  validates :last_name, length: { maximum: 32 }
+  validates :location, length: { maximum: 255 }
+  validates :gender, length: { maximum: 255 }
 
   validates_format_of :first_name, with: /\A[^;]+\z/, allow_blank: true
   validates_format_of :last_name, with: /\A[^;]+\z/, allow_blank: true
@@ -35,7 +35,7 @@ class Profile < ApplicationRecord
   end
 
   def subscribers
-    Person.joins(:contacts).where(contacts: {user_id: person.owner_id})
+    Person.joins(:contacts).where(contacts: { user_id: person.owner_id })
   end
 
   def public?
@@ -49,12 +49,12 @@ class Profile < ApplicationRecord
 
   def image_url(size: :thumb_large, fallback_to_default: true)
     result = if size == :thumb_medium && self[:image_url_medium]
-      self[:image_url_medium]
-    elsif size == :thumb_small && self[:image_url_small]
-      self[:image_url_small]
-    else
-      self[:image_url]
-    end
+               self[:image_url_medium]
+             elsif size == :thumb_small && self[:image_url_small]
+               self[:image_url_small]
+             else
+               self[:image_url]
+             end
 
     if result
       if AppConfig.privacy.camo.proxy_remote_pod_images?
@@ -63,15 +63,15 @@ class Profile < ApplicationRecord
         result
       end
     elsif fallback_to_default
-      ActionController::Base.helpers.image_path("user/default.png")
+      ActionController::Base.helpers.image_path("users/default.png")
     end
   end
 
   def from_omniauth_hash(omniauth_user_hash)
-    mappings = {"description" => "bio",
-                "image" => "image_url",
-                "name" => "first_name",
-                "location" => "location"}
+    mappings = { "description" => "bio",
+                 "image" => "image_url",
+                 "name" => "first_name",
+                 "location" => "location" }
 
     update_hash = omniauth_user_hash.map { |k, v| [mappings[k], v] }.to_h
 

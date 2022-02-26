@@ -24,10 +24,18 @@ Devise.setup do |config|
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  config.mailer_sender = "please-change-me-at-config-initializers-devise@example.com"
+  if AppConfig.mail.sender_address.present?
+    config.mailer_sender = AppConfig.mail.sender_address
+  elsif AppConfig.mail.enable?
+    unless Rails.env == 'test'
+      Rails.logger.warn("No smtp sender address set, mail may fail.")
+      warn "WARNING: No smtp sender address set, mail may fail."
+    end
+    config.mailer_sender = "please-change-me@config-diaspora-toml.com"
+  end
 
   # Configure the class responsible to send e-mails.
-  # config.mailer = 'Devise::Mailer'
+  config.mailer = "DiasporaDeviseMailer"
 
   # Configure the parent class responsible to send e-mails.
   # config.parent_mailer = 'ActionMailer::Base'
