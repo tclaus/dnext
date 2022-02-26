@@ -46,6 +46,24 @@ vendor/cache/
 config/oidc_key.pem
 config/schedule.yml
 
-# Idea workspace
-**/.idea/workspace.xml
-**/.idea/tasks.xml
+# Temporary files of every sort
+.byebug_history
+.sass-cache/
+.DS_Store
+.redcar
+.stgit*
+*.swap
+*.swo
+*.swp
+*~
+*#
+*.bak
+*.save
+*.autosave
+nbproject
+patches-*
+capybara-*.html
+
+# IDE
+.idea
+.vscode
