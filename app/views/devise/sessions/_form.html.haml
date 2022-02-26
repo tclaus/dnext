@@ -1,6 +1,7 @@
 = form_for resource, as:           resource_name,
                      url:          session_path(resource_name),
                      html:         {class: "block-form"},
+                      data: { turbo: false },
                      autocomplete: "off" do |f|
   %fieldset
     %i.entypo-user

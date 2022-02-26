@@ -7,6 +7,10 @@ class StreamsController < ApplicationController
     stream_responder(Stream::Public)
   end
 
+  def stream
+    stream_responder(Stream::Public) #TODO : this will be the "multi" stream
+  end
+
   def local_public
   end
 
@@ -21,7 +25,7 @@ class StreamsController < ApplicationController
       format.json do
         render json: {
           entries: render_to_string(partial: "stream_elements",
-            formats: [:html]),
+                                    formats: [:html]),
           pagination: view_context.pagy_nav(@pagy)
         }
       end
