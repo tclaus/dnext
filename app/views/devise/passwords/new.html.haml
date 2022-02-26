@@ -9,7 +9,11 @@
       %h1
         = AppConfig.settings.pod_name
 
-    = form_for(resource, as: resource_name, url: password_path(resource_name), html: {class: "form-horizontal block-form"}, autocomplete: 'off') do |f|
+    = form_for(resource, as: resource_name,
+                        url: password_path(resource_name),
+                       html: {class: "form-horizontal block-form"},
+               autocomplete: 'off',
+                       data: { turbo: false }) do |f|
       %fieldset
         %i.entypo-mail
         = f.text_field :email,
