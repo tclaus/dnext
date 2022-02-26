@@ -5,8 +5,8 @@ class User < ApplicationRecord
 
   # Include default devise modules. Others available are:
   devise :database_authenticatable, :registerable,
-    :recoverable, :rememberable, :validatable, :trackable, :lockable,
-    :lastseenable, lock_strategy: :none, unlock_strategy: :none
+         :recoverable, :rememberable, :validatable, :trackable, :lockable,
+         :lastseenable, lock_strategy: :none, unlock_strategy: :none
 
   has_one :person, inverse_of: :owner, foreign_key: :owner_id
 
@@ -23,9 +23,10 @@ class User < ApplicationRecord
     raise "Never destroy users!"
   end
 
-  validates :username, presence: true, uniqueness: true, format: {with: /\A[A-Za-z0-9_.\-]+\z/},
-            length: {maximum: 32}, exclusion: {in: AppConfig.settings.username_blacklist}
-  validates_inclusion_of :language, in: AVAILABLE_LANGUAGE_CODES
+  validates :username, presence: true, uniqueness: true, format: { with: /\A[A-Za-z0-9_.\-]+\z/ },
+            length: { maximum: 32 }, exclusion: { in: AppConfig.settings.username_blacklist }
+  # TODO: Validate and set Language
+  # validates_inclusion_of :language, in: AVAILABLE_LANGUAGE_CODES
   validates_format_of :unconfirmed_email, with: Devise.email_regexp, allow_blank: true
 
   validate :unconfirmed_email_quasiuniqueness
@@ -35,8 +36,8 @@ class User < ApplicationRecord
   validate :no_person_with_same_username
 
   delegate :guid, :public_key, :posts, :photos, :owns?, :image_url,
-    :diaspora_handle, :name, :atom_url, :profile_url, :profile, :url,
-    :first_name, :last_name, :full_name, :gender, :participations, to: :person
+           :diaspora_handle, :name, :atom_url, :profile_url, :profile, :url,
+           :first_name, :last_name, :full_name, :gender, :participations, to: :person
   delegate :id, :guid, to: :person, prefix: true
 
   def basic_profile_present?
@@ -150,7 +151,7 @@ class User < ApplicationRecord
     conversation = sender.build_conversation(
       participant_ids: [sender.person.id, person.id],
       subject: AppConfig.settings.welcome_message.subject.get,
-      message: {text: AppConfig.settings.welcome_message.text.get % {username: username}}
+      message: { text: AppConfig.settings.welcome_message.text.get % { username: username } }
     )
 
     # Diaspora::Federation::Dispatcher.build(sender, conversation).dispatch if conversation.save
