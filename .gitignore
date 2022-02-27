@@ -16,6 +16,8 @@
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+spec/fixtures/*.y*ml
+spec/fixtures/*.fixture.*
 
 # Ignore pidfiles, but keep the directory.
 /tmp/pids/*
