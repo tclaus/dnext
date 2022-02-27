@@ -1,83 +1,183 @@
+# frozen_string_literal: true
+
+#   Copyright (c) 2010-2011, Diaspora Inc.  This file is
+#   licensed under the Affero General Public License version 3 or later.  See
+#   the COPYRIGHT file.
+
 ENV["RAILS_ENV"] ||= "test"
 
 require File.join(File.dirname(__FILE__), "..", "config", "environment")
 require Rails.root.join("spec", "helper_methods")
 require "rspec/rails"
+require "webmock/rspec"
+require "sidekiq/testing"
+require "shoulda/matchers"
+require "diaspora_federation/schemas"
+
+include HelperMethods
+
+Dir["#{File.dirname(__FILE__)}/shared_behaviors/**/*.rb"].each do |f|
+  require f
+end
+
+RSpec::Matchers.define_negated_matcher :remain, :change
+
+ProcessedImage.enable_processing = false
+UnprocessedImage.enable_processing = false
+
+def alice
+  @alice ||= User.find_by(username: "alice")
+end
+
+def bob
+  @bob ||= User.find_by(username: "bob")
+end
+
+def eve
+  @eve ||= User.find_by(username: "eve")
+end
+
+def local_luke
+  @local_luke ||= User.find_by(username: "luke")
+end
+
+def local_leia
+  @local_leia ||= User.find_by(username: "leia")
+end
+
+def remote_raphael
+  @remote_raphael ||= Person.find_by(diaspora_handle: "raphael@remote.net")
+end
+
+def peter
+  @peter ||= User.find_by(username: "peter")
+end
+
+def photo_fixture_name
+  @photo_fixture_name = File.join(File.dirname(__FILE__), "fixtures", "button.png")
+end
+
+def jwks_file_path
+  @jwks_file = File.join(File.dirname(__FILE__), "fixtures", "jwks.json")
+end
+
+def valid_client_assertion_path
+  @valid_client_assertion = File.join(File.dirname(__FILE__), "fixtures", "valid_client_assertion.txt")
+end
+
+def client_assertion_with_tampered_sig_path
+  @client_assertion_with_tampered_sig = File.join(File.dirname(__FILE__), "fixtures",
+                                                  "client_assertion_with_tampered_sig.txt")
+end
+
+def client_assertion_with_nonexistent_kid_path
+  @client_assertion_with_nonexistent_kid = File.join(File.dirname(__FILE__), "fixtures",
+                                                     "client_assertion_with_nonexistent_kid.txt")
+end
+
+def client_assertion_with_nonexistent_client_id_path
+  @client_assertion_with_nonexistent_client_id = File.join(File.dirname(__FILE__), "fixtures",
+                                                           "client_assertion_with_nonexistent_client_id.txt")
+end
+
+# Requires supporting files with custom matchers and macros, etc,
+# in ./support/ and its subdirectories.
+fixture_builder_file = "#{File.dirname(__FILE__)}/support/fixture_builder.rb"
+support_files = Dir["#{File.dirname(__FILE__)}/support/**/*.rb"] - [fixture_builder_file]
+support_files.each {|f| require f }
+require fixture_builder_file
 
 RSpec.configure do |config|
-  # rspec-expectations config goes here. You can use an alternate
-  # assertion/expectation library such as wrong or the stdlib/minitest
-  # assertions if you prefer.
-  config.expect_with :rspec do |expectations|
-    # This option will default to `true` in RSpec 4. It makes the `description`
-    # and `failure_message` of custom matchers include text for helper methods
-    # defined using `chain`, e.g.:
-    #     be_bigger_than(2).and_smaller_than(4).description
-    #     # => "be bigger than 2 and smaller than 4"
-    # ...rather than:
-    #     # => "be bigger than 2"
-    expectations.include_chain_clauses_in_custom_matcher_descriptions = true
+  config.fixture_path = Rails.root.join("spec", "fixtures")
+  config.global_fixtures = :all
+
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Devise::Test::IntegrationHelpers, type: :request
+  config.mock_with :rspec
+
+  config.example_status_persistence_file_path = "tmp/rspec-persistance.txt"
+
+  config.render_views
+  config.use_transactional_fixtures = true
+  config.infer_spec_type_from_file_location!
+
+  config.before(:each) do
+    I18n.locale = :en
+    stub_request(:post, "https://pubsubhubbub.appspot.com/")
+    stub_request(
+      :get,
+      "https://example.com/.well-known/webfinger?resource=acct:bob@example.com"
+    )
+    stub_request(
+      :get,
+      "https://example.com/.well-known/host-meta"
+    )
+    stub_request(:get, "https://api.deepl.com/v2/languages?auth_key=722b3fb8-fea5-6a9b-3e07-39bb102b972f")
+      .with(
+        headers: {
+          'Accept'=>'*/*',
+          'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+          'User-Agent'=>'Ruby'
+        }
+      )
+      .to_return(status: 200, body: '[{"language":"de", "name": "German", "supports_formality": true}]', headers: {})
+    stub_request(:any, /localhost:9200/)
+      .to_return(status: 200, body: "", headers: {})
+
+    $process_queue = false
   end
 
-  # rspec-mocks config goes here. You can use an alternate test double
-  # library (such as bogus or mocha) by changing the `mock_with` option here.
-  config.mock_with :rspec do |mocks|
-    # Prevents you from mocking or stubbing a method that does not exist on
-    # a real object. This is generally recommended, and will default to
-    # `true` in RSpec 4.
-    mocks.verify_partial_doubles = true
+  config.expect_with :rspec do |expect_config|
+    expect_config.syntax = :expect
   end
 
-  # This option will default to `:apply_to_host_groups` in RSpec 4 (and will
-  # have no way to turn it off -- the option exists only for backwards
-  # compatibility in RSpec 3). It causes shared context metadata to be
-  # inherited by the metadata hash of host groups and examples, rather than
-  # triggering implicit auto-inclusion in groups with matching metadata.
-  config.shared_context_metadata_behavior = :apply_to_host_groups
+  config.after(:all) do
+    `rm -rf #{Rails.root}/tmp/uploads/*`
+  end
 
-  # The settings below are suggested to provide a good initial experience
-  # with RSpec, but feel free to customize to your heart's content.
-  #   # This allows you to limit a spec run to individual examples or groups
-  #   # you care about by tagging them with `:focus` metadata. When nothing
-  #   # is tagged with `:focus`, all examples get run. RSpec also provides
-  #   # aliases for `it`, `describe`, and `context` that include `:focus`
-  #   # metadata: `fit`, `fdescribe` and `fcontext`, respectively.
-  #   config.filter_run_when_matching :focus
-  #
-  #   # Allows RSpec to persist some state between runs in order to support
-  #   # the `--only-failures` and `--next-failure` CLI options. We recommend
-  #   # you configure your source control system to ignore this file.
-  #   config.example_status_persistence_file_path = "spec/examples.txt"
-  #
-  #   # Limits the available syntax to the non-monkey patched syntax that is
-  #   # recommended. For more details, see:
-  #   # https://relishapp.com/rspec/rspec-core/docs/configuration/zero-monkey-patching-mode
-  #   config.disable_monkey_patching!
-  #
-  #   # Many RSpec users commonly either run the entire suite or an individual
-  #   # file, and it's useful to allow more verbose output when running an
-  #   # individual spec file.
-  #   if config.files_to_run.one?
-  #     # Use the documentation formatter for detailed output,
-  #     # unless a formatter has already been configured
-  #     # (e.g. via a command-line flag).
-  #     config.default_formatter = "doc"
-  #   end
-  #
-  #   # Print the 10 slowest examples and example groups at the
-  #   # end of the spec run, to help surface which specs are running
-  #   # particularly slow.
-  #   config.profile_examples = 10
-  #
-  #   # Run specs in random order to surface order dependencies. If you find an
-  #   # order dependency and want to debug it, you can fix the order by providing
-  #   # the seed, which is printed after each run.
-  #   #     --seed 1234
-  #   config.order = :random
-  #
-  #   # Seed global randomization in this process using the `--seed` CLI option.
-  #   # Setting this allows you to use `--seed` to deterministically reproduce
-  #   # test failures related to randomization by passing the same `--seed` value
-  #   # as the one that triggered the failure.
-  #   Kernel.srand config.seed
+  # Reset overridden settings
+  config.after(:each) do
+    AppConfig.reset_dynamic!
+  end
+
+  # Reset test mails
+  config.after(:each) do
+    ActionMailer::Base.deliveries.clear
+  end
+
+  # Reset gon
+  config.after(:each) do
+    RequestStore.store[:gon].gon.clear unless RequestStore.store[:gon].nil?
+  end
+
+  config.include FactoryBot::Syntax::Methods
+
+  config.include JSON::SchemaMatchers
+  config.json_schemas[:archive_schema] = ArchiveValidator::SchemaValidator::JSON_SCHEMA
+  config.json_schemas[:api_v1_schema] = "lib/schemas/api_v1.json"
+
+  JSON::Validator.add_schema(
+    JSON::Schema.new(
+      DiasporaFederation::Schemas.federation_entities,
+      Addressable::URI.parse(DiasporaFederation::Schemas::FEDERATION_ENTITIES_URI)
+    )
+  )
+end
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
+end
+
+shared_context suppress_csrf_verification: :none do
+  before do
+    ActionController::Base.allow_forgery_protection = true
+  end
+end
+
+begin
+  require 'factory_bot_rails'
+rescue LoadError
 end
