@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -55,10 +57,10 @@ gem "haml"
 gem "pagy", "~> 5.6", ">= 5.6.6"
 
 # Rendering
-gem "open_graph_reader", "~> 0.7.2"
-gem "ruby-oembed", "~> 0.15.0"
 gem "entypo-rails", github: "wangliyao/entypo-rails" # Entypo-Rails can not directly used for Rails > 6
 gem "local_time"
+gem "open_graph_reader", "~> 0.7.2"
+gem "ruby-oembed", "~> 0.15.0"
 
 # Markdown renderer
 gem "redcarpet", "~> 3.5", ">= 3.5.1"
@@ -100,9 +102,9 @@ group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri mingw x64_mingw]
   gem "dotenv", "~> 2.7", ">= 2.7.6"
-  gem "rspec-rails", "~> 5.1"
-  gem "fixture_builder", "~> 0.5.2"
   gem "factory_bot_rails", "~> 6.2"
+  gem "fixture_builder", "~> 0.5.2"
+  gem "rspec-rails", "~> 5.1"
 end
 
 group :development do
@@ -122,11 +124,11 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   
   gem "capybara"
-  gem "selenium-webdriver"
-  gem "webdrivers"
-  gem "shoulda-matchers", "~> 5.1"
-  gem "webmock",           "3.14.0", require: false
   gem "json-schema-rspec", "0.0.4"
   gem "rspec-json_expectations", "~> 2.1"
+  gem "selenium-webdriver"
+  gem "shoulda-matchers", "~> 5.1"
+  gem "webdrivers"
+  gem "webmock", "3.14.0", require: false
   # gem "diaspora_federation-test", "0.2.7"
 end
