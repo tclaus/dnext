@@ -11,6 +11,10 @@ class StreamsController < ApplicationController
     stream_responder(Stream::Public) #TODO : this will be the "multi" stream
   end
 
+  def multi
+    stream
+  end
+
   def local_public
   end
 

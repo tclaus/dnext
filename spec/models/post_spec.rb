@@ -1,45 +1,45 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Post, type: :model do
-  describe 'scopes' do
-    describe '.owned_or_visible_by_user' do
+  describe "scopes" do
+    describe ".owned_or_visible_by_user" do
       before do
         @you = bob
         @public_post = FactoryBot.create(:status_message, public: true)
         @your_post = FactoryBot.create(:status_message, author: @you.person)
-        @post_from_contact = eve.post(:status_message, text: 'wooo', to: eve.aspects.where(name: 'generic').first)
+        @post_from_contact = eve.post(:status_message, text: "wooo", to: eve.aspects.where(name: "generic").first)
         @post_from_stranger = FactoryBot.create(:status_message, public: false)
       end
 
-      it 'returns post from your contacts' do
+      it "returns post from your contacts" do
         expect(StatusMessage.owned_or_visible_by_user(@you)).to include(@post_from_contact)
       end
 
-      it 'returns your posts' do
+      it "returns your posts" do
         expect(StatusMessage.owned_or_visible_by_user(@you)).to include(@your_post)
       end
 
-      it 'returns public posts' do
+      it "returns public posts" do
         expect(StatusMessage.owned_or_visible_by_user(@you)).to include(@public_post)
       end
 
-      it 'returns public post from your contact' do
+      it "returns public post from your contact" do
         sm = FactoryBot.create(:status_message, author: eve.person, public: true)
 
         expect(StatusMessage.owned_or_visible_by_user(@you)).to include(sm)
       end
 
-      it 'does not return non contacts, non-public post' do
+      it "does not return non contacts, non-public post" do
         expect(StatusMessage.owned_or_visible_by_user(@you)).not_to include(@post_from_stranger)
       end
 
-      it 'should return the three visible posts' do
+      it "should return the three visible posts" do
         expect(StatusMessage.owned_or_visible_by_user(@you).count(:all)).to eq(3)
       end
     end
 
-    describe '.all_public' do
-      it 'includes all public posts' do
+    describe ".all_public" do
+      it "includes all public posts" do
         post1 = FactoryBot.create(:status_message, author: alice.person, public: true)
         post2 = FactoryBot.create(:status_message, author: bob.person, public: true)
         post3 = FactoryBot.create(:status_message, author: eve.person, public: true)
@@ -60,11 +60,10 @@ describe Post, type: :model do
         post_nsfw.save_tags
         expect(StatusMessage.all_public_no_nsfw.ids).to eq([post.id])
       end
-
     end
 
-    describe '.all_local_public' do
-      it 'includes all public posts from local' do
+    describe ".all_local_public" do
+      it "includes all public posts from local" do
         post1 = FactoryBot.create(:status_message, author: alice.person, public: true)
         post2 = FactoryBot.create(:status_message, author: bob.person, public: true)
         expect(Post.all_local_public.ids).to match_array([post1.id, post2.id])
@@ -80,26 +79,26 @@ describe Post, type: :model do
       end
     end
 
-    describe '.for_a_stream' do
-      it 'calls #for_visible_shareable_sql' do
+    describe ".for_a_stream" do
+      it "calls #for_visible_shareable_sql" do
         time = double
         order = double
         expect(Post).to receive(:for_visible_shareable_sql).with(time, order).and_return(Post)
         Post.for_a_stream(time, order)
       end
 
-      it 'calls includes_for_a_stream' do
+      it "calls includes_for_a_stream" do
         expect(Post).to receive(:includes_for_a_stream)
-        Post.for_a_stream(Time.zone.now, 'created_at')
+        Post.for_a_stream(Time.zone.now, "created_at")
       end
 
-      it 'calls excluding_blocks if a user is present' do
+      it "calls excluding_blocks if a user is present" do
         expect(Post).to receive(:excluding_blocks).with(alice).and_return(Post)
-        Post.for_a_stream(Time.zone.now, 'created_at', alice)
+        Post.for_a_stream(Time.zone.now, "created_at", alice)
       end
     end
 
-    describe '.excluding_blocks' do
+    describe ".excluding_blocks" do
       before do
         @post = FactoryBot.create(:status_message, author: alice.person)
         @other_post = FactoryBot.create(:status_message, author: eve.person)
@@ -107,47 +106,47 @@ describe Post, type: :model do
         bob.blocks.create(person: alice.person)
       end
 
-      it 'does not included blocked users posts' do
+      it "does not included blocked users posts" do
         expect(Post.excluding_blocks(bob)).not_to include(@post)
       end
 
-      it 'includes not blocked users posts' do
+      it "includes not blocked users posts" do
         expect(Post.excluding_blocks(bob)).to include(@other_post)
       end
 
-      it 'returns posts if you dont have any blocks' do
+      it "returns posts if you dont have any blocks" do
         expect(Post.excluding_blocks(alice).count).to eq(2)
       end
     end
 
-    describe '.excluding_hidden_shareables' do
+    describe ".excluding_hidden_shareables" do
       before do
         @post = FactoryBot.create(:status_message, author: alice.person)
         @other_post = FactoryBot.create(:status_message, author: eve.person)
         bob.toggle_hidden_shareable(@post)
       end
-      it 'excludes posts the user has hidden' do
+      it "excludes posts the user has hidden" do
         expect(Post.excluding_hidden_shareables(bob)).not_to include(@post)
       end
-      it 'includes posts the user has not hidden' do
+      it "includes posts the user has not hidden" do
         expect(Post.excluding_hidden_shareables(bob)).to include(@other_post)
       end
     end
 
-    describe '.excluding_hidden_content' do
-      it 'calls excluding_blocks and excluding_hidden_shareables' do
+    describe ".excluding_hidden_content" do
+      it "calls excluding_blocks and excluding_hidden_shareables" do
         expect(Post).to receive(:excluding_blocks).and_return(Post)
         expect(Post).to receive(:excluding_hidden_shareables)
         Post.excluding_hidden_content(bob)
       end
     end
 
-    context 'having some posts' do
+    context "having some posts" do
       before do
         time_interval = 1000
         time_past = 1_000_000
         @posts = (1..5).map do |n|
-          aspect_to_post = alice.aspects.where(name: 'generic').first
+          aspect_to_post = alice.aspects.where(name: "generic").first
           post = alice.post :status_message, text: "#{alice.username} - #{n}", to: aspect_to_post.id
           post.created_at = (post.created_at - time_past) - time_interval
           post.updated_at = (post.updated_at - time_past) + time_interval
@@ -157,54 +156,54 @@ describe Post, type: :model do
         end
       end
 
-      describe '.by_max_time' do
-        it 'returns the posts ordered and limited by unix time' do
-          expect(Post.for_a_stream(Time.zone.now + 1, 'created_at')).to eq(@posts)
-          expect(Post.for_a_stream(Time.zone.now + 1, 'updated_at')).to eq(@posts.reverse)
+      describe ".by_max_time" do
+        it "returns the posts ordered and limited by unix time" do
+          expect(Post.for_a_stream(Time.zone.now + 1, "created_at")).to eq(@posts)
+          expect(Post.for_a_stream(Time.zone.now + 1, "updated_at")).to eq(@posts.reverse)
         end
       end
 
-      describe '.for_visible_shareable_sql' do
-        it 'calls max_time' do
+      describe ".for_visible_shareable_sql" do
+        it "calls max_time" do
           time = Time.zone.now + 1
-          expect(Post).to receive(:by_max_time).with(time, 'created_at').and_return(Post)
-          Post.for_visible_shareable_sql(time, 'created_at')
+          expect(Post).to receive(:by_max_time).with(time, "created_at").and_return(Post)
+          Post.for_visible_shareable_sql(time, "created_at")
         end
 
-        it 'defaults to 15 posts' do
+        it "defaults to 15 posts" do
           chain = double.as_null_object
 
           allow(Post).to receive(:by_max_time).and_return(chain)
           expect(chain).to receive(:limit).with(15).and_return(Post)
-          Post.for_visible_shareable_sql(Time.zone.now + 1, 'created_at')
+          Post.for_visible_shareable_sql(Time.zone.now + 1, "created_at")
         end
 
-        context 'with two posts with the same timestamp' do
+        context "with two posts with the same timestamp" do
           before do
-            aspect_id = alice.aspects.where(name: 'generic').first.id
+            aspect_id = alice.aspects.where(name: "generic").first.id
             Timecop.freeze Time.zone.now do
-              alice.post(:status_message, text: 'first', to: aspect_id)
-              alice.post(:status_message, text: 'second', to: aspect_id)
+              alice.post(:status_message, text: "first", to: aspect_id)
+              alice.post(:status_message, text: "second", to: aspect_id)
             end
           end
 
-          it 'returns them in reverse creation order' do
-            posts = Post.for_visible_shareable_sql(Time.zone.now + 1, 'created_at')
-            expect(posts.first.text).to eq('second')
-            expect(posts.second.text).to eq('first')
-            expect(posts.last.text).to eq('alice - 5')
+          it "returns them in reverse creation order" do
+            posts = Post.for_visible_shareable_sql(Time.zone.now + 1, "created_at")
+            expect(posts.first.text).to eq("second")
+            expect(posts.second.text).to eq("first")
+            expect(posts.last.text).to eq("alice - 5")
           end
         end
       end
     end
 
-    describe '.subscribed_by' do
+    describe ".subscribed_by" do
       let(:user) { FactoryBot.create(:user) }
 
-      context 'when the user has a participation on a post' do
+      context "when the user has a participation on a post" do
         let(:post) { FactoryBot.create(:status_message_with_participations, participants: [user]) }
 
-        it 'includes the post to the result set' do
+        it "includes the post to the result set" do
           expect(Post.subscribed_by(user)).to eq([post])
         end
       end
@@ -214,113 +213,113 @@ describe Post, type: :model do
           FactoryBot.create(:status_message)
         end
 
-        it 'returns empty result set' do
+        it "returns empty result set" do
           expect(Post.subscribed_by(user)).to be_empty
         end
       end
     end
 
-    describe '.reshared_by' do
+    describe ".reshared_by" do
       let(:person) { FactoryBot.create(:person) }
 
-      context 'when the person has a reshare for a post' do
+      context "when the person has a reshare for a post" do
         let(:post) { FactoryBot.create(:reshare, author: person).root }
 
-        it 'includes the post to the result set' do
+        it "includes the post to the result set" do
           expect(Post.reshared_by(person)).to eq([post])
         end
       end
 
-      context 'when the person has no reshare for a post' do
+      context "when the person has no reshare for a post" do
         before do
           FactoryBot.create(:status_message)
         end
 
-        it 'returns empty result set' do
+        it "returns empty result set" do
           expect(Post.reshared_by(person)).to be_empty
         end
       end
     end
   end
 
-  describe 'validations' do
-    it 'validates uniqueness of guid and does not throw a db error' do
+  describe "validations" do
+    it "validates uniqueness of guid and does not throw a db error" do
       message = FactoryBot.create(:status_message)
       expect(FactoryBot.build(:status_message, guid: message.guid)).not_to be_valid
     end
   end
 
-  describe 'post_type' do
-    it 'returns the class constant' do
+  describe "post_type" do
+    it "returns the class constant" do
       status_message = FactoryBot.create(:status_message)
-      expect(status_message.post_type).to eq('StatusMessage')
+      expect(status_message.post_type).to eq("StatusMessage")
     end
   end
 
-  describe 'deletion' do
-    it 'should delete a posts comments on delete' do
+  describe "deletion" do
+    it "should delete a posts comments on delete" do
       post = FactoryBot.create(:status_message, author: alice.person)
-      alice.comment!(post, 'hey')
+      alice.comment!(post, "hey")
       post.destroy
       expect(Post.where(id: post.id).empty?).to eq(true)
-      expect(Comment.where(text: 'hey').empty?).to eq(true)
+      expect(Comment.where(text: "hey").empty?).to eq(true)
     end
   end
 
-  describe '.diaspora_initialize' do
-    it 'takes provider_display_name' do
-      sm = FactoryBot.create(:status_message, provider_display_name: 'mobile')
+  describe ".diaspora_initialize" do
+    it "takes provider_display_name" do
+      sm = FactoryBot.create(:status_message, provider_display_name: "mobile")
       expect(StatusMessage.diaspora_initialize(sm.attributes.merge(author: bob.person))
-        .provider_display_name).to eq('mobile')
+        .provider_display_name).to eq("mobile")
     end
   end
 
-  describe '#subscribers' do
+  describe "#subscribers" do
     let(:user) { FactoryBot.create(:user_with_aspect) }
 
     before do
       user.share_with(alice.person, user.aspects.first)
     end
 
-    context 'private' do
-      it 'returns the people contained in the aspects the post appears in' do
-        post = user.post(:status_message, text: 'hello', to: user.aspects.first.id)
+    context "private" do
+      it "returns the people contained in the aspects the post appears in" do
+        post = user.post(:status_message, text: "hello", to: user.aspects.first.id)
 
         expect(post.subscribers).to eq([alice.person])
       end
 
-      it 'returns empty if posted to an empty aspect' do
-        empty_aspect = user.aspects.create(name: 'empty')
+      it "returns empty if posted to an empty aspect" do
+        empty_aspect = user.aspects.create(name: "empty")
 
-        post = user.post(:status_message, text: 'hello', to: empty_aspect.id)
+        post = user.post(:status_message, text: "hello", to: empty_aspect.id)
 
         expect(post.subscribers).to eq([])
       end
     end
 
-    context 'public' do
-      let(:post) { user.post(:status_message, text: 'hello', public: true) }
+    context "public" do
+      let(:post) { user.post(:status_message, text: "hello", public: true) }
 
-      it 'returns the author to ensure local delivery' do
+      it "returns the author to ensure local delivery" do
         lonely_user = FactoryBot.create(:user)
-        lonely_post = lonely_user.post(:status_message, text: 'anyone?', public: true)
+        lonely_post = lonely_user.post(:status_message, text: "anyone?", public: true)
         expect(lonely_post.subscribers).to match_array([lonely_user.person])
       end
 
-      it 'returns all a users contacts if the post is public' do
-        second_aspect = user.aspects.create(name: 'winners')
+      it "returns all a users contacts if the post is public" do
+        second_aspect = user.aspects.create(name: "winners")
         user.share_with(bob.person, second_aspect)
 
         expect(post.subscribers).to match_array([alice.person, bob.person, user.person])
       end
 
-      it 'adds resharers to subscribers' do
+      it "adds resharers to subscribers" do
         FactoryBot.create(:reshare, root: post, author: eve.person)
 
         expect(post.subscribers).to match_array([alice.person, eve.person, user.person])
       end
 
-      it 'adds participants to subscribers' do
+      it "adds participants to subscribers" do
         eve.participate!(post)
 
         expect(post.subscribers).to match_array([alice.person, eve.person, user.person])
@@ -328,13 +327,13 @@ describe Post, type: :model do
     end
   end
 
-  describe 'Likeable#update_likes_counter' do
+  describe "Likeable#update_likes_counter" do
     before do
-      @post = bob.post(:status_message, text: 'hello', public: true)
+      @post = bob.post(:status_message, text: "hello", public: true)
       bob.like!(@post)
     end
 
-    it 'does not update updated_at' do
+    it "does not update updated_at" do
       old_time = Time.zone.now - 100
       Post.where(id: @post.id).update_all(updated_at: old_time)
       expect(@post.reload.updated_at.to_i).to eq(old_time.to_i)
@@ -343,40 +342,40 @@ describe Post, type: :model do
     end
   end
 
-  describe '#receive' do
-    it 'creates a share visibility for the user' do
+  describe "#receive" do
+    it "creates a share visibility for the user" do
       user_ids = [alice.id, eve.id]
       post = FactoryBot.create(:status_message, author: bob.person)
       expect(ShareVisibility).to receive(:batch_import).with(user_ids, post)
       post.receive(user_ids)
     end
 
-    it 'does nothing for public post' do
+    it "does nothing for public post" do
       post = FactoryBot.create(:status_message, author: bob.person, public: true)
       expect(ShareVisibility).not_to receive(:batch_import)
       post.receive([alice.id])
     end
 
-    it 'does nothing if no recipients provided' do
+    it "does nothing if no recipients provided" do
       post = FactoryBot.create(:status_message, author: bob.person)
       expect(ShareVisibility).not_to receive(:batch_import)
       post.receive([])
     end
   end
 
-  describe '#reshares_count' do
+  describe "#reshares_count" do
     before :each do
-      @post = alice.post(:status_message, text: 'hello', public: true)
+      @post = alice.post(:status_message, text: "hello", public: true)
       expect(@post.reshares.size).to eq(0)
     end
 
-    describe 'when post has not been reshared' do
-      it 'returns zero' do
+    describe "when post has not been reshared" do
+      it "returns zero" do
         expect(@post.reshares_count).to eq(0)
       end
     end
 
-    describe 'when post has been reshared exactly 1 time' do
+    describe "when post has been reshared exactly 1 time" do
       before :each do
         expect(@post.reshares.size).to eq(0)
         @reshare = FactoryBot.create(:reshare, root: @post)
@@ -384,12 +383,12 @@ describe Post, type: :model do
         expect(@post.reshares.size).to eq(1)
       end
 
-      it 'returns 1' do
+      it "returns 1" do
         expect(@post.reshares_count).to eq(1)
       end
     end
 
-    describe 'when post has been reshared more than once' do
+    describe "when post has been reshared more than once" do
       before :each do
         expect(@post.reshares.size).to eq(0)
         FactoryBot.create(:reshare, root: @post)
@@ -399,21 +398,21 @@ describe Post, type: :model do
         expect(@post.reshares.size).to eq(3)
       end
 
-      it 'returns the number of reshares' do
+      it "returns the number of reshares" do
         expect(@post.reshares_count).to eq(3)
       end
     end
   end
 
-  describe '#after_create' do
-    it 'sets #interacted_at' do
+  describe "#after_create" do
+    it "sets #interacted_at" do
       post = FactoryBot.create(:status_message)
       expect(post.interacted_at).not_to be_blank
     end
   end
 
-  describe '#before_destroy' do
-    it 'removes root_guid from reshares' do
+  describe "#before_destroy" do
+    it "removes root_guid from reshares" do
       post = FactoryBot.create(:status_message, author: alice.person, public: true)
       reshare = FactoryBot.create(:reshare, author: bob.person, root: post)
       post.destroy!

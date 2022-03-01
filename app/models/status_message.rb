@@ -1,13 +1,8 @@
 class StatusMessage < Post
-  include Diaspora::Taggable
-
   include Reference::Source
   include Reference::Target
 
   include PeopleHelper
-
-  acts_as_taggable_on :tags
-  extract_tags_from :text
 
   validates_length_of :text, maximum: 65535, message: proc { |p, v| I18n.t("status_messages.too_long", count: 65535, current_length: v[:value].length) }
   before_save :update_text_language
@@ -32,11 +27,6 @@ class StatusMessage < Post
     owned_or_visible_by_user(person.owner).joins(:mentions).where(mentions: {person_id: person.id})
   }
 
-  def self.all_public_no_nsfw
-    self.all_public
-    .tagged_with(%i(nsfw), exclude: true)
-  end
-  
   def self.model_name
     Post.model_name
   end

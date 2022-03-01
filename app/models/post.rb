@@ -9,13 +9,16 @@ class Post < ApplicationRecord
 
   include ApplicationHelper
 
+  include Diaspora::Commentable
   include Diaspora::Federated::Base
   include Diaspora::Federated::Fetchable
-
   include Diaspora::Likeable
-  include Diaspora::Commentable
-  include Diaspora::Shareable
   include Diaspora::MentionsContainer
+  include Diaspora::Shareable
+  include Diaspora::Taggable
+
+  acts_as_taggable_on :tags
+  extract_tags_from :text
 
   has_many :participations, dependent: :delete_all, as: :target, inverse_of: :target
   has_many :participants, through: :participations, source: :author
@@ -30,7 +33,7 @@ class Post < ApplicationRecord
   belongs_to :o_embed_cache, optional: true
   belongs_to :open_graph_cache, optional: true
 
-  validates_uniqueness_of :id
+  validates :id, uniqueness: true
 
   after_create do
     touch(:interacted_at)
@@ -62,6 +65,11 @@ class Post < ApplicationRecord
       and posts.public = true")
   }
 
+  def self.all_public_no_nsfw
+    self.all_public
+        .tagged_with(%i(nsfw), exclude: true)
+  end
+
   # TODO: dont show people from blocked posts 
   scope :commented_by, lambda { |person|
     select('DISTINCT posts.*')
@@ -69,6 +77,7 @@ class Post < ApplicationRecord
       .where(comments: { author_id: person.id })
   }
 
+  # TODO: dont show people from blocked posts
   scope :liked_by, lambda { |person|
     joins(:likes).where(likes: { author_id: person.id })
   }
@@ -173,4 +182,9 @@ class Post < ApplicationRecord
   def update_text_language
     # TODO: implement update detected language
   end
+
+  def rendered_message
+    Diaspora::MessageRenderer.new(text).markdownified
+  end
+
 end
