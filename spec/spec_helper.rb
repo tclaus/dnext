@@ -22,8 +22,8 @@ end
 
 RSpec::Matchers.define_negated_matcher :remain, :change
 
-ProcessedImage.enable_processing = false
-UnprocessedImage.enable_processing = false
+#ProcessedImage.enable_processing = false
+#UnprocessedImage.enable_processing = false
 
 def alice
   @alice ||= User.find_by(username: "alice")
@@ -147,13 +147,15 @@ RSpec.configure do |config|
 
   # Reset gon
   config.after(:each) do
-    RequestStore.store[:gon].gon.clear unless RequestStore.store[:gon].nil?
+    # dnext should work without gon
+   # RequestStore.store[:gon].gon.clear unless RequestStore.store[:gon].nil?
   end
 
   config.include FactoryBot::Syntax::Methods
 
   config.include JSON::SchemaMatchers
-  config.json_schemas[:archive_schema] = ArchiveValidator::SchemaValidator::JSON_SCHEMA
+  # TODO Activate Schema tests in a separate PR
+#  config.json_schemas[:archive_schema] = ArchiveValidator::SchemaValidator::JSON_SCHEMA
   config.json_schemas[:api_v1_schema] = "lib/schemas/api_v1.json"
 
   JSON::Validator.add_schema(

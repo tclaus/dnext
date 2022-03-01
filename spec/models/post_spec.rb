@@ -4,7 +4,7 @@ describe Post, type: :model do
   describe 'scopes' do
     describe '.owned_or_visible_by_user' do
       before do
-        @you =  FactoryBot.create(:user_with_aspect, username: "bob")
+        @you = bob
         @public_post = FactoryBot.create(:status_message, public: true)
         @your_post = FactoryBot.create(:status_message, author: @you.person)
         @post_from_contact = eve.post(:status_message, text: 'wooo', to: eve.aspects.where(name: 'generic').first)
@@ -52,6 +52,15 @@ describe Post, type: :model do
         FactoryBot.create(:status_message, author: eve.person, public: false)
         expect(Post.all_public.ids).to eq([])
       end
+
+      it "doesn't include any posts tagged as NSFW" do
+        post = FactoryBot.create(:status_message, public: true)
+        post_nsfw = FactoryBot.create(:status_message, public: true)
+        post_nsfw.tag_list.add("nsfw")
+        post_nsfw.save_tags
+        expect(StatusMessage.all_public_no_nsfw.ids).to eq([post.id])
+      end
+
     end
 
     describe '.all_local_public' do

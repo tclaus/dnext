@@ -71,7 +71,7 @@ class Profile < ApplicationRecord
         result
       end
     elsif fallback_to_default
-      ActionController::Base.helpers.image_path("users/default.png")
+      ActionController::Base.helpers.image_path("user/default.png")
     end
   end
 

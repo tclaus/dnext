@@ -32,6 +32,11 @@ class StatusMessage < Post
     owned_or_visible_by_user(person.owner).joins(:mentions).where(mentions: {person_id: person.id})
   }
 
+  def self.all_public_no_nsfw
+    self.all_public
+    .tagged_with(%i(nsfw), exclude: true)
+  end
+  
   def self.model_name
     Post.model_name
   end

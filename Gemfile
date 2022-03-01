@@ -69,7 +69,8 @@ gem "twitter-text", "~> 3.1.0"
 gem "configurate", "~>0.5.0"
 gem "toml-rb", "~> 2.1.0"
 
-gem "acts-as-taggable-on", github: "mbleigh/acts-as-taggable-on"
+# Taggable Posts
+gem 'acts-as-taggable-on', '~> 9.0', '>= 9.0.1'
 
 # Process Management
 gem "eye", "~> 0.10.0"
@@ -123,6 +124,9 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
+  gem 'shoulda-matchers', '~> 5.1'
   gem "webmock",           "3.14.0", require: false
+  gem "json-schema-rspec", "0.0.4"
+  gem "rspec-json_expectations", "~> 2.1"
   # gem "diaspora_federation-test", "0.2.7"
 end
