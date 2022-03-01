@@ -8,7 +8,7 @@ module Stream
 
     # @return [ActiveRecord::Association<Post>] AR association of posts
     def posts
-      @posts ||= Post.all_public
+      @posts ||= Post.all_public_no_nsfw
     end
 
     # Override base class method

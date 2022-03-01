@@ -8,10 +8,12 @@ def r_str
   SecureRandom.hex(3)
 end
 
+# require "diaspora_federation/test/factories"
+
 FactoryBot.define do
   factory :profile do
-    sequence(:first_name) { |n| "Robert#{n}#{r_str}" }
-    sequence(:last_name) { |n| "Grimm#{n}#{r_str}" }
+    sequence(:first_name) {|n| "Robert#{n}#{r_str}" }
+    sequence(:last_name)  {|n| "Grimm#{n}#{r_str}" }
     bio { "I am a cat lover and I love to run" }
     gender { "robot" }
     location { "Earth" }
@@ -31,9 +33,9 @@ FactoryBot.define do
       first_name { nil }
     end
 
-    sequence(:diaspora_handle) { |n| "bob-person-#{n}#{r_str}@example.net" }
+    sequence(:diaspora_handle) {|n| "bob-person-#{n}#{r_str}@example.net" }
     pod { Pod.find_or_create_by(url: "http://example.net") }
-    serialized_public_key { OpenSSL::PKey::RSA.generate(1024).public_key.to_s }
+    serialized_public_key { OpenSSL::PKey::RSA.generate(1024).public_key.export }
     after(:build) do |person, evaluator|
       if person.profile.first_name.blank?
         person.profile = FactoryBot.build(:profile, person: person)
@@ -61,19 +63,19 @@ FactoryBot.define do
 
   factory :user do
     getting_started { false }
-    sequence(:username) { |n| "bob#{n}#{r_str}" }
-    sequence(:email) { |n| "bob#{n}#{r_str}@pivotallabs.com" }
+    sequence(:username) {|n| "bob#{n}#{r_str}" }
+    sequence(:email) {|n| "bob#{n}#{r_str}@pivotallabs.com" }
     password { "bluepin7" }
     password_confirmation(&:password)
-    serialized_private_key { OpenSSL::PKey::RSA.generate(1024).to_s }
+    serialized_private_key { OpenSSL::PKey::RSA.generate(1024).export }
     transient do
       profile { nil }
     end
     after(:build) do |u, e|
       u.person = FactoryBot.build(:person,
-        pod: nil,
-        serialized_public_key: u.encryption_key.public_key.export,
-        diaspora_handle: "#{u.username}#{User.diaspora_id_host}")
+                                  pod:                   nil,
+                                  serialized_public_key: u.encryption_key.public_key.export,
+                                  diaspora_handle:       "#{u.username}#{User.diaspora_id_host}")
       u.person.profile = e.profile if e.profile
     end
     after(:create) do |u|
@@ -101,7 +103,7 @@ FactoryBot.define do
   end
 
   factory(:status_message, aliases: %i[status_message_without_participation]) do
-    sequence(:text) { |n| "jimmy's #{n} whales" }
+    sequence(:text) {|n| "jimmy's #{n} whales" }
     author
 
     factory(:status_message_with_poll) do
@@ -117,20 +119,20 @@ FactoryBot.define do
     end
 
     factory(:status_message_with_photo) do
-      sequence(:text) { |n| "There are #{n} ninjas in this photo." }
+      sequence(:text) {|n| "There are #{n} ninjas in this photo." }
       after(:build) do |sm|
         FactoryBot.create(
           :photo,
-          author: sm.author,
+          author:         sm.author,
           status_message: sm,
-          pending: false,
-          public: sm.public
+          pending:        false,
+          public:         sm.public
         )
       end
     end
 
     factory(:status_message_in_aspect) do
-      public { false }
+      public { false } # rubocop:disable Layout/EmptyLinesAroundAccessModifier
       author { FactoryBot.create(:user_with_aspect).person }
       after(:build) do |sm|
         sm.aspects << sm.author.owner.aspects.first
@@ -156,9 +158,9 @@ FactoryBot.define do
   end
 
   factory(:location) do
-    sequence(:address) { |n| "Fernsehturm Berlin, #{n}, Berlin, Germany" }
-    sequence(:lat) { |n| 52.520645 + 0.0000001 * n }
-    sequence(:lng) { |n| 13.409779 + 0.0000001 * n }
+    sequence(:address) {|n| "Fernsehturm Berlin, #{n}, Berlin, Germany" }
+    sequence(:lat) {|n| 52.520645 + 0.0000001 * n }
+    sequence(:lng) {|n| 13.409779 + 0.0000001 * n }
   end
 
   factory :participation do
@@ -167,7 +169,7 @@ FactoryBot.define do
   end
 
   factory(:poll) do
-    sequence(:question) { |n| "What do you think about #{n} ninjas?" }
+    sequence(:question) {|n| "What do you think about #{n} ninjas?" }
     association :status_message
     after(:build) do |p|
       p.poll_answers << FactoryBot.build(:poll_answer, poll: p)
@@ -180,7 +182,7 @@ FactoryBot.define do
   end
 
   factory(:poll_answer) do
-    sequence(:answer) { |n| "#{n} questionmarks" }
+    sequence(:answer) {|n| "#{n} questionmarks" }
     association :poll
   end
 
@@ -189,10 +191,10 @@ FactoryBot.define do
     association :poll_answer
 
     trait(:with_poll_author) do
-      after(:build) { |p| p.poll.author ||= p.author }
+      after(:build) {|p| p.poll.author ||= p.author }
     end
 
-    after(:build) { |p| p.poll = p.poll_answer.poll }
+    after(:build) {|p| p.poll = p.poll_answer.poll }
   end
 
   factory(:photo) do
@@ -229,7 +231,7 @@ FactoryBot.define do
   end
 
   factory :invitation_code do
-    sequence(:token) { |n| "sdfsdsf#{n}" }
+    sequence(:token) {|n| "sdfsdsf#{n}" }
     association :user
     count { 0 }
   end
@@ -238,20 +240,20 @@ FactoryBot.define do
     nickname { "sirrobertking" }
     type { "Services::Twitter" }
 
-    sequence(:uid) { |token| "00000#{token}" }
-    sequence(:access_token) { |token| "12345#{token}" }
-    sequence(:access_secret) { |token| "98765#{token}" }
+    sequence(:uid)           {|token| "00000#{token}" }
+    sequence(:access_token)  {|token| "12345#{token}" }
+    sequence(:access_secret) {|token| "98765#{token}" }
 
     user
   end
 
   factory :pod do
-    sequence(:host) { |n| "pod#{n}.example#{r_str}.com" }
+    sequence(:host) {|n| "pod#{n}.example#{r_str}.com" }
     ssl { true }
   end
 
   factory(:comment) do
-    sequence(:text) { |n| "#{n} cats" }
+    sequence(:text) {|n| "#{n} cats" }
     association(:author, factory: :person)
     association(:post, factory: :status_message)
   end
@@ -297,7 +299,7 @@ FactoryBot.define do
     url { "http://youtube.com/kittens" }
     data {
       {
-        "data" => "foo",
+        "data"                 => "foo",
         "trusted_endpoint_url" => "https://www.youtube.com/oembed?scheme=https"
       }
     }
@@ -334,7 +336,7 @@ FactoryBot.define do
 
   factory(:conversation) do
     association(:author, factory: :person)
-    sequence(:subject) { |n| "conversation ##{n}" }
+    sequence(:subject) {|n| "conversation ##{n}" }
 
     after(:build) do |c|
       c.participants << c.author
@@ -352,8 +354,8 @@ FactoryBot.define do
   factory(:message) do
     association :author, factory: :person
     association :conversation
-    sequence(:text) { |n| "message text ##{n}" }
-    after(:build) { |m| m.conversation.participants << m.author }
+    sequence(:text) {|n| "message text ##{n}" }
+    after(:build) {|m| m.conversation.participants << m.author }
   end
 
   factory(:signature_order) do
@@ -396,12 +398,37 @@ FactoryBot.define do
 
   factory :report do
     user
-    association :reportable, factory: :status_message
+    association :item, factory: :status_message
     text { "offensive content" }
   end
 
-  factory :o_auth_application_with_ppid, parent: :o_auth_application do
-    ppid { true }
-    sector_identifier_uri { "https://example.com/uri" }
+  # Factories for the DiasporaFederation-gem
+
+  factory(:federation_person_from_webfinger, class: DiasporaFederation::Entities::Person) do
+    sequence(:guid) { UUID.generate :compact }
+    sequence(:diaspora_id) {|n| "bob-person-#{n}#{r_str}@example.net" }
+    url { "https://example.net/" }
+    exported_key { OpenSSL::PKey::RSA.generate(1024).public_key.export }
+    profile {
+      DiasporaFederation::Entities::Profile.new(
+        FactoryBot.attributes_for(:federation_profile_from_hcard, diaspora_id: diaspora_id)
+      )
+    }
+  end
+
+  factory(:federation_profile_from_hcard, class: DiasporaFederation::Entities::Profile) do
+    sequence(:diaspora_id) {|n| "bob-person-#{n}#{r_str}@example.net" }
+    sequence(:first_name) {|n| "My Name#{n}#{r_str}" }
+    last_name { nil }
+    image_url { "/assets/user/default.png" }
+    image_url_medium { "/assets/user/default.png" }
+    image_url_small { "/assets/user/default.png" }
+    searchable { true }
+  end
+
+  factory :federation_profile_from_hcard_with_image_url, parent: :federation_profile_from_hcard do
+    image_url { "http://example.com/image.jpg" }
+    image_url_medium { "http://example.com/image_mid.jpg" }
+    image_url_small { "http://example.com/image_small.jpg" }
   end
 end

@@ -1,11 +1,19 @@
+# frozen_string_literal: true
+
+#   Copyright (c) 2010-2011, Diaspora Inc.  This file is
+#   licensed under the Affero General Public License version 3 or later.  See
+#   the COPYRIGHT file.
+
 class Profile < ApplicationRecord
+  include Diaspora::Federated::Base
+  include Diaspora::Taggable
+  
   MAX_TAGS = 5
   self.include_root_in_json = false
 
-  # include Diaspora::Federated::Base
-  include Diaspora::Taggable
 
   attr_accessor :tag_string
+
   acts_as_ordered_taggable
   extract_tags_from :tag_string
   validates :tag_list, length: { maximum: 5 }
@@ -63,7 +71,7 @@ class Profile < ApplicationRecord
         result
       end
     elsif fallback_to_default
-      ActionController::Base.helpers.image_path("users/default.png")
+      ActionController::Base.helpers.image_path("user/default.png")
     end
   end
 
@@ -112,13 +120,13 @@ class Profile < ApplicationRecord
   end
 
   def tag_string
-    @tag_string ||= tags.pluck(:name).map { |tag| "##{tag}" }.join(" ")
+    @tag_string ||= tags.pluck(:name).map { |tag| "##{tag}" }.join(' ')
   end
 
   # Constructs a full name by joining #first_name and #last_name
   # @return [String] A full name
   def construct_full_name
-    self.full_name = [first_name, last_name].join(" ").downcase.strip
+    self.full_name = [first_name, last_name].join(' ').downcase.strip
     full_name
   end
 
@@ -140,9 +148,7 @@ class Profile < ApplicationRecord
   end
 
   def max_tags
-    if tag_string.count("#") > 5
-      errors[:base] << "Profile cannot have more than five tags"
-    end
+    errors[:base] << 'Profile cannot have more than five tags' if tag_string.count('#') > 5
   end
 
   def valid_birthday
@@ -159,8 +165,9 @@ class Profile < ApplicationRecord
   end
 
   def build_image_url(url)
-    return nil if url.blank? || url.match(/user\/default/)
-    return url if /^https?:\/\//.match?(url)
-    "#{AppConfig.pod_uri.to_s.chomp("/")}#{url}"
+    return nil if url.blank? || url.match(%r{user/default})
+    return url if url.match(%r{^https?://})
+
+    "#{AppConfig.pod_uri.to_s.chomp('/')}#{url}"
   end
 end

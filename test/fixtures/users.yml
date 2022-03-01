@@ -1,0 +1,416 @@
+---
+alice:
+  id: 25
+  username: alice
+  serialized_private_key: |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIICWwIBAAKBgQDHk0YxXw1+9W7QOwE/9WtbdaKZwbaNFplS/TJY5gU3+A5nYo6S
+    W43C5Z8Pxurg6+6aY8MiyaWBF9doEX8c0+LtUOlxeiH2a3aCP370VcmlJp652VZf
+    J8xEKqumGEXkApOYQJpqYyWYpoG4WGQ+NEmcAeik1hKXg+RdiPB46XDrZwIDAQAB
+    AoGAGnT7qS/gqiP/PLuVvtTaFpXRqHB1st58FPRb6E0WBAVuY2Y9YEmi0WN/YqgM
+    GyUrzGvNQp9YwXRXqgQnxbqRKojLF21Wmiv97UG7dhYVR1cgkyy2tPQsP2qWhvaM
+    REZqWM4jEkUvxo84Fljbnxj96Px7GMRVkG5juoVd2WPUkIECQQDol9rTfGcNGx73
+    jIuLKGuZEAgwI5Yv7jBXGZMVQWffOPSbSsxPAp/oqTgNpb+6IPqC3UClcBO4kvrr
+    j1pFbOvTAkEA26jNF2HrsoI+/TM9X0ZPWIVuy1LLefQhTBaB485rjuLppH1WLJeL
+    3XkabguUBzY+p/DV086w7/gEhvlvrnKpnQJATpNefau9NJRA9egpDC3vi5n66ihb
+    iH2zHvmo0rlx2dtn5z5xnw+H7hWcth+UkdCqUKNmP32JbAVbd1DKckHFuQJALqs6
+    h9FCJncNsvYEAA4MJZ6T35cDrDF2MZhGmIPuzjjfsxb+DBNWoANu3hqPpMidn0jH
+    5Wxwo0tqitLMK6Ao8QJAVMa0ubU89HRkJIcNfRGut2ORl8bzfnAVTS9aPyrKcTDZ
+    Rhi9IZMZhg3s6GZabp/JUoMtp9nfN4kOq9TOeh0nCA==
+    -----END RSA PRIVATE KEY-----
+  getting_started: false
+  disable_mail: false
+  language: en
+  email: bob1007261@pivotallabs.com
+  encrypted_password: "$2a$04$hvvhIGm80ybrLBJbWPndxOmMn3EC728D.lNP59bzCEzUzBGnErtyO"
+  reset_password_token: 
+  remember_created_at: 
+  sign_in_count: 0
+  current_sign_in_at: 
+  last_sign_in_at: 
+  current_sign_in_ip: 
+  last_sign_in_ip: 
+  created_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:46.235651000 Z
+    zone: &1 !ruby/object:ActiveSupport::TimeZone
+      name: Etc/UTC
+    time: 2022-02-11 10:26:46.235651000 Z
+  updated_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:46.235651000 Z
+    zone: *1
+    time: 2022-02-11 10:26:46.235651000 Z
+  invited_by_id: 
+  authentication_token: 
+  unconfirmed_email: 
+  confirm_email_token: 
+  locked_at: 
+  show_community_spotlight_in_stream: true
+  auto_follow_back: false
+  auto_follow_back_aspect_id: 
+  hidden_shareables: 
+  reset_password_sent_at: 
+  last_seen: 
+  remove_after: 
+  export: 
+  exported_at: 
+  exporting: false
+  strip_exif: false
+  exported_photos_file: 
+  exported_photos_at: 
+  exporting_photos: false
+  color_theme: 
+  post_default_public: false
+  consumed_timestep: 
+  otp_required_for_login: 
+  otp_backup_codes: 
+  plain_otp_secret: 
+  confirmation_token: 
+  confirmed_at: 
+  confirmation_sent_at: 
+  failed_attempts: 0
+  unlock_token: 
+eve:
+  id: 26
+  username: eve
+  serialized_private_key: |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIICWwIBAAKBgQCoeRhPHOSbwdGuHLxc8Wch3lAX+I+3Xs29/frk++xkr7uS9WRN
+    c2y7dxkx6Uq4TWsjj2xNbPYWZ7XgzoPJ5nVN7MAs68/oH6Pj/e50RglsH080XiBQ
+    omb4VsPTarc9FJGvMzfDRUFGdDEvr+j0jRq57mV93gO61Hz3meAUIVvAJQIDAQAB
+    AoGAfEszCxMW+m8JYnpi4fNcElmxH65LYY75HcXmt8/BPRuFuMuAn7+bpccdeHxU
+    mxrLA6ZJ0emkuSz0u5HBG1ECkzO4okpuOgnERsa5WhqdqzUli5KF4rRbOW1oy8BS
+    qxwtaczYBxLQrb+apo3NfrbEeFJfQSKdxW5OxwvgSGod8CECQQDRa3MgQ+rZKdKD
+    1k7yRmQ7emtiZulo2gn0ioCYQyBjJ3UlhikbRewG4z0vHvxdJnM/eysp/RvwcD7D
+    g3qPxGaJAkEAzfIaVjh+/lH0ELm4974blkAf1J2jFZ8infTjxwfl/sLf6Un0iePM
+    vzBcMRrOETfNnLLkGst8HuM9+5+cv6hlvQJALyOgpoKjOn7PhB2ZZ6+woDLOOTgx
+    EgkCdKk4iQ2THL6k/+1TE3CJ0IMWIqU26UDecEupS6pNv7GEbz4JOJNdAQJAakyT
+    YXuJuPVOF6/1FBLRJG12wISZH9jiwksboqimAyhM8JoWmXG2RdzNSR8/y81U2JPR
+    fy8Wos7COHV7L8XYtQJAI4hUOOBSB+0MZ/ILiapzeiFmzjJYVo1hw9rgQFYs4kNl
+    clqn+qh9jyr2zjJgapjZ+mQi8OvnqQMZUWZE6L6kIA==
+    -----END RSA PRIVATE KEY-----
+  getting_started: false
+  disable_mail: false
+  language: en
+  email: bob220796e@pivotallabs.com
+  encrypted_password: "$2a$04$SIfKJQgvYn9iq6HMDefLyO2XPHYP8Rjo5zS7fnya1ihmcz68nehwG"
+  reset_password_token: 
+  remember_created_at: 
+  sign_in_count: 0
+  current_sign_in_at: 
+  last_sign_in_at: 
+  current_sign_in_ip: 
+  last_sign_in_ip: 
+  created_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:46.481852000 Z
+    zone: *1
+    time: 2022-02-11 10:26:46.481852000 Z
+  updated_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:46.481852000 Z
+    zone: *1
+    time: 2022-02-11 10:26:46.481852000 Z
+  invited_by_id: 
+  authentication_token: 
+  unconfirmed_email: 
+  confirm_email_token: 
+  locked_at: 
+  show_community_spotlight_in_stream: true
+  auto_follow_back: false
+  auto_follow_back_aspect_id: 
+  hidden_shareables: 
+  reset_password_sent_at: 
+  last_seen: 
+  remove_after: 
+  export: 
+  exported_at: 
+  exporting: false
+  strip_exif: true
+  exported_photos_file: 
+  exported_photos_at: 
+  exporting_photos: false
+  color_theme: 
+  post_default_public: false
+  consumed_timestep: 
+  otp_required_for_login: 
+  otp_backup_codes: 
+  plain_otp_secret: 
+  confirmation_token: 
+  confirmed_at: 
+  confirmation_sent_at: 
+  failed_attempts: 0
+  unlock_token: 
+bob:
+  id: 27
+  username: bob
+  serialized_private_key: |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIICXAIBAAKBgQDSZI4Ls+bPlxHLtwv2ImMSAhWiU43tquxMeu5EX5HbReAkepgC
+    9J9DMmwPTfEkVR6sTkMSaF7kopGH2iyah9WIGsamEPHScJLw7zMuL+gzvVX17gCL
+    npE/5xOWBsJQc0dE/ixwmgLEK0H0n7dz9SfM3VDzd4Tj60FCdKzYX6OquQIDAQAB
+    AoGAEycQP0R7SH6KIi9hqWBsAGGsMoDEtNQQes3eDt9cWce8pdV7LRmzvdxDNgl0
+    YEhXaHwfYveZW9rowKM92DtxVq5GoJeXomkRMm61VUHgLdZdX+eYpUqCnD9EA99k
+    smxgeoefe/45gFG2/FRYB1UOo522Lu8EafG930DLa8HYXFkCQQDsK159UUZP6fUO
+    A+4qAipSsvFpLel79VAuH5r9raPu6MTASqNy13GeRGwNBmVGdxFkBPz3/KPQbfsB
+    pre/T1iPAkEA5A8ZT3oDpOzNioRMgDc8BtzDQRZkjYttMjR317XD5lYjNXiaXDo7
+    U8dLJ6i/KrNzHOCpH4ct54NWnFwuTZgcNwJASgLFV8xylnShIUVGC9Al50jAss96
+    jigwemPZNIqIB0TW89PwKPsvVgPnQKWyc0S5JHkTtbtsstLkiH3ws3lwLQJBAMKW
+    +4Kr2lYr04lAL0IrXuWAEn4DzFJVyBtRV3xP1FJB5xLlz9envB1U7BRv0IVvzmWy
+    b7u+DPYAQ7Nwl/WPN2sCQEZQvIVDrvj/NDS24KeYCUOXrBupy/HaPC6hg8I3jKqQ
+    //ymGrUh8fo+L1Wq1xMQQRe9IBA2ZnzfaI0AmB5vjYI=
+    -----END RSA PRIVATE KEY-----
+  getting_started: false
+  disable_mail: false
+  language: en
+  email: bob35c716a@pivotallabs.com
+  encrypted_password: "$2a$04$sbZWKzuxt/DjvCGRcuXC3ePc.CLUODiruEa9z2HAlzPFEJXdzDosS"
+  reset_password_token: 
+  remember_created_at: 
+  sign_in_count: 0
+  current_sign_in_at: 
+  last_sign_in_at: 
+  current_sign_in_ip: 
+  last_sign_in_ip: 
+  created_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:46.635388000 Z
+    zone: *1
+    time: 2022-02-11 10:26:46.635388000 Z
+  updated_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:46.635388000 Z
+    zone: *1
+    time: 2022-02-11 10:26:46.635388000 Z
+  invited_by_id: 
+  authentication_token: 
+  unconfirmed_email: 
+  confirm_email_token: 
+  locked_at: 
+  show_community_spotlight_in_stream: true
+  auto_follow_back: false
+  auto_follow_back_aspect_id: 
+  hidden_shareables: 
+  reset_password_sent_at: 
+  last_seen: 
+  remove_after: 
+  export: 
+  exported_at: 
+  exporting: false
+  strip_exif: true
+  exported_photos_file: 
+  exported_photos_at: 
+  exporting_photos: false
+  color_theme: 
+  post_default_public: false
+  consumed_timestep: 
+  otp_required_for_login: 
+  otp_backup_codes: 
+  plain_otp_secret: 
+  confirmation_token: 
+  confirmed_at: 
+  confirmation_sent_at: 
+  failed_attempts: 0
+  unlock_token: 
+luke:
+  id: 28
+  username: luke
+  serialized_private_key: |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIICXgIBAAKBgQDFUdAo0ujkY4LmvVQxgU/zAfCYJ9QObZAhhCWPmdKGW1xJ0DLy
+    iCq4+4Xg+Kou4hFhq4xrmpBxh/cDGuJVVIhjZ9Q91QCkDDmALghT5oKOZw8jDZLb
+    W1RFH/XYcSHrRPJQ2BHqP9k6IBLSzWG6cgfy7LVLbmvVPSA0HqR1MqMn9wIDAQAB
+    AoGBAJqT/huNJo+M+YZjeaqSoBxCP8YjJXfsEwZ+rKIzof5JYiIdLVxcmgNyX64f
+    f8rcpTs7lfTSECgwmKzhCcBJSdIbUOh99CujLDwRzvNOvu6FWx0z6qkNpxUF5v/9
+    n2V5UHTZbHISovs+rrG7Vw71b7R+xL3jhiSGJKyMrbGsj1cRAkEA/bKYVrR4JKd4
+    mV8r2etmA3XGRM1kc4BmXzsAmLbPB/vRWoYDjkz+4zCpKki8i+aHz3GidZbQcJjQ
+    6xH9XyF/GQJBAMccPMCi9F2lWaZEZfmkNeKtClsp8/CO0mgsciHjnjJaOkBu7a8T
+    Bpl2uz71niKcVIyRDHOjhRMCPuZQTbNwkY8CQQCsNzhCY2/LMgQj2P8jhzBQ2Pom
+    ambuIRNdQeg9wpr3iHGtSZvQVWQRRU8QbR/QuEUpBLKLsDz+sj3f1O5yTYLBAkEA
+    voAOxERkxwA/0OuaIYpyH+ltgiGWim8rco4ruK7dmdFn8GPxttLeOpA1wJwha33l
+    CwRwRGeMF87LPXJRlUA7kwJAXQ7VPvT3fdKMwFcITAufurMSYceb/kMwxsMElnmp
+    o0kd4+0vh/a4pTZiYUJFee+Gkpi2t/odIedbqHnANfjL2w==
+    -----END RSA PRIVATE KEY-----
+  getting_started: false
+  disable_mail: false
+  language: en
+  email: bob485c773@pivotallabs.com
+  encrypted_password: "$2a$04$.8jPrBqmr2nM558SaYShqOEuen9Ki1zKU5/8gxNZxNIDOEylU3pOe"
+  reset_password_token: 
+  remember_created_at: 
+  sign_in_count: 0
+  current_sign_in_at: 
+  last_sign_in_at: 
+  current_sign_in_ip: 
+  last_sign_in_ip: 
+  created_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:46.991138000 Z
+    zone: *1
+    time: 2022-02-11 10:26:46.991138000 Z
+  updated_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:46.991138000 Z
+    zone: *1
+    time: 2022-02-11 10:26:46.991138000 Z
+  invited_by_id: 
+  authentication_token: 
+  unconfirmed_email: 
+  confirm_email_token: 
+  locked_at: 
+  show_community_spotlight_in_stream: true
+  auto_follow_back: false
+  auto_follow_back_aspect_id: 
+  hidden_shareables: 
+  reset_password_sent_at: 
+  last_seen: 
+  remove_after: 
+  export: 
+  exported_at: 
+  exporting: false
+  strip_exif: true
+  exported_photos_file: 
+  exported_photos_at: 
+  exporting_photos: false
+  color_theme: 
+  post_default_public: false
+  consumed_timestep: 
+  otp_required_for_login: 
+  otp_backup_codes: 
+  plain_otp_secret: 
+  confirmation_token: 
+  confirmed_at: 
+  confirmation_sent_at: 
+  failed_attempts: 0
+  unlock_token: 
+leia:
+  id: 29
+  username: leia
+  serialized_private_key: |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIICXQIBAAKBgQC6f6c9b953IxPiFQtuATxq3vqatGj5mcR2wPtf50BjoXZqczps
+    +qWxK7uoDnsApruLUFBzGn99oeJGkW4GdzaWCfBSGIbAbke0671HyeA9TQcUKGBL
+    XCbEPRgTmrk+gBQJLiN5kUycmzaTTuSgXijw9hIeuqTSNZCpFOxhqKPktQIDAQAB
+    AoGBAJ0ZhyGDqNym2crqe1RRCjnkVyoWqw8G7q4yZg4lWOIUUxHcuuyuPwD9m/g3
+    Knoj+XujTgGH4rlLsrZLL2mW5o0Q7jaWf8Ajnx408RQovta6nhfxuGK1w8jlJdDh
+    ETMKB1+Ijkd0TasHFqPPI8318k1WgKYuyuZa1o3rW5Mzx/+JAkEA3WmpX0DQPCo8
+    G11bdIGTIMuvhb8LyxwkY73onbneJAuBvhJ2PMA3ymGwWl/A7Bc7//unWGnfjWhi
+    ffogdHzjTwJBANehxS70M07SnDICVv+mzZgUZE/AshXpsohUAnbq+Oq8Y32d/g9K
+    pqj/8XYVY9aQmhb5hJVtz/jUqfb5rk0KBrsCQQCfYZgSgU1kgeKSsDlNPJj0WqsW
+    09dhdfib8/Cm2U0XFVFnyVJjmNqQTJHt/E+bo34FXtmvw0axPBrqJEuIjv3xAkA2
+    XHgjkDjnJD1wdhqMtPab4ngvivraf2Ic8GD2reI2+2txncURAdbmQDAVfur+itHt
+    /NWp/lcx+hsnQmbo0SBFAkAi6BvPJjQMHja9IFzMjq4WIO/ZAmc3GDASBGaAqbhv
+    a61MqlVfIidKxrfBqaVrECNQ5sv40iPWYZqAhhKd3u4N
+    -----END RSA PRIVATE KEY-----
+  getting_started: false
+  disable_mail: false
+  language: en
+  email: bob5931352@pivotallabs.com
+  encrypted_password: "$2a$04$IyosJ8r9WJ/LklFlLSSX8.YvoGjwW76v71fou3rq/.Q7iMQbJ8/Oe"
+  reset_password_token: 
+  remember_created_at: 
+  sign_in_count: 0
+  current_sign_in_at: 
+  last_sign_in_at: 
+  current_sign_in_ip: 
+  last_sign_in_ip: 
+  created_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:47.104738000 Z
+    zone: *1
+    time: 2022-02-11 10:26:47.104738000 Z
+  updated_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:47.104738000 Z
+    zone: *1
+    time: 2022-02-11 10:26:47.104738000 Z
+  invited_by_id: 
+  authentication_token: 
+  unconfirmed_email: 
+  confirm_email_token: 
+  locked_at: 
+  show_community_spotlight_in_stream: true
+  auto_follow_back: false
+  auto_follow_back_aspect_id: 
+  hidden_shareables: 
+  reset_password_sent_at: 
+  last_seen: 
+  remove_after: 
+  export: 
+  exported_at: 
+  exporting: false
+  strip_exif: true
+  exported_photos_file: 
+  exported_photos_at: 
+  exporting_photos: false
+  color_theme: 
+  post_default_public: false
+  consumed_timestep: 
+  otp_required_for_login: 
+  otp_backup_codes: 
+  plain_otp_secret: 
+  confirmation_token: 
+  confirmed_at: 
+  confirmation_sent_at: 
+  failed_attempts: 0
+  unlock_token: 
+peter:
+  id: 30
+  username: peter
+  serialized_private_key: |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIICWwIBAAKBgQDNfhumRf9YRMl2GHC0zbLO7IyEFf7K0xgn2dI3ob5u3tFA7TBp
+    qBW9Icx//Jf2jRk36132P01hKAkcUYl3NDZtgiNSnry4ig2E7Puah5xGwr5HvhLc
+    nGIX+D8mKu5XzDBgwB4QHoF381E9TbKP/lubH4iKQbXL70gvZXmZqNY3BQIDAQAB
+    AoGAAP2mrHqR7J8ISaV8haKoRg8l7k0c2WWDLE4EkXgaLvasE6ARJ7FDyZGsJsHV
+    Cb9Ma9Sas2FCwkErKhPKkeSSjppm6tYhR1pgDGrAMVFi51wr0bZy8J+nBhUnNxnz
+    JCDmJHk2BYyGpQmdYLfvN8eyz5u1XgawZJjBmt2uWzceMtECQQDyjTe/NvL9GjAK
+    pxXzZEwBPuSDvfSmGnpLpZodEvtUkTWuYrRf7cLHg2jRTDsRFBZI1sYS4pcdrftV
+    J5S/3xW7AkEA2OLfsg/pef4IFa8ySYHoD+9Hd19hAElzZ39qtIvnxstsZzRC/zry
+    h9JrugVZC5XaSo/0vrAjr2nm3rj9PBK6PwJAJzoNhQA3BhYBJQfmtelHnX/1ZxUG
+    hwKLOsa6iO8z9HZTjzNpZoZGVQv8nLTObLGp9Pe/Kvi4ZdVoa1ouZWWH1wJAfZSo
+    B9c0ziEsFzoxOOTSNN/Mlq8QYHUnMEdTxqS3mKDS7NMS8+vy4HgTTkuoao/jLIc8
+    JGmiz//W4SFl57HESwJAGaJNE+Q6i2SiHcd7J5jkKZZD7e2nL8M71G4bBcR0+1+i
+    32S/fciW5ueB0+5ebUSzZWmF5k9f4X8t+MEJUdfTxQ==
+    -----END RSA PRIVATE KEY-----
+  getting_started: false
+  disable_mail: false
+  language: en
+  email: bob68a25b7@pivotallabs.com
+  encrypted_password: "$2a$04$BfQuwFD3p1nSdoItE8QxVOXY.9LqDBbuQ6w/tT.4bDXTZEgn6AJJC"
+  reset_password_token: 
+  remember_created_at: 
+  sign_in_count: 0
+  current_sign_in_at: 
+  last_sign_in_at: 
+  current_sign_in_ip: 
+  last_sign_in_ip: 
+  created_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:47.542108000 Z
+    zone: *1
+    time: 2022-02-11 10:26:47.542108000 Z
+  updated_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:47.542108000 Z
+    zone: *1
+    time: 2022-02-11 10:26:47.542108000 Z
+  invited_by_id: 
+  authentication_token: 
+  unconfirmed_email: 
+  confirm_email_token: 
+  locked_at: 
+  show_community_spotlight_in_stream: true
+  auto_follow_back: false
+  auto_follow_back_aspect_id: 
+  hidden_shareables: 
+  reset_password_sent_at: 
+  last_seen: 
+  remove_after: 
+  export: 
+  exported_at: 
+  exporting: false
+  strip_exif: true
+  exported_photos_file: 
+  exported_photos_at: 
+  exporting_photos: false
+  color_theme: 
+  post_default_public: false
+  consumed_timestep: 
+  otp_required_for_login: 
+  otp_backup_codes: 
+  plain_otp_secret: 
+  confirmation_token: 
+  confirmed_at: 
+  confirmation_sent_at: 
+  failed_attempts: 0
+  unlock_token: 
