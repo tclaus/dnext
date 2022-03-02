@@ -1,0 +1,100 @@
+---
+generic:
+  id: 16
+  name: generic
+  user_id: 25
+  created_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:46.405551000 Z
+    zone: &1 !ruby/object:ActiveSupport::TimeZone
+      name: Etc/UTC
+    time: 2022-02-11 10:26:46.405551000 Z
+  updated_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:46.405551000 Z
+    zone: *1
+    time: 2022-02-11 10:26:46.405551000 Z
+  order_id: 1
+  post_default: true
+generic_1:
+  id: 17
+  name: generic
+  user_id: 26
+  created_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:46.550754000 Z
+    zone: *1
+    time: 2022-02-11 10:26:46.550754000 Z
+  updated_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:46.550754000 Z
+    zone: *1
+    time: 2022-02-11 10:26:46.550754000 Z
+  order_id: 1
+  post_default: true
+generic_2:
+  id: 18
+  name: generic
+  user_id: 27
+  created_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:46.703480000 Z
+    zone: *1
+    time: 2022-02-11 10:26:46.703480000 Z
+  updated_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:46.703480000 Z
+    zone: *1
+    time: 2022-02-11 10:26:46.703480000 Z
+  order_id: 1
+  post_default: true
+empty:
+  id: 19
+  name: empty
+  user_id: 27
+  created_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:46.718987000 Z
+    zone: *1
+    time: 2022-02-11 10:26:46.718987000 Z
+  updated_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:46.718987000 Z
+    zone: *1
+    time: 2022-02-11 10:26:46.718987000 Z
+  order_id: 2
+  post_default: true
+generic_3:
+  id: 20
+  name: generic
+  user_id: 28
+  created_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:47.058339000 Z
+    zone: *1
+    time: 2022-02-11 10:26:47.058339000 Z
+  updated_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:47.058339000 Z
+    zone: *1
+    time: 2022-02-11 10:26:47.058339000 Z
+  order_id: 1
+  post_default: true
+generic_4:
+  id: 21
+  name: generic
+  user_id: 29
+  created_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:47.176266000 Z
+    zone: *1
+    time: 2022-02-11 10:26:47.176266000 Z
+  updated_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:47.176266000 Z
+    zone: *1
+    time: 2022-02-11 10:26:47.176266000 Z
+  order_id: 1
+  post_default: true
+generic_5:
+  id: 22
+  name: generic
+  user_id: 30
+  created_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:47.608158000 Z
+    zone: *1
+    time: 2022-02-11 10:26:47.608158000 Z
+  updated_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: 2022-02-11 10:26:47.608158000 Z
+    zone: *1
+    time: 2022-02-11 10:26:47.608158000 Z
+  order_id: 1
+  post_default: true

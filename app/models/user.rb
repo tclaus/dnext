@@ -14,6 +14,10 @@ class User < ApplicationRecord
   has_many :followed_tags, -> { order("tags.name") }, through: :tag_followings, source: ActsAsTaggableOn::Tag
   has_many :aspects, -> { order("order_id ASC") }
   has_many :aspect_memberships, through: :aspects
+  has_many :contacts
+  has_many :contact_people, :through => :contacts, :source => :person
+  has_many :blocks
+  has_many :ignored_people, :through => :blocks, :source => :person
 
   before_validation :strip_and_downcase_username
   before_validation :strip_and_downcase_email
@@ -39,6 +43,10 @@ class User < ApplicationRecord
            :diaspora_handle, :name, :atom_url, :profile_url, :profile, :url,
            :first_name, :last_name, :full_name, :gender, :participations, to: :person
   delegate :id, :guid, to: :person, prefix: true
+  
+  def self.all_sharing_with_person(person)
+    User.joins(:contacts).where(:contacts => {:person_id => person.id})
+  end
 
   def basic_profile_present?
     tag_followings.any? || profile[:image_url]
@@ -154,7 +162,11 @@ class User < ApplicationRecord
       message: { text: AppConfig.settings.welcome_message.text.get % { username: username } }
     )
 
-    # Diaspora::Federation::Dispatcher.build(sender, conversation).dispatch if conversation.save
+    Diaspora::Federation::Dispatcher.build(sender, conversation).dispatch if conversation.save
+  end
+
+  def encryption_key
+    OpenSSL::PKey::RSA.new(serialized_private_key)
   end
 
   def encryption_key

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApplicationHelper
   # Changes Ruby Class names to CSS class names. Example: StatusMessage => status_message
   # @param [String] name
@@ -29,7 +31,7 @@ module ApplicationHelper
   end
 
   def source_url
-    AppConfig.settings.source_url.presence || "#{root_path.chomp("/")}/source.tar.gz"
+    AppConfig.settings.source_url.presence || "#{root_path.chomp('/')}/source.tar.gz"
   end
 
   def flash_messages

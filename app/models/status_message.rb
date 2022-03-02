@@ -1,13 +1,8 @@
 class StatusMessage < Post
-  include Diaspora::Taggable
-
   include Reference::Source
   include Reference::Target
 
   include PeopleHelper
-
-  acts_as_taggable_on :tags
-  extract_tags_from :text
 
   validates_length_of :text, maximum: 65535, message: proc { |p, v| I18n.t("status_messages.too_long", count: 65535, current_length: v[:value].length) }
   before_save :update_text_language
