@@ -5,7 +5,6 @@ Rails.application.configure do
 
   config.hosts << "dnext.societas.online"
 
-
   # Code is not reloaded between requests.
   config.cache_classes = true
 
