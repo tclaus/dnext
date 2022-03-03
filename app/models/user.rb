@@ -15,9 +15,9 @@ class User < ApplicationRecord
   has_many :aspects, -> { order("order_id ASC") }
   has_many :aspect_memberships, through: :aspects
   has_many :contacts
-  has_many :contact_people, :through => :contacts, :source => :person
+  has_many :contact_people, through: :contacts, source: :person
   has_many :blocks
-  has_many :ignored_people, :through => :blocks, :source => :person
+  has_many :ignored_people, through: :blocks, source: :person
 
   before_validation :strip_and_downcase_username
   before_validation :strip_and_downcase_email
@@ -29,9 +29,9 @@ class User < ApplicationRecord
 
   validates :username, presence: true, uniqueness: true, format: { with: /\A[A-Za-z0-9_.\-]+\z/ },
             length: { maximum: 32 }, exclusion: { in: AppConfig.settings.username_blacklist }
-  # TODO: Validate and set Language
-  # validates_inclusion_of :language, in: AVAILABLE_LANGUAGE_CODES
-  validates_format_of :unconfirmed_email, with: Devise.email_regexp, allow_blank: true
+
+  validates :unconfirmed_email, format: { with: Devise.email_regexp, allow_blank: true }
+  validates :language, inclusion: { in: AVAILABLE_LANGUAGE_CODES }
 
   validate :unconfirmed_email_quasiuniqueness
 
@@ -43,9 +43,9 @@ class User < ApplicationRecord
            :diaspora_handle, :name, :atom_url, :profile_url, :profile, :url,
            :first_name, :last_name, :full_name, :gender, :participations, to: :person
   delegate :id, :guid, to: :person, prefix: true
-  
+
   def self.all_sharing_with_person(person)
-    User.joins(:contacts).where(:contacts => {:person_id => person.id})
+    User.joins(:contacts).where(contacts: { person_id: person.id })
   end
 
   def basic_profile_present?

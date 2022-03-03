@@ -82,4 +82,32 @@ describe User, type: :model do
       end
     end
   end
+
+  describe "validation" do
+    describe "of language" do
+      after do
+        I18n.locale = :en
+      end
+
+      it "requires availability" do
+        alice.language = "some invalid language"
+        expect(alice).not_to be_valid
+      end
+
+      it "should save with current language if blank" do
+        I18n.locale = :fr
+        user = User.build username: "max", email: "foo@bar.com", password: "password", password_confirmation: "password"
+        expect(user.language).to eq("fr")
+      end
+
+      it "should save with language what is set" do
+        I18n.locale = :fr
+        user = User.build(username: "max", email: "foo@bar.com", password: "password",
+                          password_confirmation: "password", language: "de")
+        expect(user.language).to eq("de")
+      end
+    end
+
+  end
+
 end
