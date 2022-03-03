@@ -206,6 +206,7 @@ GEM
       temple (>= 0.8.0)
       tilt
     hashdiff (1.0.1)
+    http_accept_language (2.1.1)
     i18n (1.10.0)
       concurrent-ruby (~> 1.0)
     idn-ruby (0.1.4)
@@ -458,6 +459,7 @@ DEPENDENCIES
   factory_bot_rails (~> 6.2)
   fixture_builder (~> 0.5.2)
   haml
+  http_accept_language (~> 2.1, >= 2.1.1)
   importmap-rails
   invisible_captcha (~> 2.0)
   jbuilder

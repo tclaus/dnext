@@ -2,7 +2,7 @@
 
 class ApplicationController < ActionController::Base
 
-  before_action :set_locale
+  around_action :set_locale
   before_action :configure_permitted_parameters, if: :devise_controller?
   protect_from_forgery except: :receive, with: :exception, prepend: true
   layout "with_header_with_footer"
@@ -26,14 +26,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def set_locale
+  def set_locale(&action)
     if user_signed_in?
-      I18n.locale = current_user.language
+      locale = current_user.try(:language) || I18n.default_locale
     else
       locale = http_accept_language.language_region_compatible_from AVAILABLE_LANGUAGE_CODES
       locale ||= DEFAULT_LANGUAGE
-      I18n.locale = locale
     end
+    I18n.with_locale(locale, &action)
   end
 
   def redirect_unless_admin
@@ -65,7 +65,7 @@ class ApplicationController < ActionController::Base
   end
 
   protected
-  
+
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_in, keys: [:otp_attempt])
   end

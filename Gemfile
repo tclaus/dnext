@@ -67,7 +67,8 @@ gem "redcarpet", "~> 3.5", ">= 3.5.1"
 gem "twitter-text", "~> 3.1.0"
 
 # Localization helpers
-gem 'rails-i18n', '~> 7.0', '>= 7.0.3'
+gem "http_accept_language", "~> 2.1", ">= 2.1.1"
+gem "rails-i18n", "~> 7.0", ">= 7.0.3"
 
 # Configuration
 gem "configurate", "~>0.5.0"
