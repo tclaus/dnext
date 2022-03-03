@@ -3,6 +3,8 @@
     = render "stream_post_author", author: post.author, created_at: post.created_at
     %span.post-head-text
       = range_tag(post)
+      - if current_user.podmin?
+        = "lang: #{post.language_id}"
   %div{class: classify(post.type)}
     - if post.type === "Reshare"
       = post.rendered_message.html_safe # Print shared post text, then embed original post

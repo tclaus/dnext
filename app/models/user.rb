@@ -204,11 +204,18 @@ class User < ApplicationRecord
   end
 
   def admin?
+    # todo: return if admin
     false
   end
 
   def moderator?
+    # todo: return if moderator
     false
+  end
+
+  def podmin?
+    # todo: return if podmin
+    true
   end
 
   ######### Mailer #######################
