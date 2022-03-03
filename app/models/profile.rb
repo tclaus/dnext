@@ -7,10 +7,9 @@
 class Profile < ApplicationRecord
   include Diaspora::Federated::Base
   include Diaspora::Taggable
-  
+
   MAX_TAGS = 5
   self.include_root_in_json = false
-
 
   attr_accessor :tag_string
 

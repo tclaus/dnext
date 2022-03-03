@@ -22,9 +22,9 @@ module Diaspora
 
         # scopes
         scope :with_visibility, lambda {
-                                  joins("LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = #{table_name}.id AND "\
+          joins("LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = #{table_name}.id AND "\
                                     "share_visibilities.shareable_type = '#{base_class}'")
-                                }
+        }
 
         scope :with_aspects, lambda {
           joins("LEFT OUTER JOIN aspect_visibilities ON aspect_visibilities.shareable_id = #{table_name}.id AND "\
@@ -64,7 +64,7 @@ module Diaspora
       def owned_or_visible_by_user(user)
         with_visibility.where(
           visible_by_user(user).or(arel_table[:public].eq(true)
-                                     .or(arel_table[:author_id].eq(user.person_id)))
+                                                      .or(arel_table[:author_id].eq(user.person_id)))
         ).select("DISTINCT #{table_name}.*")
       end
 

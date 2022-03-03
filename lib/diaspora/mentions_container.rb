@@ -22,7 +22,7 @@ module Diaspora
     end
 
     def subscribers
-      super.tap {|subscribers|
+      super.tap { |subscribers|
         subscribers.concat(mentions.map(&:person).select(&:remote?)) if add_mention_subscribers?
       }
     end

@@ -14,7 +14,7 @@ class Like < ApplicationRecord
     end
 
     def relayable_options
-      {target: @target, positive: true}
+      { target: @target, positive: true }
     end
   end
 

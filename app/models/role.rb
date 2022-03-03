@@ -3,8 +3,8 @@
 class Role < ApplicationRecord
   belongs_to :person
 
-  validates :name, uniqueness: {scope: :person_id}
-  validates :name, inclusion: {in: %w[admin moderator spotlight]}
+  validates :name, uniqueness: { scope: :person_id }
+  validates :name, inclusion: { in: %w[admin moderator spotlight] }
 
   scope :admins, -> { where(name: "admin") }
   scope :moderators, -> { where(name: %w[moderator admin]) }

@@ -24,7 +24,7 @@ class StatusMessage < Post
 
   # scopes
   scope :where_person_is_mentioned, ->(person) {
-    owned_or_visible_by_user(person.owner).joins(:mentions).where(mentions: {person_id: person.id})
+    owned_or_visible_by_user(person.owner).joins(:mentions).where(mentions: { person_id: person.id })
   }
 
   def self.model_name
@@ -57,7 +57,7 @@ class StatusMessage < Post
 
   def self.query_stream(query, page)
     response = Post.search query, from: (page - 1) * 10
-    where(posts: {id: response.results.map(&:id)})
+    where(posts: { id: response.results.map(&:id) })
   end
 
   def self.any_tag_stream(tag_ids)
@@ -139,7 +139,7 @@ class StatusMessage < Post
       if public?
         :all
       else
-        Contact.joins(:aspect_memberships).where(aspect_memberships: {aspect: aspects}).distinct.pluck(:person_id)
+        Contact.joins(:aspect_memberships).where(aspect_memberships: { aspect: aspects }).distinct.pluck(:person_id)
       end
   end
 

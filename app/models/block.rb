@@ -4,7 +4,7 @@ class Block < ApplicationRecord
 
   delegate :name, :diaspora_handle, to: :person, prefix: true
 
-  validates :person_id, uniqueness: {scope: :user_id}
+  validates :person_id, uniqueness: { scope: :user_id }
 
   validate :not_blocking_yourself
 

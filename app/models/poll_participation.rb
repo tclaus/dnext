@@ -38,7 +38,7 @@ class PollParticipation < ApplicationRecord
     end
 
     def relayable_options
-      {poll: @target.poll, poll_answer: @poll_answer}
+      { poll: @target.poll, poll_answer: @poll_answer }
     end
   end
 end

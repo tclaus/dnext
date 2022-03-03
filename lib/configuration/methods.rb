@@ -106,7 +106,7 @@ module Configuration
       unless redis_url.start_with?("redis://", "unix:///")
         warn "WARNING: Your redis url (#{redis_url}) doesn't start with redis:// or unix:///"
       end
-      {url: redis_url}
+      { url: redis_url }
     end
 
     def sidekiq_log

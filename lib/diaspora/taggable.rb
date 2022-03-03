@@ -35,9 +35,9 @@ module Diaspora
 
     def tag_strings
       MessageRenderer::Processor.normalize(send(self.class.field_with_tags) || "")
-        .scan(/(?:^|\s)#([#{Tag.tag_text_regexp}]+|<3)/u)
-        .map(&:first)
-        .uniq(&:downcase)
+                                .scan(/(?:^|\s)#([#{Tag.tag_text_regexp}]+|<3)/u)
+                                .map(&:first)
+                                .uniq(&:downcase)
     end
 
     def self.format_tags(text, opts = {})
@@ -60,8 +60,8 @@ module Diaspora
     def self.format_tags_for_mail(text)
       regex = /(?<=^|\s|>)#([#{ActsAsTaggableOn::Tag.tag_text_regexp}]+|<3)/u
       text.gsub(regex) do |tag|
-        opts = {name: Tag.normalize(tag)}
-          .merge(Rails.application.config.action_mailer.default_url_options)
+        opts = { name: Tag.normalize(tag) }
+                 .merge(Rails.application.config.action_mailer.default_url_options)
         "[#{tag}](#{Rails.application.routes.url_helpers.tag_url(opts)})"
       end
     end

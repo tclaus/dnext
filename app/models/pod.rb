@@ -1,4 +1,4 @@
- # frozen_string_literal: true
+# frozen_string_literal: true
 
 class Pod < ApplicationRecord
   enum status: %i(
@@ -13,21 +13,21 @@ class Pod < ApplicationRecord
   )
 
   ERROR_MAP = {
-    ConnectionTester::AddressFailure  => :dns_failed,
-    ConnectionTester::DNSFailure      => :dns_failed,
-    ConnectionTester::NetFailure      => :net_failed,
-    ConnectionTester::SSLFailure      => :ssl_failed,
-    ConnectionTester::HTTPFailure     => :http_failed,
+    ConnectionTester::AddressFailure => :dns_failed,
+    ConnectionTester::DNSFailure => :dns_failed,
+    ConnectionTester::NetFailure => :net_failed,
+    ConnectionTester::SSLFailure => :ssl_failed,
+    ConnectionTester::HTTPFailure => :http_failed,
     ConnectionTester::NodeInfoFailure => :version_failed
   }
 
   # this are only the most common errors, the rest will be +unknown_error+
   CURL_ERROR_MAP = {
-    couldnt_resolve_host:         :dns_failed,
-    couldnt_connect:              :net_failed,
-    operation_timedout:           :net_failed,
-    ssl_cipher:                   :ssl_failed,
-    ssl_cacert:                   :ssl_failed,
+    couldnt_resolve_host: :dns_failed,
+    couldnt_connect: :net_failed,
+    operation_timedout: :net_failed,
+    ssl_cipher: :ssl_failed,
+    ssl_cacert: :ssl_failed,
     redirected_to_other_hostname: :http_failed
   }.freeze
 
@@ -42,7 +42,8 @@ class Pod < ApplicationRecord
   validate :not_own_pod
 
   class << self
-    def find_or_create_by(opts) # Rename this method to not override an AR method
+    def find_or_create_by(opts)
+      # Rename this method to not override an AR method
       uri = URI.parse(opts.fetch(:url))
       port = DEFAULT_PORTS.include?(uri.port) ? nil : uri.port
       find_or_initialize_by(host: uri.host, port: port).tap do |pod|
@@ -61,7 +62,7 @@ class Pod < ApplicationRecord
     end
 
     def check_all!
-      Pod.find_in_batches(batch_size: 20) {|batch| batch.each(&:test_connection!) }
+      Pod.find_in_batches(batch_size: 20) { |batch| batch.each(&:test_connection!) }
     end
 
     def check_scheduled!
@@ -75,7 +76,7 @@ class Pod < ApplicationRecord
 
   # a pod is active if it is online or was online less than 14 days ago
   def active?
-    !offline? || offline_since.try {|date| date > DateTime.now.utc - 14.days }
+    !offline? || offline_since.try { |date| date > DateTime.now.utc - 14.days }
   end
 
   def to_s
@@ -98,7 +99,7 @@ class Pod < ApplicationRecord
   # @param path [String]
   # @return [String]
   def url_to(path)
-    uri.tap {|uri| uri.path = path }.to_s
+    uri.tap { |uri| uri.path = path }.to_s
   end
 
   def update_offline_since

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
+
+  before_action :set_locale
   before_action :configure_permitted_parameters, if: :devise_controller?
   protect_from_forgery except: :receive, with: :exception, prepend: true
   layout "with_header_with_footer"
@@ -21,6 +23,16 @@ class ApplicationController < ActionController::Base
     if AppConfig.git_available?
       headers["X-Git-Update"] = AppConfig.git_update if AppConfig.git_update.present?
       headers["X-Git-Revision"] = AppConfig.git_revision if AppConfig.git_revision.present?
+    end
+  end
+
+  def set_locale
+    if user_signed_in?
+      I18n.locale = current_user.language
+    else
+      locale = http_accept_language.language_region_compatible_from AVAILABLE_LANGUAGE_CODES
+      locale ||= DEFAULT_LANGUAGE
+      I18n.locale = locale
     end
   end
 
@@ -53,9 +65,7 @@ class ApplicationController < ActionController::Base
   end
 
   protected
-
-  protected
-
+  
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_in, keys: [:otp_attempt])
   end

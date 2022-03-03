@@ -38,7 +38,7 @@ module Diaspora
         if author.local?
           root.subscribers
         else
-          root.subscribers.select(&:remote?).reject {|person| person.pod_id == author.pod_id }
+          root.subscribers.select(&:remote?).reject { |person| person.pod_id == author.pod_id }
         end
       else
         [root.author, author]

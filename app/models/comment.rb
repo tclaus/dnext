@@ -18,7 +18,7 @@ class Comment < ApplicationRecord
   delegate :comment_email_subject, to: :parent
   delegate :author_name, to: :parent, prefix: true
 
-  validates :text, presence: true, length: {maximum: 65535}
+  validates :text, presence: true, length: { maximum: 65535 }
   has_many :reports, as: :reportable
 
   acts_as_taggable_on :tags

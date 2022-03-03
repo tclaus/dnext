@@ -61,10 +61,10 @@ class UsersController < ApplicationController
       redirect_to(new_user_session_path(format: request[:format]), notice: I18n.t("users.destroy.success"))
     else
       flash[:error] = if params[:user].present? && params[:user][:current_password].present?
-        t "users.destroy.wrong_password"
-      else
-        t "users.destroy.no_password"
-      end
+                        t "users.destroy.wrong_password"
+                      else
+                        t "users.destroy.no_password"
+                      end
       redirect_back fallback_location: edit_user_path
     end
   end
@@ -74,10 +74,10 @@ class UsersController < ApplicationController
       respond_to do |format|
         format.atom do
           @posts = Post.where(author_id: @user.person_id, public: true)
-            .order("created_at DESC")
-            .limit(25)
-            .map { |post| post.is_a?(Reshare) ? post.absolute_root : post }
-            .compact
+                       .order("created_at DESC")
+                       .limit(25)
+                       .map { |post| post.is_a?(Reshare) ? post.absolute_root : post }
+                       .compact
         end
 
         format.any { redirect_to person_path(@user.person) }
@@ -135,7 +135,7 @@ class UsersController < ApplicationController
 
   def auth_token
     current_user.ensure_authentication_token!
-    render status: 200, json: {token: current_user.authentication_token}
+    render status: 200, json: { token: current_user.authentication_token }
   end
 
   private
@@ -158,7 +158,7 @@ class UsersController < ApplicationController
       :otp_secret,
       :exported_photos_file,
       :export,
-      {stream_languages: []},
+      { stream_languages: [] },
       email_preferences: UserPreference::VALID_EMAIL_TYPES.map(&:to_sym)
     )
   end
@@ -260,7 +260,7 @@ class UsersController < ApplicationController
 
   def change_stream_languages(stream_languages)
     language_ids = stream_languages.delete_if { |id| id == "" }
-    languages = language_ids.map { |id| {user_id: @user.id, language_id: id} }
+    languages = language_ids.map { |id| { user_id: @user.id, language_id: id } }
     StreamLanguage.where(user_id: @user.id).destroy_all
     @user.stream_languages.create(languages)
   end

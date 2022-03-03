@@ -9,8 +9,8 @@ class Person < ApplicationRecord
 
   has_one :profile, dependent: :destroy
   delegate :first_name, :last_name, :full_name, :image_url, :tag_string, :bio, :location,
-    :gender, :birthday, :formatted_birthday, :tags, :searchable,
-    :public_details?, to: :profile
+           :gender, :birthday, :formatted_birthday, :tags, :searchable,
+           :public_details?, to: :profile
   accepts_nested_attributes_for :profile
 
   validate :owner_xor_pod
@@ -44,10 +44,10 @@ class Person < ApplicationRecord
 
   def self.find_from_guid_or_username(params)
     p = if params[:id].present?
-      Person.find_by(guid: params[:id])
-    elsif params[:username].present? && u = User.find_by_username(params[:username])
-      u.person
-    end
+          Person.find_by(guid: params[:id])
+        elsif params[:username].present? && u = User.find_by_username(params[:username])
+          u.person
+        end
     raise ActiveRecord::RecordNotFound unless p.present?
     p
   end
@@ -58,8 +58,8 @@ class Person < ApplicationRecord
 
   def other_person_with_same_guid
     diaspora_id = Person.where(guid: guid)
-      .where.not(diaspora_handle: diaspora_handle)
-      .pluck(:diaspora_handle).first
+                        .where.not(diaspora_handle: diaspora_handle)
+                        .pluck(:diaspora_handle).first
     errors.add(:base, "Person with same GUID already exists: #{diaspora_id}") if diaspora_id
   end
 

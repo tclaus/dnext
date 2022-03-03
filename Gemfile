@@ -66,8 +66,10 @@ gem "ruby-oembed", "~> 0.15.0"
 gem "redcarpet", "~> 3.5", ">= 3.5.1"
 gem "twitter-text", "~> 3.1.0"
 
-# Configuration
+# Localization helpers
+gem 'rails-i18n', '~> 7.0', '>= 7.0.3'
 
+# Configuration
 gem "configurate", "~>0.5.0"
 gem "toml-rb", "~> 2.1.0"
 

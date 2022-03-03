@@ -13,7 +13,7 @@ module Notifications
     def self.notify(object, _recipient_user_ids)
       case object
       when Conversation
-        object.messages.each {|message| notify_message(message) }
+        object.messages.each { |message| notify_message(message) }
       when Message
         notify_message(object)
       end
