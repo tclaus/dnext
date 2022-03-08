@@ -4,7 +4,9 @@ class StatusMessage < Post
 
   include PeopleHelper
 
-  validates_length_of :text, maximum: 65535, message: proc { |p, v| I18n.t("status_messages.too_long", count: 65535, current_length: v[:value].length) }
+  validates :text, length: {maximum: 65_535, message: proc {|_p, v|
+                                                        I18n.t("status_messages.too_long", count: 65_535, current_length: v[:value].length)
+                                                      }}
   before_save :update_text_language
 
   # don't allow creation of empty status messages
@@ -12,7 +14,7 @@ class StatusMessage < Post
 
   has_many :photos, dependent: :destroy, foreign_key: :status_message_guid, primary_key: :guid
 
-  has_one :location
+  has_one :location, dependent: :destroy
   has_one :poll, autosave: true, dependent: :destroy
   has_many :poll_participations, through: :poll
 
@@ -24,7 +26,7 @@ class StatusMessage < Post
 
   # scopes
   scope :where_person_is_mentioned, ->(person) {
-    owned_or_visible_by_user(person.owner).joins(:mentions).where(mentions: { person_id: person.id })
+    owned_or_visible_by_user(person.owner).joins(:mentions).where(mentions: {person_id: person.id})
   }
 
   def self.model_name
@@ -57,7 +59,7 @@ class StatusMessage < Post
 
   def self.query_stream(query, page)
     response = Post.search query, from: (page - 1) * 10
-    where(posts: { id: response.results.map(&:id) })
+    where(posts: {id: response.results.map(&:id)})
   end
 
   def self.any_tag_stream(tag_ids)
@@ -72,7 +74,7 @@ class StatusMessage < Post
 
     joins("INNER JOIN (
       SELECT taggable_id FROM taggings
-      WHERE taggings.tag_id IN (#{tag_ids.join(",")}) AND taggings.taggable_type = 'Post'
+      WHERE taggings.tag_id IN (#{tag_ids.join(',')}) AND taggings.taggable_type = 'Post'
       GROUP BY taggable_id
       HAVING COUNT(*) >= #{tag_ids.length})
       taggable ON taggable.taggable_id = posts.id")
@@ -108,29 +110,30 @@ class StatusMessage < Post
 
   def contains_oembed_url_in_text?
     urls = message.urls
-    self.oembed_url = urls.find { |url| !TRUSTED_OEMBED_PROVIDERS.find(url).nil? }
+    self.oembed_url = urls.find {|url| !TRUSTED_OEMBED_PROVIDERS.find(url).nil? }
   end
 
   def contains_open_graph_url_in_text?
     return nil if contains_oembed_url_in_text?
+
     self.open_graph_url = message.urls[0]
   end
 
   def post_location
     {
       address: location.try(:address),
-      lat: location.try(:lat),
-      lng: location.try(:lng)
+      lat:     location.try(:lat),
+      lng:     location.try(:lng)
     }
   end
 
   def receive(recipient_user_ids)
     super(recipient_user_ids)
 
-    photos.each { |photo| photo.receive(recipient_user_ids) }
+    photos.each {|photo| photo.receive(recipient_user_ids) }
   end
 
-  # Note: the next two methods can be safely removed once changes from #6818 are deployed on every pod
+  # NOTE: the next two methods can be safely removed once changes from #6818 are deployed on every pod
   # see StatusMessageCreationService#dispatch
   # Only includes those people, to whom we're going to send a federation entity
   # (and doesn't define exhaustive list of people who can receive it)
@@ -139,12 +142,13 @@ class StatusMessage < Post
       if public?
         :all
       else
-        Contact.joins(:aspect_memberships).where(aspect_memberships: { aspect: aspects }).distinct.pluck(:person_id)
+        Contact.joins(:aspect_memberships).where(aspect_memberships: {aspect: aspects}).distinct.pluck(:person_id)
       end
   end
 
   def filter_mentions
     return if people_allowed_to_be_mentioned == :all
+
     update(text: Diaspora::Mentionable.filter_people(text, people_allowed_to_be_mentioned))
   end
 

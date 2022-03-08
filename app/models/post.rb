@@ -29,6 +29,7 @@ class Post < ApplicationRecord
 
   has_many :reshares, class_name: "Reshare", foreign_key: :root_guid, primary_key: :guid
   has_many :resharers, class_name: "Person", through: :reshares, source: :author
+  belongs_to :author, class_name: "Person", inverse_of: :posts, optional: true
 
   belongs_to :o_embed_cache, optional: true
   belongs_to :open_graph_cache, optional: true
@@ -47,12 +48,12 @@ class Post < ApplicationRecord
   scope :includes_for_a_stream, lambda {
     includes(:o_embed_cache,
              :open_graph_cache,
-             { author: :profile },
-             mentions: { person: :profile }) # NOTE: should include root and photos, but i think those are both on status_message
+             {author: :profile},
+             mentions: {person: :profile}) # NOTE: should include root and photos, but i think those are both on status_message
   }
 
   scope :all_public, lambda {
-    includes({ author: :profile })
+    includes({author: :profile})
     left_outer_joins(author: [:pod])
       .where("(pods.blocked = false or pods.blocked is null)")
       .where(public: true)
@@ -66,31 +67,31 @@ class Post < ApplicationRecord
   }
 
   def self.all_public_no_nsfw
-    self.all_public
-        .tagged_with(%i[nsfw], exclude: true)
+    all_public
+      .tagged_with(%i[nsfw], exclude: true)
   end
 
   # TODO: dont show people from blocked posts
-  scope :commented_by, lambda { |person|
+  scope :commented_by, lambda {|person|
     select("DISTINCT posts.*")
       .joins(:comments)
-      .where(comments: { author_id: person.id })
+      .where(comments: {author_id: person.id})
   }
 
   # TODO: dont show people from blocked posts
-  scope :liked_by, lambda { |person|
-    joins(:likes).where(likes: { author_id: person.id })
+  scope :liked_by, lambda {|person|
+    joins(:likes).where(likes: {author_id: person.id})
   }
 
-  scope :subscribed_by, lambda { |user|
-    joins(:participations).where(participations: { author_id: user.person_id })
+  scope :subscribed_by, lambda {|user|
+    joins(:participations).where(participations: {author_id: user.person_id})
   }
 
   scope :reshares, -> { where(type: "Reshare") }
 
-  scope :reshared_by, lambda { |person|
+  scope :reshared_by, lambda {|person|
     # we join on the same table, Rails renames "posts" to "reshares_posts" for the right table
-    joins(:reshares).where(reshares_posts: { author_id: person.id })
+    joins(:reshares).where(reshares_posts: {author_id: person.id})
   }
 
   def post_type
@@ -108,19 +109,17 @@ class Post < ApplicationRecord
   def poll; end
 
   def self.excluding_blocks(user)
-    people = user.blocks.map { |b| b.person_id }
+    people = user.blocks.map {|b| b.person_id }
     scope = all
 
-    scope = scope.where.not(posts: { author_id: people }) if people.any?
+    scope = scope.where.not(posts: {author_id: people}) if people.any?
 
     scope
   end
 
   def self.excluding_hidden_shareables(user)
     scope = all
-    if user.has_hidden_shareables_of_type?
-      scope = scope.where.not(posts: { id: user.hidden_shareables[base_class.to_s] })
-    end
+    scope = scope.where.not(posts: {id: user.hidden_shareables[base_class.to_s]}) if user.has_hidden_shareables_of_type?
     scope
   end
 
@@ -128,9 +127,9 @@ class Post < ApplicationRecord
     excluding_blocks(user).excluding_hidden_shareables(user)
   end
 
-  def self.for_a_stream(max_time, order, user = nil, ignore_blocks = false)
+  def self.for_a_stream(max_time, order, user=nil, ignore_blocks=false)
     scope = for_visible_shareable_sql(max_time, order)
-              .includes_for_a_stream
+            .includes_for_a_stream
 
     if user.present?
       scope = if ignore_blocks
@@ -181,11 +180,14 @@ class Post < ApplicationRecord
   end
 
   def update_text_language
-    # TODO: implement update detected language
+    language_service.detect_post_language(self) if text_changed?
+  end
+
+  def language_service
+    @language_service ||= PostLanguageService.new
   end
 
   def rendered_message
     Diaspora::MessageRenderer.new(text).markdownified
   end
-
 end

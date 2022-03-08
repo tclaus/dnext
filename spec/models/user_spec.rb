@@ -7,9 +7,9 @@ describe User, type: :model do
     context "with valid parameters" do
       before do
         params = {
-          username: "Ohai",
-          email: "ohai@example.com",
-          password: "password",
+          username:              "Ohai",
+          email:                 "ohai@example.com",
+          password:              "password",
           password_confirmation: "password"
         }
         @user = User.build(params)
@@ -30,11 +30,11 @@ describe User, type: :model do
     describe "with invalid params" do
       before do
         @invalid_params = {
-          username: "ohai",
-          email: "ohai@example.com",
-          password: "password",
+          username:              "ohai",
+          email:                 "ohai@example.com",
+          password:              "password",
           password_confirmation: "wrongpasswordz",
-          person: {profile: {first_name: "", last_name: ""}}
+          person:                {profile: {first_name: "", last_name: ""}}
         }
       end
 
@@ -61,9 +61,9 @@ describe User, type: :model do
   describe "#destroy" do
     it "raises error" do
       params = {
-        username: "Ohai",
-        email: "ohai@example.com",
-        password: "password",
+        username:              "Ohai",
+        email:                 "ohai@example.com",
+        password:              "password",
         password_confirmation: "password"
       }
       user = User.build(params)
@@ -106,8 +106,15 @@ describe User, type: :model do
                           password_confirmation: "password", language: "de")
         expect(user.language).to eq("de")
       end
+
+      it "has a default list of stream languages" do
+        expect(alice.stream_languages).to be_empty
+      end
+
+      it "has a default list of stream languages" do
+        alice.stream_languages.create(language_id: "de")
+        expect(alice.stream_languages).not_to be_empty
+      end
     end
-
   end
-
 end

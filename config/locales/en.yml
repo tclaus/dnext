@@ -135,4 +135,6 @@ en:
   error_messages:
     helper:
       correct_the_following_errors_and_try_again: "Correct this error and try again"
+  status_messages:
+    too_long: "Post message length exceeds maximun length."
 

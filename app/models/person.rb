@@ -1,17 +1,45 @@
+# frozen_string_literal: true
+
 class Person < ApplicationRecord
   include Diaspora::Fields::Guid
-
-  has_many :posts, foreign_key: :author_id, dependent: :destroy
-  has_many :photos, foreign_key: :author_id, dependent: :destroy
-
-  belongs_to :owner, class_name: "User", optional: true
-  belongs_to :pod, optional: true # on this pod, this attribute stays empty
+  # include Diaspora::Federation
 
   has_one :profile, dependent: :destroy
-  delegate :first_name, :last_name, :full_name, :image_url, :tag_string, :bio, :location,
+  delegate :last_name, :full_name, :image_url, :tag_string, :bio, :location,
            :gender, :birthday, :formatted_birthday, :tags, :searchable,
            :public_details?, to: :profile
   accepts_nested_attributes_for :profile
+
+  before_validation :downcase_diaspora_handle
+
+  def downcase_diaspora_handle
+    diaspora_handle.downcase! if diaspora_handle.present?
+  end
+
+  has_many :contacts, dependent: :destroy # Other people's contacts for this person
+  has_many :posts, foreign_key: :author_id, inverse_of: :author, dependent: :destroy # This person's own posts
+  has_many :photos, foreign_key: :author_id, dependent: :destroy # This person's own photos
+  has_many :comments, foreign_key: :author_id, dependent: :destroy # This person's own comments
+  has_many :likes, foreign_key: :author_id, dependent: :destroy # This person's own likes
+  has_many :participations, foreign_key: :author_id, dependent: :destroy
+  has_many :poll_participations, foreign_key: :author_id, dependent: :destroy
+  has_many :conversation_visibilities, dependent: :destroy
+  has_many :messages, foreign_key: :author_id, dependent: :destroy
+  has_many :conversations, foreign_key: :author_id, dependent: :destroy
+  has_many :blocks, dependent: :destroy
+
+  has_many :roles, dependent: :destroy
+
+  belongs_to :owner, class_name: "User", optional: true
+  belongs_to :pod, optional: true
+
+  has_many :notification_actors
+  has_many :notifications, through: :notification_actors
+
+  has_many :mentions, dependent: :destroy
+
+  has_one :account_deletion, dependent: :destroy
+  has_one :account_migration, foreign_key: :old_person_id, dependent: :nullify, inverse_of: :old_person
 
   validate :owner_xor_pod
   validate :other_person_with_same_guid, on: :create
@@ -19,11 +47,143 @@ class Person < ApplicationRecord
   validates :serialized_public_key, presence: true
   validates :diaspora_handle, uniqueness: true
 
-  scope :remote, -> { where("people.owner_id IS NULL") }
-  scope :local, -> { where("people.owner_id IS NOT NULL") }
+  scope :searchable, ->(user) {
+    if user
+      joins("LEFT OUTER JOIN contacts ON contacts.user_id = #{user.id} AND contacts.person_id = people.id")
+        .joins(:profile)
+        .where("profiles.searchable = true OR contacts.user_id = ?", user.id)
+    else
+      joins(:profile).where(profiles: {searchable: true})
+    end
+  }
+
+  scope :remote, -> { where(people: {owner_id: nil}) }
+  scope :local, -> { where.not(people: {owner_id: nil}) }
+  scope :for_json, -> { select("people.id, people.guid, people.diaspora_handle").includes(:profile) }
+
+  # @note user is passed in here defensively
+  scope :all_from_aspects, ->(aspect_ids, user) {
+    joins(contacts: :aspect_memberships)
+      .where(contacts: {user_id: user.id})
+      .where(aspect_memberships: {aspect_id: aspect_ids})
+  }
+
+  scope :unique_from_aspects, ->(aspect_ids, user) {
+    all_from_aspects(aspect_ids, user).select("DISTINCT people.*")
+  }
+
+  # not defensive
+  scope :in_aspects, ->(aspect_ids) {
+    joins(contacts: :aspect_memberships)
+      .where(aspect_memberships: {aspect_id: aspect_ids}).distinct
+  }
+
+  scope :in_all_aspects, ->(aspect_ids) {
+    joins(contacts: :aspect_memberships)
+      .where(aspect_memberships: {aspect_id: aspect_ids})
+  }
+
+  scope :contacts_of, ->(user) {
+    joins(:contacts).where(contacts: {user_id: user.id})
+  }
+
+  scope :contacts_of_for_admins, ->(user) {
+    left_outer_joins(:contacts).where(contacts: {user_id: user.id})
+                               .or(Person.where("order_id > 0"))
+  }
+
+  scope :profile_tagged_with, ->(tag_name) {
+    joins(profile: :tags)
+      .where(tags: {name: tag_name})
+      .where("profiles.searchable IS TRUE")
+  }
+
+  scope :who_have_reshared_a_users_posts, ->(user) {
+    joins(:posts)
+      .where(posts: {root_guid: StatusMessage.guids_for_author(user.person), type: "Reshare"})
+  }
+
+  # This scope selects people where the full name contains the search_str or diaspora ID
+  # starts with the search_str.
+  # However, if the search_str doesn't have more than 1 non-whitespace character, it'll return an empty set.
+  # @param [String] search substring
+  # @return [Person::ActiveRecord_Relation]
+  scope :find_by_substring, ->(search_str) {
+    search_str = search_str.strip
+    if search_str.blank? || search_str.size < 2
+      none
+    else
+      sql, tokens = search_query_string(search_str)
+      joins(:profile).where(sql, *tokens)
+    end
+  }
+
+  # Left joins likes and comments to a specific post where people are authors of these comments and likes
+  # @param [String, Integer] post ID for which comments and likes should be joined
+  # @return [Person::ActiveRecord_Relation]
+  scope :left_join_visible_post_interactions_on_authorship, ->(post_id) {
+    comments_sql = <<-SQL
+      LEFT OUTER JOIN comments ON
+      comments.author_id = people.id AND comments.commentable_type = 'Post' AND comments.commentable_id = #{post_id}
+    SQL
+
+    likes_sql = <<-SQL
+      LEFT OUTER JOIN likes ON
+      likes.author_id = people.id AND likes.target_type = 'Post' AND likes.target_id = #{post_id}
+    SQL
+
+    joins(comments_sql).joins(likes_sql)
+  }
+
+  # Selects people who can be mentioned in a comment to a specific post. For public posts all people
+  # are allowed, so no additional constraints are added. For private posts selection is limited to
+  # people who have posted comments or likes for this post.
+  # @param [Post] the post for which we query mentionable in comments people
+  # @return [Person::ActiveRecord_Relation]
+  scope :allowed_to_be_mentioned_in_a_comment_to, ->(post) {
+    allowed = if post.public?
+                all
+              else
+                left_join_visible_post_interactions_on_authorship(post.id)
+                  .where("comments.id IS NOT NULL OR likes.id IS NOT NULL OR people.id = #{post.author_id}")
+              end
+    allowed.distinct
+  }
+
+  # This scope adds sorting of people in the order, appropriate for suggesting to a user (current user) who
+  # has requested a list of the people mentionable in a comment for a specific post.
+  # Sorts people in the following priority: post author > commenters > likers > contacts > non-contacts
+  # @param [Post] post for which the mentionable in comment people list is requested
+  # @param [User] user who requests the people list
+  # @return [Person::ActiveRecord_Relation]
+  scope :sort_for_mention_suggestion, ->(post, user) {
+    left_join_visible_post_interactions_on_authorship(post.id)
+      .joins("LEFT OUTER JOIN contacts ON people.id = contacts.person_id AND contacts.user_id = #{user.id}")
+      .joins(:profile)
+      .select(<<-SQL
+        people.id = #{unscoped { post.author_id }} AS is_author,
+        comments.id IS NOT NULL AS is_commenter,
+        likes.id IS NOT NULL AS is_liker,
+        contacts.id IS NOT NULL AS is_contact
+    SQL
+             )
+      .order(Arel.sql(<<-SQL
+        is_author DESC,
+        is_commenter DESC,
+        is_liker DESC,
+        is_contact DESC,
+        profiles.full_name,
+        people.diaspora_handle
+      SQL
+                     ))
+  }
 
   def avatar_small
     profile.image_url(size: :thumb_small)
+  end
+
+  def self.community_spotlight
+    Person.joins(:roles).where(roles: {name: "spotlight"})
   end
 
   # Set a default of an empty profile when a new Person record is instantiated.
@@ -32,8 +192,8 @@ class Person < ApplicationRecord
   #   Person.new do |p|
   #     p.profile = nil
   #   end
-  # will not work!  The nil profile will be overridden with an empty one.
-  def initialize(params = {})
+  # will not work!  The nil profile will be overriden with an empty one.
+  def initialize(params={})
     params = {} if params.nil?
 
     profile_set = params.has_key?(:profile) || params.has_key?("profile")
@@ -49,7 +209,244 @@ class Person < ApplicationRecord
           u.person
         end
     raise ActiveRecord::RecordNotFound unless p.present?
+
     p
+  end
+
+  def to_param
+    guid
+  end
+
+  def self.search_query_string(query)
+    query = query.downcase
+    like_operator = AppConfig.postgres? ? "ILIKE" : "LIKE"
+
+    where_clause = <<-SQL
+      profiles.full_name #{like_operator} ? OR
+      people.diaspora_handle #{like_operator} ?
+    SQL
+
+    q_tokens = []
+    q_tokens[0] = query.to_s.strip.gsub(/(\s|$|^)/) { "%#{Regexp.last_match(1)}" }
+    q_tokens[1] = q_tokens[0].gsub(/\s/, "").gsub("%", "")
+    q_tokens[1] << "%"
+
+    [where_clause, q_tokens]
+  end
+
+  # rubocop:disable Rails/DynamicFindBy
+  def self.search(search_str, user, only_contacts: false, mutual: false)
+    query = find_by_substring(search_str)
+    return query if query.is_a?(ActiveRecord::NullRelation)
+
+    query = if only_contacts
+              query.contacts_of(user)
+            else
+              query.searchable(user)
+            end
+    query = query.where(contacts: {sharing: true, receiving: true}) if mutual
+
+    # return only unblocked or local persons
+    query = query.includes(:pod).where("pods.blocked = false or pods.blocked is null").references(:pod)
+
+    query.where(closed_account: false)
+         .order([Arel.sql("contacts.user_id IS NULL"), "profiles.last_name ASC", "profiles.first_name ASC"])
+  end
+
+  def self.search_as_admin(search_str, user, only_contacts: false, mutual: false)
+    query = find_by_substring(search_str)
+    return query if query.is_a?(ActiveRecord::NullRelation)
+
+    query = if only_contacts
+              query.where("exists (#{exists_in_contacts(user, mutual)} or people.owner_id is not null)")
+            else
+              query.searchable(user)
+            end
+    query.where(closed_account: false)
+         .order(["profiles.last_name ASC", "profiles.first_name ASC"])
+  end
+  # rubocop:enable Rails/DynamicFindBy
+
+  def self.exists_in_contacts(user, mutual)
+    return "SELECT 1 FROM contacts WHERE contacts.person_id = people.id AND contacts.user_id = #{user.id}" unless mutual
+
+    "SELECT 1 FROM contacts WHERE contacts.person_id = people.id
+     AND contacts.user_id = #{user.id} AND sharing = TRUE AND receiving = TRUE"
+  end
+
+  def name(_opts={})
+    fix_profile if self.profile.nil?
+    @name ||= Person.name_from_attrs(self.profile.first_name, self.profile.last_name, diaspora_handle)
+  end
+
+  def self.name_from_attrs(first_name, last_name, diaspora_handle)
+    first_name.blank? && last_name.blank? ? diaspora_handle : "#{first_name.to_s.strip} #{last_name.to_s.strip}".strip
+  end
+
+  def first_name
+    @first_name ||= if profile.nil? || profile.first_name.nil? || profile.first_name.blank?
+                      diaspora_handle.split("@").first
+                    else
+                      names = profile.first_name.to_s.split(/\s/)
+                      str = names[0...-1].join(" ")
+                      str = names[0] if str.blank?
+                      str
+                    end
+  end
+
+  def username
+    @username ||= owner ? owner.username : diaspora_handle.split("@")[0]
+  end
+
+  def author
+    self
+  end
+
+  def owns?(obj)
+    id == obj.author_id
+  end
+
+  def url
+    url_to "/"
+  end
+
+  def profile_url
+    url_to "/u/#{username}"
+  end
+
+  def atom_url
+    url_to "/public/#{username}.atom"
+  end
+
+  def receive_url
+    url_to "/receive/users/#{guid}"
+  end
+
+  # @param path [String]
+  # @return [String]
+  def url_to(path)
+    local? ? AppConfig.url_to(path) : pod.url_to(path)
+  end
+
+  def public_key_hash
+    Base64.encode64(OpenSSL::Digest::SHA256.new(serialized_public_key).to_s)
+  end
+
+  def public_key
+    OpenSSL::PKey::RSA.new(serialized_public_key)
+  rescue OpenSSL::PKey::RSAError
+    nil
+  end
+
+  def exported_key
+    serialized_public_key
+  end
+
+  # discovery (webfinger)
+  def self.find_or_fetch_by_identifier(diaspora_id)
+    # pod blocked?
+    if diaspora_handle_from_blocked_pod?(diaspora_id)
+      logger.info "Rejecting #{diaspora_id}, from blocked pod"
+      raise DiasporaFederation::Federation::PodBlocked,
+            "Failed discovery for #{diaspora_id}: blocked pod"
+    end
+
+    # exiting person?
+    person = by_account_identifier(diaspora_id)
+    return person if person.present? && person.profile.present?
+
+    # create or update person from webfinger
+    logger.info "webfingering #{diaspora_id}, it is not known or needs updating"
+    DiasporaFederation::Discovery::Discovery.new(diaspora_id).fetch_and_save
+
+    by_account_identifier(diaspora_id)
+  end
+
+  def self.by_account_identifier(diaspora_id)
+    find_by(diaspora_handle: diaspora_id.strip.downcase)
+  end
+
+  def remote?
+    owner_id.nil?
+  end
+
+  def local?
+    !remote?
+  end
+
+  def has_photos?
+    photos.exists?
+  end
+
+  def as_json(opts={})
+    opts ||= {}
+    json = {
+      id:     id,
+      guid:   guid,
+      name:   name,
+      avatar: profile.image_url(size: :thumb_small),
+      handle: diaspora_handle,
+      url:    Rails.application.routes.url_helpers.person_path(self)
+    }
+    json.merge!(tags: self.profile.tags.map {|t| "##{t.name}" }) if opts[:includes] == "tags"
+    json
+  end
+
+  # Verifies whether local user is temporary locked or not
+  def locked_access?
+    return owner.access_locked? if owner.present?
+
+    false
+  end
+
+  # Locks revocable the users account and access to this instance if local
+  def lock_access!
+    owner.lock_access!({send_instructions: false}) if owner.present?
+  end
+
+  def unlock_access
+    owner.unlock_access! if owner.present?
+  end
+
+  # Verifies whether user account is permanently locked or not
+  def closed_account?
+    closed_account
+  end
+
+  # Locks user and closes account permanently. Messages from external users will not enter this pod
+  def close_account!
+    update(closed_account: true)
+    lock_access!
+    AccountDeletion.create(person: self) unless AccountDeletion.exists?(person: self)
+  end
+
+  # Locks user and closes account permanently. Messages from external users will not enter this pod
+  # All messages and comments will be deleted
+  def wipe_and_close_account!
+    update(closed_account: true)
+    lock_access!
+    owner.lock_access! if owner.present?
+    AccountDeletion.create(person: self) unless AccountDeletion.exists?(person: self)
+    Workers::WipeAccount.perform_async(id)
+  end
+
+  def clear_profile!
+    self.profile.tombstone!
+    self
+  end
+
+  def self.diaspora_handle_from_blocked_pod?(diaspora_handle)
+    host = diaspora_handle.split("@").last
+    pod = Pod.find_by(host: host)
+    !pod.nil? && pod.blocked
+  end
+
+  private
+
+  def fix_profile
+    logger.info "fix profile for account: #{diaspora_handle}"
+    DiasporaFederation::Discovery::Discovery.new(diaspora_handle).fetch_and_save
+    reload
   end
 
   def owner_xor_pod
@@ -59,18 +456,8 @@ class Person < ApplicationRecord
   def other_person_with_same_guid
     diaspora_id = Person.where(guid: guid)
                         .where.not(diaspora_handle: diaspora_handle)
-                        .pluck(:diaspora_handle).first
+                        .pluck(:diaspora_handle)
+                        .first
     errors.add(:base, "Person with same GUID already exists: #{diaspora_id}") if diaspora_id
-  end
-
-  def name
-    if self.profile.nil?
-      # fix_profile #TODO: Implement fetch profile
-    end
-    @name ||= Person.name_from_attrs(self.profile.first_name, self.profile.last_name, diaspora_handle)
-  end
-
-  def self.name_from_attrs(first_name, last_name, diaspora_handle)
-    first_name.blank? && last_name.blank? ? diaspora_handle : "#{first_name.to_s.strip} #{last_name.to_s.strip}".strip
   end
 end

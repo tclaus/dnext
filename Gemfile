@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 source "https://rubygems.org"
-git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+git_source(:github) {|repo| "https://github.com/#{repo}.git" }
 
 ruby "3.0.3"
 
@@ -70,6 +70,10 @@ gem "twitter-text", "~> 3.1.0"
 gem "http_accept_language", "~> 2.1", ">= 2.1.1"
 gem "rails-i18n", "~> 7.0", ">= 7.0.3"
 
+# Detect language of text
+gem "cld3", "~> 3.4", ">= 3.4.2"
+gem "ffi", "~> 1.15", ">= 1.15.5"
+
 # Configuration
 gem "configurate", "~>0.5.0"
 gem "toml-rb", "~> 2.1.0"
@@ -125,7 +129,7 @@ end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  
+
   gem "capybara"
   gem "json-schema-rspec", "0.0.4"
   gem "rspec-json_expectations", "~> 2.1"

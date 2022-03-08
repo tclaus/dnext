@@ -2,3 +2,8 @@ de:
   post:
     visibility:
       global: Öffentlich
+  status_messages:
+    too_long: "Post message exceeds maximal length"
+  streams:
+    public:
+      title: "Öffentliche Aktivität"
