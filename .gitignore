@@ -69,3 +69,4 @@ capybara-*.html
 # IDE
 .idea
 .vscode
+/dump.rdb

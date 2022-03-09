@@ -29,6 +29,7 @@ class Post < ApplicationRecord
 
   has_many :reshares, class_name: "Reshare", foreign_key: :root_guid, primary_key: :guid
   has_many :resharers, class_name: "Person", through: :reshares, source: :author
+  belongs_to :author, class_name: "Person", inverse_of: :posts, optional: true
 
   belongs_to :o_embed_cache, optional: true
   belongs_to :open_graph_cache, optional: true
@@ -65,12 +66,16 @@ class Post < ApplicationRecord
       and posts.public = true")
   }
 
-  def self.all_public_no_nsfw
-    self.all_public
-        .tagged_with(%i[nsfw], exclude: true)
-  end
+  # Public posts without any nsfw tagged content
+  scope :all_public_no_nsfw, -> {
+    all_public
+      .where("posts.id NOT IN
+      (SELECT taggings.taggable_id FROM taggings
+          INNER JOIN tags ON taggings.tag_id = tags.id AND taggings.taggable_type = 'Post' AND (tags.name = 'nsfw' )
+      )")
+  }
 
-  # TODO: dont show people from blocked posts 
+  # TODO: dont show people from blocked posts
   scope :commented_by, lambda {|person|
     select("DISTINCT posts.*")
       .joins(:comments)
@@ -98,6 +103,7 @@ class Post < ApplicationRecord
   end
 
   def root; end
+
   def photos() = []
 
   # prevents error when trying to access @post.address in a post different than Reshare and StatusMessage types;
@@ -110,16 +116,14 @@ class Post < ApplicationRecord
     people = user.blocks.map {|b| b.person_id }
     scope = all
 
-    scope = scope.where.not(posts: { author_id: people }) if people.any?
+    scope = scope.where.not(posts: {author_id: people}) if people.any?
 
     scope
   end
 
   def self.excluding_hidden_shareables(user)
     scope = all
-    if user.has_hidden_shareables_of_type?
-      scope = scope.where.not(posts: { id: user.hidden_shareables[base_class.to_s] })
-    end
+    scope = scope.where.not(posts: {id: user.hidden_shareables[base_class.to_s]}) if user.has_hidden_shareables_of_type?
     scope
   end
 
@@ -127,7 +131,7 @@ class Post < ApplicationRecord
     excluding_blocks(user).excluding_hidden_shareables(user)
   end
 
-  def self.for_a_stream(max_time, order, user = nil, ignore_blocks = false)
+  def self.for_a_stream(max_time, order, user=nil, ignore_blocks=false)
     scope = for_visible_shareable_sql(max_time, order)
             .includes_for_a_stream
 
@@ -180,11 +184,14 @@ class Post < ApplicationRecord
   end
 
   def update_text_language
-    # TODO: implement update detected language
+    language_service.detect_post_language(self) if text_changed?
+  end
+
+  def language_service
+    @language_service ||= PostLanguageService.new
   end
 
   def rendered_message
     Diaspora::MessageRenderer.new(text).markdownified
   end
-
 end

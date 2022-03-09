@@ -4,17 +4,17 @@ class Contact < ApplicationRecord
   belongs_to :user
   belongs_to :person
 
-  validates :person_id, uniqueness: {scope: :user_id}
+  validates :person_id, uniqueness: { scope: :user_id }
 
   delegate :name, :diaspora_handle, :guid, :first_name,
-    to: :person, prefix: true
+           to: :person, prefix: true
 
   has_many :aspect_memberships, dependent: :destroy
   has_many :aspects, through: :aspect_memberships
 
   validate :not_contact_for_self,
-    :not_blocked_user,
-    :not_contact_with_closed_account
+           :not_blocked_user,
+           :not_contact_with_closed_account
 
   before_destroy :destroy_notifications
 

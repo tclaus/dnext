@@ -15,23 +15,23 @@ class User < ApplicationRecord
   has_many :aspects, -> { order("order_id ASC") }
   has_many :aspect_memberships, through: :aspects
   has_many :contacts
-  has_many :contact_people, :through => :contacts, :source => :person
+  has_many :contact_people, through: :contacts, source: :person
   has_many :blocks
-  has_many :ignored_people, :through => :blocks, :source => :person
+  has_many :ignored_people, through: :blocks, source: :person
+  has_many :stream_languages, dependent: :destroy
 
   before_validation :strip_and_downcase_username
   before_validation :strip_and_downcase_email
   before_validation :set_current_language, on: :create
-
   before_destroy do
     raise "Never destroy users!"
   end
 
-  validates :username, presence: true, uniqueness: true, format: { with: /\A[A-Za-z0-9_.\-]+\z/ },
-            length: { maximum: 32 }, exclusion: { in: AppConfig.settings.username_blacklist }
-  # TODO: Validate and set Language
-  # validates_inclusion_of :language, in: AVAILABLE_LANGUAGE_CODES
-  validates_format_of :unconfirmed_email, with: Devise.email_regexp, allow_blank: true
+  validates :username, presence: true, uniqueness: true, format: {with: /\A[A-Za-z0-9_.\-]+\z/},
+            length: {maximum: 32}, exclusion: {in: AppConfig.settings.username_blacklist}
+
+  validates :unconfirmed_email, format: {with: Devise.email_regexp, allow_blank: true}
+  validates :language, inclusion: {in: AVAILABLE_LANGUAGE_CODES}
 
   validate :unconfirmed_email_quasiuniqueness
 
@@ -43,9 +43,9 @@ class User < ApplicationRecord
            :diaspora_handle, :name, :atom_url, :profile_url, :profile, :url,
            :first_name, :last_name, :full_name, :gender, :participations, to: :person
   delegate :id, :guid, to: :person, prefix: true
-  
+
   def self.all_sharing_with_person(person)
-    User.joins(:contacts).where(:contacts => {:person_id => person.id})
+    User.joins(:contacts).where(contacts: {person_id: person.id})
   end
 
   def basic_profile_present?
@@ -53,13 +53,13 @@ class User < ApplicationRecord
   end
 
   ### Helpers ############
-  def self.build(opts = {})
+  def self.build(opts={})
     user = User.new(opts.except(:person, :id))
     user.setup(opts)
     user
   end
 
-  def self.find_or_build(opts = {})
+  def self.find_or_build(opts={})
     user = User.find_by(username: opts[:username])
     user ||= User.build(opts)
     user
@@ -75,7 +75,7 @@ class User < ApplicationRecord
     valid?
     errors = self.errors
     errors.delete :person
-    return if errors.size > 0
+    return unless errors.empty?
 
     set_person(Person.new((opts[:person] || {}).except(:id)))
     generate_keys
@@ -100,13 +100,13 @@ class User < ApplicationRecord
   # Whenever email is set, clear all unconfirmed emails which match
   def remove_invalid_unconfirmed_emails
     return unless saved_change_to_email?
+
     User.where(unconfirmed_email: email).update_all(unconfirmed_email: nil, confirm_email_token: nil)
-    # rubocop:enable Rails/SkipsModelValidations
   end
 
   # Generate public/private keys for User and associated Person
   def generate_keys
-    key_size = (Rails.env == "test" ? 512 : 4096)
+    key_size = (Rails.env.test? ? 512 : 4096)
 
     self.serialized_private_key = OpenSSL::PKey::RSA.generate(key_size).to_s if serialized_private_key.blank?
 
@@ -120,7 +120,7 @@ class User < ApplicationRecord
     if username_changed? && Person.exists?(diaspora_handle: diaspora_id)
       errors[:base] << "That username has already been taken"
     end
-  rescue => e
+  rescue StandardError => e
     logger.error e
   end
 
@@ -153,13 +153,15 @@ class User < ApplicationRecord
 
   def send_welcome_message
     return unless AppConfig.settings.welcome_message.enabled? && AppConfig.admins.account?
+
     sender_username = AppConfig.admins.account.get
     sender = User.find_by(username: sender_username)
     return if sender.nil?
+
     conversation = sender.build_conversation(
       participant_ids: [sender.person.id, person.id],
-      subject: AppConfig.settings.welcome_message.subject.get,
-      message: { text: AppConfig.settings.welcome_message.text.get % { username: username } }
+      subject:         AppConfig.settings.welcome_message.subject.get,
+      message:         {text: AppConfig.settings.welcome_message.text.get % {username: username}}
     )
 
     Diaspora::Federation::Dispatcher.build(sender, conversation).dispatch if conversation.save
@@ -175,7 +177,7 @@ class User < ApplicationRecord
 
   # Copy the method provided by Devise to be able to call it later
   # from a Sidekiq job
-  alias_method :send_reset_password_instructions!, :send_reset_password_instructions
+  alias send_reset_password_instructions! send_reset_password_instructions
 
   def send_reset_password_instructions
     ResetPasswordJob.perform_later(self)
@@ -204,24 +206,31 @@ class User < ApplicationRecord
   end
 
   def admin?
+    # TODO: return if admin
     false
   end
 
   def moderator?
+    # TODO: return if moderator
     false
+  end
+
+  def podmin?
+    # TODO: return if podmin
+    true
   end
 
   ######### Mailer #######################
   def mail(job, *args)
     return unless job.present?
+
     pref = job.to_s.gsub("Workers::Mail::", "").underscore
-    if disable_mail == false && !user_preferences.exists?(email_type: pref)
-      job.perform_async(*args)
-    end
+    job.perform_async(*args) if disable_mail == false && !user_preferences.exists?(email_type: pref)
   end
 
   def send_confirm_email
     return if unconfirmed_email.blank?
+
     Workers::Mail::ConfirmEmail.perform_async(id)
   end
 end

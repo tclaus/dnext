@@ -1,22 +1,26 @@
 # frozen_string_literal: true
+
 module Stream
   class Base
-    TYPES_OF_POST_IN_STREAM = %w[StatusMessage Reshare]
+    TYPES_OF_POST_IN_STREAM = %w[StatusMessage Reshare].freeze
+    attr_accessor :user
 
-    def initialize(opts = {}) end
-
-    # required to implement said stream
-    def link(opts = {})
-      'change me in lib/base_stream.rb!'
+    def initialize(user, _opts={})
+      @user = user
     end
 
-    def post_from_group(post)
+    # required to implement said stream
+    def link(_opts={})
+      "change me in lib/base_stream.rb!"
+    end
+
+    def post_from_group(_post)
       []
     end
 
     # @return [String]
     def title
-      'a title'
+      "a title"
     end
 
     # @return [ActiveRecord::Relation<Post>]
@@ -30,8 +34,8 @@ module Stream
       ordered_posts
     end
 
-    #NOTE: MBS bad bad methods the fact we need these means our views are foobared. please kill them and make them
-    #private methods on the streams that need them
+    # NOTE: MBS bad bad methods the fact we need these means our views are foobared. please kill them and make them
+    # private methods on the streams that need them
     def aspects
       user.post_default_aspects
     end
@@ -51,11 +55,10 @@ module Stream
     def like_posts_for_stream!(posts)
       return posts unless @user
 
-      likes = Like.where(:author_id => @user.person_id, :target_id => posts.map(&:id), :target_type => "Post")
+      likes = Like.where(author_id: @user.person_id, target_id: posts.map(&:id), target_type: "Post")
 
-      like_hash = likes.inject({}) do |hash, like|
-        hash[like.target_id] = like
-        hash
+      like_hash = likes.index_by do |like|
+        like.target_id
       end
 
       posts.each do |post|
@@ -73,6 +76,6 @@ module Stream
   #
   # @return [Array<Contact>]
   def contacts_in_stream
-    @contacts_in_stream ||= Contact.where(:user_id => user.id, :person_id => people.map(&:id)).load
+    @contacts_in_stream ||= Contact.where(user_id: user.id, person_id: people.map(&:id)).load
   end
 end

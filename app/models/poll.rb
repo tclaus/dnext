@@ -14,7 +14,7 @@ class Poll < ApplicationRecord
   validate :enough_poll_answers
   validates :question, presence: true
 
-  scope :all_public, -> { joins(:status_message).where(posts: {public: true}) }
+  scope :all_public, -> { joins(:status_message).where(posts: { public: true }) }
 
   self.include_root_in_json = false
 

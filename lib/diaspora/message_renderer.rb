@@ -67,7 +67,7 @@ module Diaspora
       def process_newlines
         message.gsub(/^[\w<][^\n]*\n+/) do |x|
           /\n{2}/.match?(x) ? x : (x.strip!
-                                   x << " \n")
+          x << " \n")
         end
       end
 
@@ -107,29 +107,29 @@ module Diaspora
       end
     end
 
-    DEFAULTS = {mentioned_people: [],
-                link_all_mentions: false,
-                disable_hovercards: false,
-                truncate: false,
-                append: nil,
-                append_after_truncate: nil,
-                squish: false,
-                escape: true,
-                escape_tags: false,
-                markdown_options: {
-                  autolink: true,
-                  fenced_code_blocks: true,
-                  space_after_headers: true,
-                  strikethrough: true,
-                  footnotes: true,
-                  tables: true,
-                  no_intra_emphasis: true
-                },
-                markdown_render_options: {
-                  filter_html: true,
-                  hard_wrap: true,
-                  safe_links_only: true
-                }}.freeze
+    DEFAULTS = { mentioned_people: [],
+                 link_all_mentions: false,
+                 disable_hovercards: false,
+                 truncate: false,
+                 append: nil,
+                 append_after_truncate: nil,
+                 squish: false,
+                 escape: true,
+                 escape_tags: false,
+                 markdown_options: {
+                   autolink: true,
+                   fenced_code_blocks: true,
+                   space_after_headers: true,
+                   strikethrough: true,
+                   footnotes: true,
+                   tables: true,
+                   no_intra_emphasis: true
+                 },
+                 markdown_render_options: {
+                   filter_html: true,
+                   hard_wrap: true,
+                   safe_links_only: true
+                 } }.freeze
 
     delegate :empty?, :blank?, :present?, to: :raw
 
@@ -230,11 +230,11 @@ module Diaspora
     def title(opts = {})
       # Setext-style header
       heading = if /\A(?<setext_content>.{1,200})\n(?:={1,200}|-{1,200})(?:\r?\n|$)/ =~ @text.lstrip
-        setext_content
-      # Atx-style header
-      elsif /\A\#{1,6}\s+(?<atx_content>.{1,200}?)(?:\s+#+)?(?:\r?\n|$)/ =~ @text.lstrip
-        atx_content
-      end
+                  setext_content
+                  # Atx-style header
+                elsif /\A\#{1,6}\s+(?<atx_content>.{1,200}?)(?:\s+#+)?(?:\r?\n|$)/ =~ @text.lstrip
+                  atx_content
+                end
 
       heading &&= self.class.new(heading).plain_text_without_markdown
 

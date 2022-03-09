@@ -1,10 +1,9 @@
-
 # frozen_string_literal: true
 
 class ConnectionTester
   include Diaspora::Logging
 
-  NODEINFO_SCHEMA   = "http://nodeinfo.diaspora.software/ns/schema/1.0"
+  NODEINFO_SCHEMA = "http://nodeinfo.diaspora.software/ns/schema/1.0"
   NODEINFO_FRAGMENT = "/.well-known/nodeinfo"
 
   class << self
@@ -67,7 +66,7 @@ class ConnectionTester
   end
 
   # @raise [AddressFailure] if the specified url is not http(s)
-  def initialize(url, result=Result.new)
+  def initialize(url, result = Result.new)
     @url ||= url
     @result ||= result
     @uri ||= URI.parse(@url)

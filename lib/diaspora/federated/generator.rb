@@ -10,7 +10,7 @@ module Diaspora
         @target = target
       end
 
-      def create!(options={})
+      def create!(options = {})
         relayable = build(options)
         if relayable.save!
           logger.info "user:#{@user.id} dispatching #{relayable.class}:#{relayable.guid}"
@@ -19,7 +19,7 @@ module Diaspora
         end
       end
 
-      def build(options={})
+      def build(options = {})
         self.class.federated_class.new(options.merge(relayable_options).merge(author_id: @user.person.id))
       end
 

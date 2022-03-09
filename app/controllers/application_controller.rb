@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
+
+  around_action :set_locale
   before_action :configure_permitted_parameters, if: :devise_controller?
   protect_from_forgery except: :receive, with: :exception, prepend: true
   layout "with_header_with_footer"
@@ -22,6 +24,16 @@ class ApplicationController < ActionController::Base
       headers["X-Git-Update"] = AppConfig.git_update if AppConfig.git_update.present?
       headers["X-Git-Revision"] = AppConfig.git_revision if AppConfig.git_revision.present?
     end
+  end
+
+  def set_locale(&action)
+    if user_signed_in?
+      locale = current_user.try(:language) || I18n.default_locale
+    else
+      locale = http_accept_language.language_region_compatible_from AVAILABLE_LANGUAGE_CODES
+      locale ||= DEFAULT_LANGUAGE
+    end
+    I18n.with_locale(locale, &action)
   end
 
   def redirect_unless_admin
@@ -51,8 +63,6 @@ class ApplicationController < ActionController::Base
       stream_path
     end
   end
-
-  protected
 
   protected
 

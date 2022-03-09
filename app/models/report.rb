@@ -65,12 +65,12 @@ class Report < ApplicationRecord
 
   def mark_as_reviewed_and_deleted
     Report.where(item_id: item_id, item_type: item_type)
-      .update_all(reviewed: true, action: STATUS_DELETED)
+          .update_all(reviewed: true, action: STATUS_DELETED)
   end
 
   def mark_as_reviewed
     Report.where(item_id: item_id, item_type: item_type)
-      .update_all(reviewed: true, action: STATUS_NO_ACTION)
+          .update_all(reviewed: true, action: STATUS_NO_ACTION)
   end
 
   # rubocop:enable Rails/SkipsModelValidations

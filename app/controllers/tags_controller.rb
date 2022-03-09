@@ -61,10 +61,10 @@ class TagsController < ApplicationController
 
   def prep_tags_for_javascript
     @tags = @tags.map { |tag|
-      {name: ("#" + tag.name)}
+      { name: ("#" + tag.name) }
     }
 
-    @tags << {name: ("#" + params[:q])}
+    @tags << { name: ("#" + params[:q]) }
     @tags.uniq!
   end
 end

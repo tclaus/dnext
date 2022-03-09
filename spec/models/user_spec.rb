@@ -7,9 +7,9 @@ describe User, type: :model do
     context "with valid parameters" do
       before do
         params = {
-          username: "Ohai",
-          email: "ohai@example.com",
-          password: "password",
+          username:              "Ohai",
+          email:                 "ohai@example.com",
+          password:              "password",
           password_confirmation: "password"
         }
         @user = User.build(params)
@@ -30,11 +30,11 @@ describe User, type: :model do
     describe "with invalid params" do
       before do
         @invalid_params = {
-          username: "ohai",
-          email: "ohai@example.com",
-          password: "password",
+          username:              "ohai",
+          email:                 "ohai@example.com",
+          password:              "password",
           password_confirmation: "wrongpasswordz",
-          person: {profile: {first_name: "", last_name: ""}}
+          person:                {profile: {first_name: "", last_name: ""}}
         }
       end
 
@@ -61,9 +61,9 @@ describe User, type: :model do
   describe "#destroy" do
     it "raises error" do
       params = {
-        username: "Ohai",
-        email: "ohai@example.com",
-        password: "password",
+        username:              "Ohai",
+        email:                 "ohai@example.com",
+        password:              "password",
         password_confirmation: "password"
       }
       user = User.build(params)
@@ -79,6 +79,41 @@ describe User, type: :model do
       user = FactoryBot.create(:user)
       assert_enqueued_with(job: ResetPasswordJob, args: [user]) do
         user.send_reset_password_instructions
+      end
+    end
+  end
+
+  describe "validation" do
+    describe "of language" do
+      after do
+        I18n.locale = :en
+      end
+
+      it "requires availability" do
+        alice.language = "some invalid language"
+        expect(alice).not_to be_valid
+      end
+
+      it "should save with current language if blank" do
+        I18n.locale = :fr
+        user = User.build username: "max", email: "foo@bar.com", password: "password", password_confirmation: "password"
+        expect(user.language).to eq("fr")
+      end
+
+      it "should save with language what is set" do
+        I18n.locale = :fr
+        user = User.build(username: "max", email: "foo@bar.com", password: "password",
+                          password_confirmation: "password", language: "de")
+        expect(user.language).to eq("de")
+      end
+
+      it "has a default list of stream languages" do
+        expect(alice.stream_languages).to be_empty
+      end
+
+      it "has a default list of stream languages" do
+        alice.stream_languages.create(language_id: "de")
+        expect(alice.stream_languages).not_to be_empty
       end
     end
   end

@@ -8,7 +8,7 @@ class StreamsController < ApplicationController
   end
 
   def stream
-    stream_responder(Stream::Public) #TODO : this will be the "multi" stream
+    stream_responder(Stream::Public) # TODO : this will be the "multi" stream
   end
 
   def multi
@@ -16,13 +16,12 @@ class StreamsController < ApplicationController
     stream
   end
 
-  def local_public
-  end
+  def local_public; end
 
   private
 
   def stream_responder(stream_builder=nil)
-    @stream_builder_object = stream_builder.new
+    @stream_builder_object = stream_builder.new(current_user)
     @pagy, @stream = pagy(@stream_builder_object.stream_posts)
 
     respond_to do |format|

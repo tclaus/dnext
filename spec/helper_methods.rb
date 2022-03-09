@@ -1,4 +1,3 @@
-
 # frozen_string_literal: true
 
 require Rails.root.join("spec", "support", "inlined_jobs")
@@ -12,20 +11,20 @@ module HelperMethods
   end
 
   def connect_users(user1, aspect1, user2, aspect2)
-    user1.contacts.create!(:person => user2.person,
-                           :aspects => [aspect1],
-                           :sharing => true,
-                           :receiving => true)
+    user1.contacts.create!(person:    user2.person,
+                           aspects:   [aspect1],
+                           sharing:   true,
+                           receiving: true)
 
-    user2.contacts.create!(:person => user1.person,
-                           :aspects => [aspect2],
-                           :sharing => true,
-                           :receiving => true)
+    user2.contacts.create!(person:    user1.person,
+                           aspects:   [aspect2],
+                           sharing:   true,
+                           receiving: true)
   end
 
   def uploaded_photo
-    fixture_filename = 'button.png'
-    fixture_name = File.join(File.dirname(__FILE__), 'fixtures', fixture_filename)
+    fixture_filename = "button.png"
+    fixture_name = File.join(File.dirname(__FILE__), "fixtures", fixture_filename)
     File.open(fixture_name)
   end
 
@@ -41,7 +40,7 @@ module HelperMethods
   end
 
   def get_response_for_user_agent(app, userAgent)
-    env = Rack::MockRequest.env_for('/', "HTTP_USER_AGENT" => userAgent)
+    env = Rack::MockRequest.env_for("/", "HTTP_USER_AGENT" => userAgent)
     status, headers, body = app.call(env)
     body.close if body.respond_to?(:close) # avoids deadlock after 3 tests
     ActionDispatch::TestResponse.new(status, headers, body)

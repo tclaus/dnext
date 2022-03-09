@@ -22,33 +22,40 @@ end
 
 RSpec::Matchers.define_negated_matcher :remain, :change
 
-#ProcessedImage.enable_processing = false
-#UnprocessedImage.enable_processing = false
+# ProcessedImage.enable_processing = false
+# UnprocessedImage.enable_processing = false
 
+# @return [User]
 def alice
   @alice ||= User.find_by(username: "alice")
 end
 
+# @return [User]
 def bob
   @bob ||= User.find_by(username: "bob")
 end
 
+# @return [User]
 def eve
   @eve ||= User.find_by(username: "eve")
 end
 
+# @return [User]
 def local_luke
   @local_luke ||= User.find_by(username: "luke")
 end
 
+# @return [User]
 def local_leia
   @local_leia ||= User.find_by(username: "leia")
 end
 
+# @return [User]
 def remote_raphael
   @remote_raphael ||= Person.find_by(diaspora_handle: "raphael@remote.net")
 end
 
+# @return [User]
 def peter
   @peter ||= User.find_by(username: "peter")
 end
@@ -115,9 +122,9 @@ RSpec.configure do |config|
     stub_request(:get, "https://api.deepl.com/v2/languages?auth_key=722b3fb8-fea5-6a9b-3e07-39bb102b972f")
       .with(
         headers: {
-          'Accept'=>'*/*',
-          'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-          'User-Agent'=>'Ruby'
+          "Accept"          => "*/*",
+          "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+          "User-Agent"      => "Ruby"
         }
       )
       .to_return(status: 200, body: '[{"language":"de", "name": "German", "supports_formality": true}]', headers: {})
@@ -148,14 +155,14 @@ RSpec.configure do |config|
   # Reset gon
   config.after(:each) do
     # dnext should work without gon
-   # RequestStore.store[:gon].gon.clear unless RequestStore.store[:gon].nil?
+    # RequestStore.store[:gon].gon.clear unless RequestStore.store[:gon].nil?
   end
 
   config.include FactoryBot::Syntax::Methods
 
   config.include JSON::SchemaMatchers
-  # TODO Activate Schema tests in a separate PR
-#  config.json_schemas[:archive_schema] = ArchiveValidator::SchemaValidator::JSON_SCHEMA
+  # TODO: Activate Schema tests in a separate PR
+  #  config.json_schemas[:archive_schema] = ArchiveValidator::SchemaValidator::JSON_SCHEMA
   config.json_schemas[:api_v1_schema] = "lib/schemas/api_v1.json"
 
   JSON::Validator.add_schema(
@@ -180,6 +187,6 @@ shared_context suppress_csrf_verification: :none do
 end
 
 begin
-  require 'factory_bot_rails'
+  require "factory_bot_rails"
 rescue LoadError
 end
