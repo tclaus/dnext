@@ -12,6 +12,13 @@ module Stream
       posts_by_language
     end
 
+    # Override base class method
+    def aspects
+      ["public"]
+    end
+
+    private
+
     def posts_by_language
       languages = language_service.language_for_stream
       return @posts if languages.empty?
@@ -20,13 +27,6 @@ module Stream
       @posts.where("(posts.language_id in (#{comma_separated})
                    or posts.language_id is null)")
     end
-
-    # Override base class method
-    def aspects
-      ["public"]
-    end
-
-    private
 
     def language_service
       @language_service ||= StreamLanguageService.new(@user)

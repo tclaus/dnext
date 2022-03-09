@@ -66,10 +66,14 @@ class Post < ApplicationRecord
       and posts.public = true")
   }
 
-  def self.all_public_no_nsfw
+  # Public posts without any nsfw tagged content
+  scope :all_public_no_nsfw, -> {
     all_public
-      .tagged_with(%i[nsfw], exclude: true)
-  end
+      .where("posts.id NOT IN
+      (SELECT taggings.taggable_id FROM taggings
+          INNER JOIN tags ON taggings.tag_id = tags.id AND taggings.taggable_type = 'Post' AND (tags.name = 'nsfw' )
+      )")
+  }
 
   # TODO: dont show people from blocked posts
   scope :commented_by, lambda {|person|

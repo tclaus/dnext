@@ -10,7 +10,7 @@ class StreamLanguageService
   end
 
   def language_for_stream
-    return default_language if @user.stream_languages.empty?
+    return default_language if @user.nil?
 
     user_defined_language
   end
