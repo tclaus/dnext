@@ -7,8 +7,7 @@
 class SessionsController < Devise::SessionsController
   # rubocop:disable Rails/LexicallyScopedActionFilter
   before_action :authenticate_with_2fa, only: :create
-  after_action :reset_authentication_token, only: :create
-  before_action :reset_authentication_token, only: :destroy
+
   # rubocop:enable Rails/LexicallyScopedActionFilter
 
   def find_user
@@ -33,7 +32,7 @@ class SessionsController < Devise::SessionsController
   def valid_otp_attempt?(user)
     user.validate_and_consume_otp!(params[:user][:otp_attempt]) ||
       user.invalidate_otp_backup_code!(params[:user][:otp_attempt])
-  rescue OpenSSL::Cipher::CipherError => _error
+  rescue OpenSSL::Cipher::CipherError => _e
     false
   end
 
@@ -50,10 +49,5 @@ class SessionsController < Devise::SessionsController
   def prompt_for_two_factor(user)
     session[:otp_user_id] = user.id
     render :two_factor
-  end
-
-  def reset_authentication_token
-    # TODO: Token shoiuld be removed when login part has ended
-    # current_user&.reset_authentication_token!
   end
 end

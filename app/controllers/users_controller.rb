@@ -76,7 +76,7 @@ class UsersController < ApplicationController
           @posts = Post.where(author_id: @user.person_id, public: true)
                        .order("created_at DESC")
                        .limit(25)
-                       .map { |post| post.is_a?(Reshare) ? post.absolute_root : post }
+                       .map {|post| post.is_a?(Reshare) ? post.absolute_root : post }
                        .compact
         end
 
@@ -133,11 +133,6 @@ class UsersController < ApplicationController
     redirect_to edit_user_path
   end
 
-  def auth_token
-    current_user.ensure_authentication_token!
-    render status: 200, json: { token: current_user.authentication_token }
-  end
-
   private
 
   def user_params
@@ -158,12 +153,10 @@ class UsersController < ApplicationController
       :otp_secret,
       :exported_photos_file,
       :export,
-      { stream_languages: [] },
+      {stream_languages: []},
       email_preferences: UserPreference::VALID_EMAIL_TYPES.map(&:to_sym)
     )
   end
-
-  # rubocop:enable Metrics/MethodLength
 
   def update_user(user_data)
     if user_data[:email_preferences]
@@ -203,7 +196,7 @@ class UsersController < ApplicationController
     when "public"
       user_data[:post_default_public] = true
     when "all_aspects"
-      params[:aspect_ids] = @user.aspects.map { |a| a.id.to_s }
+      params[:aspect_ids] = @user.aspects.map {|a| a.id.to_s }
     end
     @user.update_post_default_aspects params[:aspect_ids].to_a
     change_settings(user_data)
@@ -259,13 +252,13 @@ class UsersController < ApplicationController
   end
 
   def change_stream_languages(stream_languages)
-    language_ids = stream_languages.delete_if { |id| id == "" }
-    languages = language_ids.map { |id| { user_id: @user.id, language_id: id } }
+    language_ids = stream_languages.delete_if {|id| id == "" }
+    languages = language_ids.map {|id| {user_id: @user.id, language_id: id} }
     StreamLanguage.where(user_id: @user.id).destroy_all
     @user.stream_languages.create(languages)
   end
 
-  def change_settings(user_data, successful = "users.update.settings_updated", error = "users.update.settings_not_updated")
+  def change_settings(user_data, successful="users.update.settings_updated", error="users.update.settings_not_updated")
     if @user.update_attributes(user_data)
       flash.now[:notice] = t(successful)
     else
