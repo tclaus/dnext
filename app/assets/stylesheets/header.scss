@@ -3,9 +3,23 @@
   height: 50px;
   border-radius: 5px;
 
+  &-post {
+    width: 50px;
+    height: 50px;
+  }
+
+  &-reshare {
+    height: 30px;
+    width: 30px;
+  }
+
   &-small {
     height: 35px;
     width: 35px;
+  }
+  &-micro {
+    height: 20px;
+    width: 20px;
   }
 }
 
