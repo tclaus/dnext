@@ -38,6 +38,23 @@ describe Post, type: :model do
       end
     end
 
+    describe ".all_not_blocked_pod" do
+      it "returns public and private posts from any pod" do
+        post1 = FactoryBot.create(:status_message, author: alice.person, public: true)
+        post2 = FactoryBot.create(:status_message, author: bob.person, public: false)
+        expect(Post.all_not_blocked_pod.ids).to match_array([post1.id, post2.id])
+      end
+
+      it "returns public and private posts from not blocked pods" do
+        blocked_pod_post = FactoryBot.create(:status_message, author: alice.person, public: true)
+        post2 = FactoryBot.create(:status_message, author: bob.person, public: false)
+        blocked_pod = FactoryBot.create(:pod, blocked: true)
+        blocked_pod_post.author.pod = blocked_pod
+
+        expect(Post.all_not_blocked_pod.ids).to match_array([post2.id])
+      end
+    end
+
     describe ".all_public" do
       it "includes all public posts" do
         post1 = FactoryBot.create(:status_message, author: alice.person, public: true)
@@ -107,15 +124,15 @@ describe Post, type: :model do
       end
 
       it "does not included blocked users posts" do
-        expect(Post.excluding_blocks(bob)).not_to include(@post)
+        expect(Post.excluding_blocks(Post.all, bob)).not_to include(@post)
       end
 
       it "includes not blocked users posts" do
-        expect(Post.excluding_blocks(bob)).to include(@other_post)
+        expect(Post.excluding_blocks(Post.all, bob)).to include(@other_post)
       end
 
       it "returns posts if you dont have any blocks" do
-        expect(Post.excluding_blocks(alice).count).to eq(2)
+        expect(Post.excluding_blocks(Post.all, alice).count).to eq(2)
       end
     end
 
@@ -126,10 +143,10 @@ describe Post, type: :model do
         bob.toggle_hidden_shareable(@post)
       end
       it "excludes posts the user has hidden" do
-        expect(Post.excluding_hidden_shareables(bob)).not_to include(@post)
+        expect(Post.excluding_hidden_shareables(Post.all, bob)).not_to include(@post)
       end
       it "includes posts the user has not hidden" do
-        expect(Post.excluding_hidden_shareables(bob)).to include(@other_post)
+        expect(Post.excluding_hidden_shareables(Post.all, bob)).to include(@other_post)
       end
     end
 
@@ -137,7 +154,7 @@ describe Post, type: :model do
       it "calls excluding_blocks and excluding_hidden_shareables" do
         expect(Post).to receive(:excluding_blocks).and_return(Post)
         expect(Post).to receive(:excluding_hidden_shareables)
-        Post.excluding_hidden_content(bob)
+        Post.excluding_hidden_content(Post.all, bob)
       end
     end
 
@@ -153,13 +170,6 @@ describe Post, type: :model do
           post.save
           time_interval += 1000
           post
-        end
-      end
-
-      describe ".by_max_time" do
-        it "returns the posts ordered and limited by unix time" do
-          expect(Post.for_a_stream(Time.zone.now + 1, "created_at")).to eq(@posts)
-          expect(Post.for_a_stream(Time.zone.now + 1, "updated_at")).to eq(@posts.reverse)
         end
       end
 

@@ -8,15 +8,15 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable, :trackable, :lockable,
          :lastseenable, lock_strategy: :none, unlock_strategy: :none
 
-  has_one :person, inverse_of: :owner, foreign_key: :owner_id
+  has_one :person, inverse_of: :owner, foreign_key: :owner_id, dependent: :destroy
 
   has_many :tag_followings
   has_many :followed_tags, -> { order("tags.name") }, through: :tag_followings, source: ActsAsTaggableOn::Tag
   has_many :aspects, -> { order("order_id ASC") }
   has_many :aspect_memberships, through: :aspects
-  has_many :contacts
+  has_many :contacts, dependent: :destroy
   has_many :contact_people, through: :contacts, source: :person
-  has_many :blocks
+  has_many :blocks, dependent: :destroy
   has_many :ignored_people, through: :blocks, source: :person
   has_many :stream_languages, dependent: :destroy
 
@@ -38,6 +38,8 @@ class User < ApplicationRecord
   validates :person, presence: true
   validates_associated :person
   validate :no_person_with_same_username
+
+  serialize :hidden_shareables, Hash
 
   delegate :guid, :public_key, :posts, :photos, :owns?, :image_url,
            :diaspora_handle, :name, :atom_url, :profile_url, :profile, :url,
@@ -173,6 +175,52 @@ class User < ApplicationRecord
 
   def encryption_key
     OpenSSL::PKey::RSA.new(serialized_private_key)
+  end
+
+  def hidden_shareables
+    self[:hidden_shareables] ||= {}
+  end
+
+  def add_hidden_shareable(key, share_id, opts={})
+    if hidden_shareables.has_key?(key)
+      hidden_shareables[key] << share_id
+    else
+      hidden_shareables[key] = [share_id]
+    end
+    save unless opts[:batch]
+    hidden_shareables
+  end
+
+  def remove_hidden_shareable(key, share_id)
+    hidden_shareables[key].delete(share_id) if hidden_shareables.has_key?(key)
+  end
+
+  def is_shareable_hidden?(shareable)
+    shareable_type = shareable.class.base_class.name
+    if hidden_shareables.has_key?(shareable_type)
+      hidden_shareables[shareable_type].include?(shareable.id.to_s)
+    else
+      false
+    end
+  end
+
+  def toggle_hidden_shareable(share)
+    share_id = share.id.to_s
+    key = share.class.base_class.to_s
+    if hidden_shareables.has_key?(key) && hidden_shareables[key].include?(share_id)
+      remove_hidden_shareable(key, share_id)
+      save
+      false
+    else
+      add_hidden_shareable(key, share_id)
+      save
+      true
+    end
+  end
+
+  def has_hidden_shareables_of_type?(t=Post)
+    share_type = t.base_class.to_s
+    hidden_shareables[share_type].present?
   end
 
   # Copy the method provided by Devise to be able to call it later

@@ -23,12 +23,12 @@ module Diaspora
         # scopes
         scope :with_visibility, lambda {
           joins("LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = #{table_name}.id AND "\
-                                    "share_visibilities.shareable_type = '#{base_class}'")
+                "share_visibilities.shareable_type = '#{base_class}'")
         }
 
         scope :with_aspects, lambda {
           joins("LEFT OUTER JOIN aspect_visibilities ON aspect_visibilities.shareable_id = #{table_name}.id AND "\
-          " aspect_visibilities.shareable_type = '#{base_class}'")
+                " aspect_visibilities.shareable_type = '#{base_class}'")
         }
       end
       model.extend Diaspora::Shareable::QueryMethods
@@ -57,7 +57,7 @@ module Diaspora
     #
     # @return [Array<String>] The list of pods' URIs
     def subscribed_pods_uris
-      Pod.find(subscribers.select(&:remote?).map(&:pod_id).uniq).map { |pod| pod.url_to('') }
+      Pod.find(subscribers.select(&:remote?).map(&:pod_id).uniq).map {|pod| pod.url_to("") }
     end
 
     module QueryMethods
@@ -76,11 +76,11 @@ module Diaspora
         ).select("DISTINCT #{table_name}.*")
       end
 
-      def for_visible_shareable_sql(max_time, order, limit = 15, types = Stream::Base::TYPES_OF_POST_IN_STREAM)
-        by_max_time(max_time, order).order(table_name + '.id DESC').where(type: types).limit(limit)
+      def for_visible_shareable_sql(max_time, order, limit=15, types=Stream::Base::TYPES_OF_POST_IN_STREAM)
+        by_max_time(max_time, order).order(table_name + ".id DESC").where(type: types).limit(limit)
       end
 
-      def by_max_time(max_time, order = 'created_at')
+      def by_max_time(max_time, order="created_at")
         where("#{table_name}.#{order} < ?", max_time).order("#{table_name}.#{order} DESC")
       end
 
