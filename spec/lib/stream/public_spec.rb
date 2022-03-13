@@ -13,12 +13,19 @@ describe Stream::Public do
 
   describe "#posts" do
     it "calls Post#all_public" do
-      expect(Post).to receive(:all_public_no_nsfw)
+      expect(Post).to receive(:all_public)
+      expect(Post).to receive(:for_a_stream)
       expect(@stream).to receive(:posts_by_language)
       @stream.posts
     end
 
-    it "returns posts without language" do
+    it "calls for_a_stream when user is set" do
+      expect(Post).to receive(:for_a_stream)
+      expect(@stream).to receive(:posts_by_language)
+      @stream.posts
+    end
+
+    it "returns posts without a defined language" do
       english_user = FactoryBot.create(:user)
       english_user.stream_languages.create(language_id: "en")
       stream = Stream::Public.new(english_user)
@@ -49,18 +56,32 @@ describe Stream::Public do
       expect(localized_posts.ids).not_to match_array([post_de.id])
     end
 
-    it "returns posts with any language if nothing set" do
+    it "returns posts with by browser settings" do
       user = FactoryBot.create(:user)
       stream = Stream::Public.new(user)
       post1 = FactoryBot.create(:status_message, author: alice.person, public: true)
-      post1.language_id = "uk"
+      post1.language_id = "en"
       post1.save
 
       post2 = FactoryBot.create(:status_message, author: bob.person, public: true)
       post2.language_id = "dn"
       post2.save
+
       localized_posts = stream.posts
-      expect(localized_posts.ids).to match_array([post1.id, post2.id])
+      expect(localized_posts.ids).to match_array([post1.id])
+    end
+
+    describe "returns posts filtered by blocked or hidden content" do
+      it "blocks hidden shareables" do
+        user = FactoryBot.create(:user)
+        stream = Stream::Public.new(user)
+        post1 = FactoryBot.create(:status_message, author: alice.person, public: true)
+
+        hidden_post = FactoryBot.create(:status_message, author: bob.person, public: true)
+
+        user.toggle_hidden_shareable(hidden_post)
+        expect(stream.posts.ids).to match_array([post1.id])
+      end
     end
   end
 end

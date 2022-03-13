@@ -52,15 +52,24 @@ class Post < ApplicationRecord
              mentions: {person: :profile}) # NOTE: should include root and photos, but i think those are both on status_message
   }
 
-  scope :all_public, lambda {
-    includes({author: :profile})
+  # all Posts from not blocked pods
+  scope :all_not_blocked_pod, -> {
     left_outer_joins(author: [:pod])
       .where("(pods.blocked = false or pods.blocked is null)")
-      .where(public: true)
   }
 
+  # Public Posts from not blocked pods
+  scope :all_public, lambda {
+    includes({author: :profile})
+      .where(public: true)
+      .left_outer_joins(author: [:pod])
+      .where("(pods.blocked = false or pods.blocked is null)")
+  }
+
+  # Public posts from local Pod
   scope :all_local_public, lambda {
-    where(" exists (
+    where(public: true)
+      .where(" exists (
       select 1 from people where posts.author_id = people.id
       and people.pod_id is null)
       and posts.public = true")
@@ -82,7 +91,7 @@ class Post < ApplicationRecord
       .where(comments: {author_id: person.id})
   }
 
-  # TODO: dont show people from blocked posts
+  # TODO: dont show likes from people from blocked posts or are blocked
   scope :liked_by, lambda {|person|
     joins(:likes).where(likes: {author_id: person.id})
   }
@@ -104,7 +113,7 @@ class Post < ApplicationRecord
 
   def root; end
 
-  def photos() = []
+  def photos = []
 
   # prevents error when trying to access @post.address in a post different than Reshare and StatusMessage types;
   # check PostPresenter
@@ -112,38 +121,38 @@ class Post < ApplicationRecord
 
   def poll; end
 
-  def self.excluding_blocks(user)
-    people = user.blocks.map {|b| b.person_id }
-    scope = all
-
-    scope = scope.where.not(posts: {author_id: people}) if people.any?
-
-    scope
+  # @return An ActiveRecord::Relation of posts
+  def self.excluding_hidden_content(relation, user)
+    relation = excluding_blocks(relation, user)
+    excluding_hidden_shareables(relation, user)
   end
 
-  def self.excluding_hidden_shareables(user)
-    scope = all
-    scope = scope.where.not(posts: {id: user.hidden_shareables[base_class.to_s]}) if user.has_hidden_shareables_of_type?
-    scope
+  # exclude blocks from user
+  def self.excluding_blocks(relation, user)
+    people = user.blocks.map(&:person_id)
+    relation = relation.where.not(posts: {author_id: people}) if people.any?
+    relation
   end
 
-  def self.excluding_hidden_content(user)
-    excluding_blocks(user).excluding_hidden_shareables(user)
+  def self.excluding_hidden_shareables(relation, user)
+    if user.has_hidden_shareables_of_type?
+      relation = relation.where.not(posts: {id: user.hidden_shareables[base_class.to_s]})
+    end
+    relation
   end
 
-  def self.for_a_stream(max_time, order, user=nil, ignore_blocks=false)
-    scope = for_visible_shareable_sql(max_time, order)
-            .includes_for_a_stream
+  def self.for_a_stream(relation, user=nil, ignore_blocks: false)
+    relation = relation
+               .includes_for_a_stream
 
     if user.present?
-      scope = if ignore_blocks
-                scope.excluding_hidden_shareables(user)
-              else
-                scope.excluding_hidden_content(user)
-              end
+      relation = if ignore_blocks
+                   excluding_hidden_shareables(relation, user)
+                 else
+                   excluding_hidden_content(relation, user)
+                 end
     end
-
-    scope
+    relation
   end
 
   def reshare_for(user)
