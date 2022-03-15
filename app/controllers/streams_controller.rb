@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class StreamsController < ApplicationController
+  layout "with_header"
+
   include Pagy::Backend
 
   def public

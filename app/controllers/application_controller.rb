@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
-
   around_action :set_locale
   before_action :configure_permitted_parameters, if: :devise_controller?
   protect_from_forgery except: :receive, with: :exception, prepend: true
@@ -9,7 +8,7 @@ class ApplicationController < ActionController::Base
 
   rescue_from ActionController::InvalidAuthenticityToken do
     if user_signed_in?
-      logger.warn "#{current_user.diaspora_handle} CSRF token fail. referer: #{request.referer || "empty"}"
+      logger.warn "#{current_user.diaspora_handle} CSRF token fail. referer: #{request.referer || 'empty'}"
       Workers::Mail::CsrfTokenFail.perform_async(current_user.id)
       sign_out current_user
     end
@@ -38,20 +37,22 @@ class ApplicationController < ActionController::Base
 
   def redirect_unless_admin
     return if current_user.admin?
+
     redirect_to stream_url, notice: "you need to be an admin to do that"
   end
 
   def redirect_unless_moderator
     return if current_user.moderator?
+
     redirect_to stream_url, notice: "you need to be an admin or moderator to do that"
   end
 
-  def after_sign_in_path_for(resource)
+  def after_sign_in_path_for(_resource)
     stored_location_for(:user) || current_user_redirect_path
   end
 
   # Overwriting the sign_out redirect path method
-  def after_sign_out_path_for(resource_or_scope)
+  def after_sign_out_path_for(_resource_or_scope)
     new_user_session_path
   end
 
