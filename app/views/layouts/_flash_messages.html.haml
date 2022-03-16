@@ -1,4 +1,4 @@
-- flash.each do |type, msg|
-  %div{class:"alert alert-#{type} alert-dismissible fade show", role: "alert"}
-    = msg
-    %button{type:"button", class:"btn-close", data:{bs_dismiss: "alert"},  aria_label: "Close"}
+.flash-body.expose
+  - flash.each do |type, message|
+    %div{class:"flash-message message alert alert-#{type}", role: "alert"}
+      = message
