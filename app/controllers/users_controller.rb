@@ -5,9 +5,8 @@
 #   the COPYRIGHT file.
 
 class UsersController < ApplicationController
-  before_action :authenticate_user!, except: %i[new create public]
-
   invisible_captcha only: %i[create update], honeypot: :subtitle
+  before_action :authenticate_user!, except: %i[new create public]
 
   respond_to :html
 

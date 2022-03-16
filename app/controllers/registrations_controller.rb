@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class RegistrationsController < Devise::RegistrationsController
+  invisible_captcha only: %i[create update], honeypot: :subtitle
   before_action :check_registrations_open_or_valid_invite!, except: :registrations_closed
   layout "with_header_with_footer"
 
@@ -17,7 +18,7 @@ class RegistrationsController < Devise::RegistrationsController
       @user.errors.delete(:person)
 
       flash.now[:error] = @user.errors.full_messages.join(" - ")
-      logger.info "event=registration status=failure errors='#{@user.errors.full_messages.join(", ")}'"
+      logger.info "event=registration status=failure errors='#{@user.errors.full_messages.join(', ')}'"
       render action: "new"
     end
   end
@@ -42,6 +43,9 @@ class RegistrationsController < Devise::RegistrationsController
   helper_method :invite
 
   def user_params
+    # TODO: Fixme, maybe handled here: https://github.com/markets/invisible_captcha/issues/107
+    params[:user].try(:delete, :subtitle) if params.key?(:user)
+
     params.require(:user).permit(
       :username, :email, :getting_started, :password, :password_confirmation, :language, :disable_mail,
       :show_community_spotlight_in_stream, :auto_follow_back, :auto_follow_back_aspect_id,

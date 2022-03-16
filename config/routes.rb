@@ -2,12 +2,13 @@ require "sidekiq/web"
 
 Rails.application.routes.draw do
   mount Sidekiq::Web => "/sidekiq"
-  authenticate :user, lambda { |u| u.admin? } do
+  authenticate :user, lambda {|u| u.admin? } do
     # Important: Sidekiq is visible for all users!
   end
 
   # Defines the root path route ("/")
   root to: "home#show"
+  get "podmin", to: "home#podmin"
 
   # Users and people
   controller :users do
@@ -15,7 +16,7 @@ Rails.application.routes.draw do
     get "getting_started", action: :getting_started, as: :getting_started
   end
 
-  devise_for :users, controllers: { sessions: :sessions }, skip: :registration
+  devise_for :users, controllers: {sessions: :sessions}, skip: :registration
 
   devise_scope :user do
     get "/users/sign_up", to: "registrations#new", as: :new_user_registration

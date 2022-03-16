@@ -1,0 +1,6 @@
+
+.row
+  .column
+    - post.photos.first(5).each do |photo|
+      = image_tag photo.url
+

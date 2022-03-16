@@ -10,6 +10,7 @@
       = post.rendered_message.html_safe # Print shared post text, then embed original post
       = render "stream_root_element", post: post.root, type: "reshare"
     - else
+      = render "attached_photos", post: post if post.photos.exists?
       = post.rendered_message.html_safe
       = render "oembed", post: post
       = render "opengraph", post: post
