@@ -2,10 +2,7 @@
   .row
     - # This is the left sidebar
     .col-md-3
-      .sidebar.left-sidebar
-        %ul.nav.flex-column
-          %li.nav-item
-            = link_to t("streams.multi.title"), public_stream_path
+      = render "shared/sidebar"
     - # This is the main content
     .col-md-9
       %main
