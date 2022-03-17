@@ -484,7 +484,7 @@ DEPENDENCIES
   rspec-rails (~> 5.1)
   rubocop-rails (~> 2.13, >= 2.13.2)
   ruby-oembed (~> 0.15.0)
-  sassc-rails
+  sassc-rails (~> 2.1, >= 2.1.2)
   selenium-webdriver
   shoulda-matchers (~> 5.1)
   sidekiq (~> 6.4, >= 6.4.1)

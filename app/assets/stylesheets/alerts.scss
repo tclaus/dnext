@@ -1,0 +1,48 @@
+.flash-body {
+  left: 0;
+  position: fixed;
+  text-align: center;
+  top: -100px;
+  z-index: 999;
+  width: 100%;
+  pointer-events:none;
+}
+
+.flash-body.expose {
+  animation:expose 10s ease-in-out
+}
+
+.flash-body .flash-message {
+  border-radius: 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  display: inline-block;
+  font-weight: bold;
+  max-width: 800px;
+  min-width: 500px;
+  padding:10px 12px
+}
+
+.flash-body .flash-message.alert-danger {
+  border:1px solid #e4b9b9
+}
+
+.flash-body .flash-message.alert-success {
+  border:1px solid #c1e2b3
+}
+
+.flash-body .flash-message.alert-warning {
+  border:1px solid #f7ecb5
+}
+.alert-notice {
+  color: #636464;
+  background-color: #fefefe;
+  border-color: #fdfdfe;
+}
+
+
+@media (max-width: 991px) {
+  .flash-body .flash-message {
+    max-width: 80%;
+    min-width:80%
+  }
+}

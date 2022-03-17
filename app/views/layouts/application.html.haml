@@ -13,6 +13,6 @@
 
   %body{class: "page-#{controller_name} action-#{action_name}"}
     = render 'layouts/header'
-    = render "layouts/flash_messages"
+    = render "layouts/flash_turbo_container"
     = content_for?(:content) ? yield(:content) : yield
     = yield :after_content
