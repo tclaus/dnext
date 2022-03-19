@@ -3,8 +3,8 @@
 class Role < ApplicationRecord
   belongs_to :person
 
-  validates :name, uniqueness: { scope: :person_id }
-  validates :name, inclusion: { in: %w[admin moderator spotlight] }
+  validates :name, uniqueness: {scope: :person_id}
+  validates :name, inclusion: {in: %w[admin moderator spotlight]}
 
   scope :admins, -> { where(name: "admin") }
   scope :moderators, -> { where(name: %w[moderator admin]) }
@@ -41,10 +41,12 @@ class Role < ApplicationRecord
     exists?(person_id: person.id, name: "spotlight")
   end
 
+  # @param [Person] person
   def self.add_spotlight(person)
     find_or_create_by(person_id: person.id, name: "spotlight")
   end
 
+  # @param [Person] person
   def self.remove_spotlight(person)
     find_by(person_id: person.id, name: "spotlight").destroy
   end

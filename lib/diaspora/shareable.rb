@@ -14,7 +14,7 @@ module Diaspora
         include Diaspora::Fields::Author
 
         has_many :aspect_visibilities, as: :shareable, validate: false, dependent: :delete_all
-        has_many :aspects, through: :aspect_visibilities
+        has_many :aspects, through: :aspect_visibilities, class_name: "Aspect"
 
         has_many :share_visibilities, as: :shareable, dependent: :delete_all
 
@@ -91,7 +91,7 @@ module Diaspora
       private
 
       def visible_by_user(user)
-        ShareVisibility.arel_table[:user_id].eq(user.id)
+        ShareVisibility.arel_table[:user_id].eq(user.id) # ShareVisbilty.user_id = user.id
       end
     end
   end

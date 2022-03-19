@@ -9,7 +9,7 @@ Bundler.require(*Rails.groups)
 module Diaspora
   class Application < Rails::Application
     # Tell Fixture Builder where to set fixtures
-    ENV['FIXTURES_PATH'] = 'spec/fixtures'
+    ENV["FIXTURES_PATH"] = "spec/fixtures"
 
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0

@@ -7,3 +7,5 @@ de:
   streams:
     public:
       title: "Öffentliche Aktivität"
+    multi:
+      title: "Stream"

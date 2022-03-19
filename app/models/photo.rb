@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Photo < ApplicationRecord
+  include Diaspora::Federated::Base
+  include Diaspora::Shareable
+
   belongs_to :status_message, foreign_key: :status_message_guid, primary_key: :guid, inverse_of: :photos, optional: true
   belongs_to :person, foreign_key: :author_id, inverse_of: :photos
   validates_associated :status_message

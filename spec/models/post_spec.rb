@@ -111,7 +111,7 @@ describe Post, type: :model do
 
       it "calls excluding_blocks if a user is present" do
         expect(Post).to receive(:excluding_blocks).with(alice).and_return(Post)
-        Post.for_a_stream(Time.zone.now, "created_at", alice)
+        Post.for_a_stream(Time.zone.now, alice)
       end
     end
 
@@ -174,12 +174,6 @@ describe Post, type: :model do
       end
 
       describe ".for_visible_shareable_sql" do
-        it "calls max_time" do
-          time = Time.zone.now + 1
-          expect(Post).to receive(:by_max_time).with(time, "created_at").and_return(Post)
-          Post.for_visible_shareable_sql(time, "created_at")
-        end
-
         it "defaults to 15 posts" do
           chain = double.as_null_object
 

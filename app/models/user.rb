@@ -11,7 +11,7 @@ class User < ApplicationRecord
   has_one :person, inverse_of: :owner, foreign_key: :owner_id, dependent: :destroy
 
   has_many :tag_followings
-  has_many :followed_tags, -> { order("tags.name") }, through: :tag_followings, source: ActsAsTaggableOn::Tag
+  has_many :followed_tags, -> { order("tags.name") }, through: :tag_followings, source: :tag
   has_many :aspects, -> { order("order_id ASC") }
   has_many :aspect_memberships, through: :aspects
   has_many :contacts, dependent: :destroy
@@ -167,10 +167,6 @@ class User < ApplicationRecord
     )
 
     Diaspora::Federation::Dispatcher.build(sender, conversation).dispatch if conversation.save
-  end
-
-  def encryption_key
-    OpenSSL::PKey::RSA.new(serialized_private_key)
   end
 
   def encryption_key

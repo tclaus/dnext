@@ -63,7 +63,7 @@ class StatusMessage < Post
   end
 
   def self.any_tag_stream(tag_ids)
-    joins(:taggings).where("taggings.tag_id IN (?)", tag_ids)
+    joins(:taggings).where(taggings: {tag_id: tag_ids})
   end
 
   def self.all_tag_stream(tag_ids)

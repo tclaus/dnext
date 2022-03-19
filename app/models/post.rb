@@ -141,6 +141,8 @@ class Post < ApplicationRecord
     relation
   end
 
+  # Adds a relation to filter out blocked user and hidden content
+  # @return [Object]
   def self.for_a_stream(relation, user=nil, ignore_blocks: false)
     relation = relation
                .includes_for_a_stream
