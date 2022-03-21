@@ -28,6 +28,6 @@ Rails.application.routes.draw do
 
   # Streams
   get "public", to: redirect("streams/public")
-  get "stream", to: "streams#multi", as: :multi_stream
+  get "stream", to: "streams#multi", as: :stream
   get "streams/public", to: "streams#public", as: :public_stream
 end

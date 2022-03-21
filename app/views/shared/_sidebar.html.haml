@@ -1,7 +1,7 @@
 - if user_signed_in?
   .sidebar.left-navbar
     %ul.nav.flex-column
-      %li.nav-item{class: current_page?(multi_stream_path) && 'selected'}
-        = link_to t("streams.multi.title"), multi_stream_path, class:"hoverable"
+      %li.nav-item{class: current_page?(stream_path) && 'selected'}
+        = link_to t("streams.multi.title"), stream_path, class:"hoverable"
       %li.nav-item{class: current_page?(public_stream_path) && 'selected'}
         = link_to t("streams.public.title"), public_stream_path, class:"hoverable"
