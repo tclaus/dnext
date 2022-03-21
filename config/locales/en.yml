@@ -137,4 +137,6 @@ en:
       correct_the_following_errors_and_try_again: "Correct this error and try again"
   status_messages:
     too_long: "Post message length exceeds maximun length."
+  stream_helper:
+    no_more_posts: "You have reached the end of the stream."
 

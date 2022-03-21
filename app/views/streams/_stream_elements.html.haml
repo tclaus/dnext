@@ -1,2 +1,4 @@
 - @stream.each do |post|
   = render "stream_element", post: post
+- if @stream.empty?
+  = render "end_of_stream"
