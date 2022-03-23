@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  include Querying
+
   encrypts :otp_secret
 
   # Include default devise modules. Others available are:

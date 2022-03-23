@@ -24,14 +24,19 @@ module Stream
     end
 
     # @return [ActiveRecord::Relation<Post>]
+    def stream_posts
+      ordered_posts
+    end
+
+    def ordered_posts
+      posts.order(created_at: :desc)
+    end
+
+    # Should be overwritten in classes
+    # @return [ActiveRecord::Relation<Post>]
     def posts
       # should never be called directly
       Post.none
-    end
-
-    # @return [ActiveRecord::Relation<Post>]
-    def stream_posts
-      ordered_posts
     end
 
     # NOTE: MBS bad bad methods the fact we need these means our views are foobared. please kill them and make them
@@ -43,10 +48,6 @@ module Stream
     # @return [Aspect] The first aspect in #aspects
     def aspect
       aspects.first
-    end
-
-    def ordered_posts
-      posts.order(created_at: :desc)
     end
 
     protected
