@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class StreamsController < ApplicationController
+  before_action :authenticate_user!, except: :public
+  # before_action :save_selected_aspects, :only => :aspects
+
   layout "with_header"
 
   include Pagy::Backend
@@ -10,12 +13,12 @@ class StreamsController < ApplicationController
   end
 
   def stream
-    stream_responder(Stream::Public) # TODO : this will be the "multi" stream
+    multi
   end
 
   def multi
     # will show all following users with all followed tags
-    stream
+    stream_responder(Stream::Multi)
   end
 
   def local_public; end

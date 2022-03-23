@@ -8,7 +8,8 @@ module PeopleHelper
       content_tag(:h2, t("people.index.no_results"))
     else
       content_tag(:h2, id: "search_title") do
-        t("people.index.results_for", search_term: content_tag(:span, search_query, class: "term")).html_safe + looking_for_tag_link
+        t("people.index.results_for",
+          search_term: content_tag(:span, search_query, class: "term")).html_safe + looking_for_tag_link
       end
     end
   end
@@ -21,16 +22,17 @@ module PeopleHelper
     end
   end
 
-  def person_link(person, opts = {})
+  def person_link(person, opts={})
     css_class = person_link_class(person, opts[:class])
     remote_or_hovercard_link = Rails.application.routes.url_helpers.person_path(person).html_safe
     "<a data-hovercard='#{remote_or_hovercard_link}' href='#{remote_or_hovercard_link}' class='#{css_class}'>"\
-      "#{html_escape_once(opts[:display_name] || person.name)}</a>"\
+    "#{html_escape_once(opts[:display_name] || person.name)}</a>"\
       .html_safe
   end
 
-  def person_image_tag(person, size = :thumb_small)
+  def person_image_tag(person, size=:thumb_small)
     return "" if person.nil? || person.profile.nil?
+
     tag_class = "avatar img-responsive center-block"
     tag_class += " avatar-small" if size == :thumb_small
 
@@ -38,21 +40,22 @@ module PeopleHelper
               title: person.name, "data-person_id": person.id)
   end
 
-  def person_image_link(person, opts = {})
+  def person_image_link(person, opts={})
     return "" if person.nil? || person.profile.nil?
+
     if opts[:to] == :photos
       link_to person_image_tag(person, opts[:size]), person_photos_path(person)
     else
       css_class = person_link_class(person, opts[:class])
       remote_or_hovercard_link = Rails.application.routes.url_helpers.person_path(person).html_safe
-      "<a href='#{remote_or_hovercard_link}' class='#{css_class}' #{("target=" + opts[:target]) if opts[:target]}>
+      "<a href='#{remote_or_hovercard_link}' class='#{css_class}' #{('target=' + opts[:target]) if opts[:target]}>
       #{person_image_tag(person, opts[:size])}
       </a>".html_safe
     end
   end
 
   # Rails.application.routes.url_helpers is needed since this is indirectly called from a model
-  def local_or_remote_person_path(person, opts = {})
+  def local_or_remote_person_path(person, opts={})
     opts.merge!(protocol: AppConfig.pod_uri.scheme, host: AppConfig.pod_uri.authority)
     absolute = opts.delete(:absolute)
 

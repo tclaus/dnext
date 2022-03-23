@@ -3,10 +3,9 @@
 # a logging mixin providing the logger
 module Diaspora
   module Logging
-    private
-
-    def logger
-      @logger ||= ::Logging::Logger[self]
-    end
+    # Disabled, the default logger should be used
+    #     def logger
+    #       @logger ||= ::Logging::Logger[self]
+    #     end
   end
 end

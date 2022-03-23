@@ -15,18 +15,18 @@ class Profile < ApplicationRecord
 
   acts_as_ordered_taggable
   extract_tags_from :tag_string
-  validates :tag_list, length: { maximum: 5 }
+  validates :tag_list, length: {maximum: 5}
 
-  before_save :strip_names
   after_validation :strip_names
+  before_save :strip_names
 
-  validates :first_name, length: { maximum: 32 }
-  validates :last_name, length: { maximum: 32 }
-  validates :location, length: { maximum: 255 }
-  validates :gender, length: { maximum: 255 }
+  validates :first_name, length: {maximum: 32}
+  validates :last_name, length: {maximum: 32}
+  validates :location, length: {maximum: 255}
+  validates :gender, length: {maximum: 255}
 
-  validates_format_of :first_name, with: /\A[^;]+\z/, allow_blank: true
-  validates_format_of :last_name, with: /\A[^;]+\z/, allow_blank: true
+  validates :first_name, format: {with: /\A[^;]+\z/, allow_blank: true}
+  validates :last_name, format: {with: /\A[^;]+\z/, allow_blank: true}
   validate :max_tags
   validate :valid_birthday
 
@@ -42,7 +42,7 @@ class Profile < ApplicationRecord
   end
 
   def subscribers
-    Person.joins(:contacts).where(contacts: { user_id: person.owner_id })
+    Person.joins(:contacts).where(contacts: {user_id: person.owner_id})
   end
 
   def public?
@@ -75,14 +75,14 @@ class Profile < ApplicationRecord
   end
 
   def from_omniauth_hash(omniauth_user_hash)
-    mappings = { "description" => "bio",
-                 "image" => "image_url",
-                 "name" => "first_name",
-                 "location" => "location" }
+    mappings = {"description" => "bio",
+                "image"       => "image_url",
+                "name"        => "first_name",
+                "location"    => "location"}
 
-    update_hash = omniauth_user_hash.map { |k, v| [mappings[k], v] }.to_h
+    update_hash = omniauth_user_hash.map {|k, v| [mappings[k], v] }.to_h
 
-    attributes.merge(update_hash) { |key, old, new| old.blank? ? new : old }
+    attributes.merge(update_hash) {|_key, old, new| old.presence || new }
   end
 
   def image_url=(url)
@@ -97,15 +97,15 @@ class Profile < ApplicationRecord
     super(build_image_url(url))
   end
 
-  def date= params
-    if %w[month day].all? { |key| params[key].present? }
+  def date=(params)
+    if %w[month day].all? {|key| params[key].present? }
       params["year"] = "1004" if params["year"].blank?
       if Date.valid_civil?(params["year"].to_i, params["month"].to_i, params["day"].to_i)
         self.birthday = Date.new(params["year"].to_i, params["month"].to_i, params["day"].to_i)
       else
         @invalid_birthday_date = true
       end
-    elsif %w[year month day].all? { |key| params[key].blank? }
+    elsif %w[year month day].all? {|key| params[key].blank? }
       self.birthday = nil
     end
   end
@@ -119,13 +119,13 @@ class Profile < ApplicationRecord
   end
 
   def tag_string
-    @tag_string ||= tags.pluck(:name).map { |tag| "##{tag}" }.join(' ')
+    @tag_string ||= tags.pluck(:name).map {|tag| "##{tag}" }.join(" ")
   end
 
   # Constructs a full name by joining #first_name and #last_name
   # @return [String] A full name
   def construct_full_name
-    self.full_name = [first_name, last_name].join(' ').downcase.strip
+    self.full_name = [first_name, last_name].join(" ").downcase.strip
     full_name
   end
 
@@ -147,7 +147,7 @@ class Profile < ApplicationRecord
   end
 
   def max_tags
-    errors[:base] << 'Profile cannot have more than five tags' if tag_string.count('#') > 5
+    errors[:base] << "Profile cannot have more than five tags" if tag_string.count("#") > 5
   end
 
   def valid_birthday
