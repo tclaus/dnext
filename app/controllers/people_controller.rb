@@ -69,10 +69,11 @@ class PeopleController < ApplicationController
 
   def stream_responder
     @stream_builder_object = person_stream
+    @title = @person.diaspora_handle
     @pagy, @stream = pagy(person_stream.stream_posts)
 
     respond_to do |format|
-      format.html { render "streams/main_stream" } # Person Profile
+      format.html { render "people/show", layout: "with_header" } # Person Profile
       format.json do
         render json: {
           entries:    render_to_string(partial: "stream_elements",

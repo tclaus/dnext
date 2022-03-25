@@ -32,5 +32,6 @@ Rails.application.routes.draw do
   get "streams/public", to: "streams#public", as: :public_stream
 
   resources :people, only: %i[show index] do
+    resources :photos, except: %i[new update]
   end
 end

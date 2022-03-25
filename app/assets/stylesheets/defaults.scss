@@ -4,10 +4,25 @@ $navbar-height:50px;
 
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.42857;
   color: #333333;
   background-color: $main-background;
+}
+
+a {
+  color: #3f8fba;
+  text-decoration:none
+}
+
+a:hover, a:focus {
+  color: #2c6381;
+  text-decoration:underline
+}
+
+a:focus {
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset:-2px
 }
 
 .container-fluid {
