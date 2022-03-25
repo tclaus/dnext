@@ -102,7 +102,7 @@ gem "invisible_captcha", "~> 2.0"
 # Background processing
 gem "sidekiq", "~> 6.4", ">= 6.4.1"
 # Federation
-gem "diaspora_federation", "~> 0.2", github: "SuperTux88/diaspora_federation" # bunp for newer version
+gem "diaspora_federation", "~> 0.3"
 
 # frozen_string_literal: true
 group :development, :test do
@@ -137,5 +137,5 @@ group :test do
   gem "shoulda-matchers", "~> 5.1"
   gem "webdrivers"
   gem "webmock", "3.14.0", require: false
-  # gem "diaspora_federation-test", "0.2.7"
+  gem 'diaspora_federation-json_schema', '~> 0.3.0'
 end
