@@ -17,8 +17,7 @@
         //  = render "publisher/publisher", publisher_aspects_for(nil)
 
         .stream.clearfix#main-stream
-          = render "streams/stream", stream: @stream
-
-        #paginate
-          .loader.hidden
-            .spinner
+          - if current_page?(person_photos_path(@person))
+            = render "streams/photos", photos: @photos
+          - else
+            = render "streams/stream", stream: @stream

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class PeopleController < ApplicationController
-  before_action :authenticate_user!, except: %i[show stream hovercard]
-  before_action :find_person, only: %i[show stream hovercard]
-  before_action :authenticate_if_remote_profile!, only: %i[show stream]
+  before_action :authenticate_user!, except: %i[show hovercard]
+  before_action :find_person, only: %i[show hovercard]
+  before_action :authenticate_if_remote_profile!, only: %i[show]
   include Pagy::Backend
 
   rescue_from ActiveRecord::RecordNotFound do
@@ -64,6 +64,9 @@ class PeopleController < ApplicationController
   # renders the persons user profile page
   def show
     mark_corresponding_notifications_read if user_signed_in?
+    @presenter = PersonPresenter.new(@person, current_user)
+    @contact = current_user.contact_for(@person) if user_signed_in?
+
     stream_responder
   end
 
@@ -71,6 +74,7 @@ class PeopleController < ApplicationController
     @stream_builder_object = person_stream
     @title = @person.diaspora_handle
     @pagy, @stream = pagy(person_stream.stream_posts)
+    @photos_count =  Photo.visible(current_user, @person).count(:all)
 
     respond_to do |format|
       format.html { render "people/show", layout: "with_header" } # Person Profile

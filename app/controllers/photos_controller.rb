@@ -22,7 +22,8 @@ class PhotosController < ApplicationController
 
     if @person
       @contact = current_user.contact_for(@person) if user_signed_in?
-      @posts = Photo.visible(current_user, @person, :all, max_time)
+      # TODO: A user might have a lot of photos, so implement a pagy way for showing
+      @photos = Photo.visible(current_user, @person, :all)
       respond_to do |format|
         format.all do
           render "people/show", layout: "with_header"

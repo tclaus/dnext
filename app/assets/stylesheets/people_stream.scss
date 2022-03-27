@@ -42,6 +42,10 @@ ul.profile_nav>li {
    color:gray;
  }
 
+ul.profile_nav>li.active {
+  border-bottom: 3px solid #0088e6;
+}
+
 ul.profile_nav>li a:active {
   color:black;
 }
