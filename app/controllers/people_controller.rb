@@ -72,7 +72,6 @@ class PeopleController < ApplicationController
 
   def stream_responder
     @stream_builder_object = person_stream
-    @title = @person.diaspora_handle
     @pagy, @stream = pagy(person_stream.stream_posts)
     @photos_count =  Photo.visible(current_user, @person).count(:all)
 

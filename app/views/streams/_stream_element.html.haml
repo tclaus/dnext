@@ -1,6 +1,6 @@
 %article{id: dom_id(post), class: "stream-element"}
   %div
-    = render "streams/stream_post_author", author: post.author, created_at: post.created_at, type: "post"
+    = render partial: "streams/stream_post_author", locals: {author: post.author, created_at: post.created_at, type: "post"}
     %span.post-head-text
       = range_tag(post)
       - if current_user&.podmin?
@@ -8,11 +8,11 @@
   %div{class: classify(post.type)}
     - if post.type === "Reshare"
       = post.rendered_message.html_safe # Print shared post text, then embed original post
-      = render "streams/stream_root_element", post: post.root, type: "reshare"
+      = render partial: "streams/stream_root_element", locals:{post: post.root, type: "reshare"}
     - else
-      = render "streams/attached_photos", post: post if post.photos.exists?
+      = render partial: "streams/attached_photos", locals:{post: post} if post.photos.exists?
       = post.rendered_message.html_safe
-      = render "streams/oembed", post: post
-      = render "streams/opengraph", post: post
-  = render "streams/stream_footer", post: post
-  = render "streams/comments/comments", comments: post.last_three_comments
+      = render partial: "streams/oembed", locals:{post: post}
+      = render partial: "streams/opengraph", locals:{post: post}
+  = render partial: "streams/stream_footer",locals:{post: post}
+  = render partial: "streams/comments/comments", locals: {comments: post.last_three_comments}

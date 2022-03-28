@@ -1,5 +1,5 @@
 %div{data: {controller: "infinite-scroll"}}
   %div{data: {infinite_scroll_target: "entries"}}
-    = render "streams/stream_elements", stream: @stream
+    = render partial: "streams/stream_elements", locals:{stream: stream}
   %div{data:{infinite_scroll_target: "pagination"}}
     != pagy_nav(@pagy)

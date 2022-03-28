@@ -1,15 +1,15 @@
 - content_for :page_title do
-  = @title
+  = @presenter.title
 
 .container-lg#profile_container
   .row
     .col-md-3
-      .sidebar.profile-sidebar#profile
-        -# here be JS
+      .sidebar.profile-sidebar
+        = render partial: "people/sidebar", locals: {person: @person, presenter: @presenter}
 
     .col-md-9
       .profile_header
-        = render "people/profile_header", profile: @person
+        = render partial: "people/profile_header", locals: {profile: @person}
 
       .stream-container
 
@@ -18,6 +18,6 @@
 
         .stream.clearfix#main-stream
           - if current_page?(person_photos_path(@person))
-            = render "streams/photos", photos: @photos
+            = render partial:"streams/photos", locals: {photos: @photos}
           - else
-            = render "streams/stream", stream: @stream
+            = render partial: "streams/stream", locals: {stream: @stream}

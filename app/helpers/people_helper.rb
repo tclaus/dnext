@@ -92,6 +92,10 @@ module PeopleHelper
     "</span>"
   end
 
+  def text_formatter(text)
+    Diaspora::MessageRenderer.new(text).markdownified
+  end
+
   private
 
   def person_link_class(person, css_class)

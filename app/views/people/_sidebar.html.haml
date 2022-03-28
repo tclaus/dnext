@@ -1,0 +1,12 @@
+.profile_photo
+  = link_to person_path(person) do
+    = image_tag person.avatar_large
+
+- if presenter.show_profile_info
+  %ul
+    -if person.profile.bio.present?
+      %li
+        %h4
+          = t "profile.bio"
+        .markdown-content
+          = person.profile.bio
