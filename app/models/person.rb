@@ -182,6 +182,10 @@ class Person < ApplicationRecord
     profile.image_url(size: :thumb_small)
   end
 
+  def avatar_large
+    profile.image_url
+  end
+
   def self.community_spotlight
     Person.joins(:roles).where(roles: {name: "spotlight"})
   end

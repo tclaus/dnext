@@ -1,0 +1,23 @@
+- content_for :page_title do
+  = @presenter.title
+
+.container-lg#profile_container
+  .row
+    .col-md-3
+      .sidebar.profile-sidebar
+        = render partial: "people/sidebar", locals: {person: @person, presenter: @presenter}
+
+    .col-md-9
+      .profile_header
+        = render partial: "people/profile_header", locals: {profile: @person}
+
+      .stream-container
+
+        //- if user_signed_in? && current_user.person.id == @person.id && !current_page?(person_photos_path(@person))
+        //  = render "publisher/publisher", publisher_aspects_for(nil)
+
+        .stream.clearfix#main-stream
+          - if current_page?(person_photos_path(@person))
+            = render partial:"streams/photos", locals: {photos: @photos}
+          - else
+            = render partial: "streams/stream", locals: {stream: @stream}

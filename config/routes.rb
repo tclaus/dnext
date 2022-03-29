@@ -30,4 +30,8 @@ Rails.application.routes.draw do
   get "public", to: redirect("streams/public")
   get "stream", to: "streams#multi", as: :stream
   get "streams/public", to: "streams#public", as: :public_stream
+
+  resources :people, only: %i[show index] do
+    resources :photos, except: %i[new update]
+  end
 end

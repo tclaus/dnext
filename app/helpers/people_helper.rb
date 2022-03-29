@@ -78,6 +78,24 @@ module PeopleHelper
     end
   end
 
+  def person_share_message(_current_user, person)
+    i18nScope = "people.helper.is_not_sharing"
+    icon = "entypo-record"
+    if person.is_sharing
+      i18nScope = "people.helper.is_sharing"
+      icon = "entypo-check"
+    end
+
+    title = t(i18nScope, {name: _.escape(person.name)})
+    '<span class="sharing_message_container" title="' + title + '" data-placement="bottom">' +
+    '  <i id="sharing_message" class="' + icon + '"></i>' +
+    "</span>"
+  end
+
+  def text_formatter(text)
+    Diaspora::MessageRenderer.new(text).markdownified
+  end
+
   private
 
   def person_link_class(person, css_class)

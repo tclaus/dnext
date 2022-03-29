@@ -12,6 +12,7 @@ module Diaspora
 
         def process(message, options, &block)
           return "" if message.blank? # Optimize for empty message
+
           processor = new message, options
           processor.instance_exec(&block)
           processor.message
@@ -34,18 +35,14 @@ module Diaspora
       end
 
       def append_and_truncate
-        if options[:truncate]
-          @message = @message.truncate(options[:truncate] - options[:append].to_s.size)
-        end
+        @message = @message.truncate(options[:truncate] - options[:append].to_s.size) if options[:truncate]
 
         @message << options[:append].to_s
         @message << options[:append_after_truncate].to_s
       end
 
       def escape
-        if options[:escape]
-          @message = ERB::Util.html_escape_once message
-        end
+        @message = ERB::Util.html_escape_once message if options[:escape]
       end
 
       def strip_markdown
@@ -66,8 +63,12 @@ module Diaspora
       # Grabbed from Github flavored Markdown
       def process_newlines
         message.gsub(/^[\w<][^\n]*\n+/) do |x|
-          /\n{2}/.match?(x) ? x : (x.strip!
-          x << " \n")
+          if /\n{2}/.match?(x)
+            x
+          else
+            (x.strip!
+             x << " \n")
+          end
         end
       end
 
@@ -100,36 +101,36 @@ module Diaspora
       end
 
       def diaspora_links
-        #   @message = @message.gsub(DiasporaFederation::Federation::DiasporaUrlParser::DIASPORA_URL_REGEX) { |match_str|
-        #     guid = Regexp.last_match(3)
-        #     Regexp.last_match(2) == "post" && Post.exists?(guid: guid) ? AppConfig.url_to("/posts/#{guid}") : match_str
-        #   }
+        @message = @message.gsub(DiasporaFederation::Federation::DiasporaUrlParser::DIASPORA_URL_REGEX) {|match_str|
+          guid = Regexp.last_match(3)
+          Regexp.last_match(2) == "post" && Post.exists?(guid: guid) ? AppConfig.url_to("/posts/#{guid}") : match_str
+        }
       end
     end
 
-    DEFAULTS = { mentioned_people: [],
-                 link_all_mentions: false,
-                 disable_hovercards: false,
-                 truncate: false,
-                 append: nil,
-                 append_after_truncate: nil,
-                 squish: false,
-                 escape: true,
-                 escape_tags: false,
-                 markdown_options: {
-                   autolink: true,
-                   fenced_code_blocks: true,
-                   space_after_headers: true,
-                   strikethrough: true,
-                   footnotes: true,
-                   tables: true,
-                   no_intra_emphasis: true
-                 },
-                 markdown_render_options: {
-                   filter_html: true,
-                   hard_wrap: true,
-                   safe_links_only: true
-                 } }.freeze
+    DEFAULTS = {mentioned_people:        [],
+                link_all_mentions:       false,
+                disable_hovercards:      false,
+                truncate:                false,
+                append:                  nil,
+                append_after_truncate:   nil,
+                squish:                  false,
+                escape:                  true,
+                escape_tags:             false,
+                markdown_options:        {
+                  autolink:            true,
+                  fenced_code_blocks:  true,
+                  space_after_headers: true,
+                  strikethrough:       true,
+                  footnotes:           true,
+                  tables:              true,
+                  no_intra_emphasis:   true
+                },
+                markdown_render_options: {
+                  filter_html:     true,
+                  hard_wrap:       true,
+                  safe_links_only: true
+                }}.freeze
 
     delegate :empty?, :blank?, :present?, to: :raw
 
@@ -160,13 +161,13 @@ module Diaspora
     #   to Redcarpet
     # @option opts [Hash] :markdown_render_options Override default options
     #   passed to the Redcarpet renderer
-    def initialize(text, opts = {})
+    def initialize(text, opts={})
       @text = text
       @options = DEFAULTS.deep_merge opts
     end
 
     # @param [Hash] opts Override global output options, see {#initialize}
-    def plain_text(opts = {})
+    def plain_text(opts={})
       process(opts) {
         make_mentions_plain_text
         diaspora_links
@@ -176,7 +177,7 @@ module Diaspora
     end
 
     # @param [Hash] opts Override global output options, see {#initialize}
-    def plain_text_without_markdown(opts = {})
+    def plain_text_without_markdown(opts={})
       process(opts) {
         make_mentions_plain_text
         diaspora_links
@@ -187,7 +188,7 @@ module Diaspora
     end
 
     # @param [Hash] opts Override global output options, see {#initialize}
-    def plain_text_for_json(opts = {})
+    def plain_text_for_json(opts={})
       process(opts) {
         normalize
         diaspora_links
@@ -196,7 +197,7 @@ module Diaspora
     end
 
     # @param [Hash] opts Override global output options, see {#initialize}
-    def html(opts = {})
+    def html(opts={})
       process(opts) {
         escape
         normalize
@@ -209,7 +210,7 @@ module Diaspora
     end
 
     # @param [Hash] opts Override global output options, see {#initialize}
-    def markdownified(opts = {})
+    def markdownified(opts={})
       process(opts) {
         process_newlines
         normalize
@@ -227,7 +228,7 @@ module Diaspora
     # @param [Hash] opts Additional options
     # @option opts [Integer] :length (70) Truncate the title to
     #   this length. If not given defaults to 70.
-    def title(opts = {})
+    def title(opts={})
       # Setext-style header
       heading = if /\A(?<setext_content>.{1,200})\n(?:={1,200}|-{1,200})(?:\r?\n|$)/ =~ @text.lstrip
                   setext_content
@@ -248,7 +249,7 @@ module Diaspora
     # Extracts all the urls from the raw message and return them in the form of a string
     # Different URLs are seperated with a space
     def urls
-      @urls ||= Twitter::TwitterText::Extractor.extract_urls(plain_text_without_markdown).map { |url|
+      @urls ||= Twitter::TwitterText::Extractor.extract_urls(plain_text_without_markdown).map {|url|
         Addressable::URI.parse(url).normalize.to_s
       }
     end

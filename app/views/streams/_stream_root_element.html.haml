@@ -1,8 +1,8 @@
 %div{id: dom_id(post), class: "root-stream-element"}
   %div.post-sub-headline
-    = render "stream_post_author", author: post.author, created_at: post.created_at, type: type
+    = render partial: "streams/stream_post_author", locals: {author: post.author, created_at: post.created_at, type: type}
   %div{class: classify(post.type)}
-    = render "attached_photos", post: post if post.photos.exists?
+    = render partial: "streams/attached_photos", locals: {post: post} if post.photos.exists?
     = post.rendered_message.html_safe
-    = render "oembed", post: post
-    = render "opengraph", post: post
+    = render partial: "streams/oembed", locals: {post: post}
+    = render partial: "streams/opengraph", locals: {post: post}

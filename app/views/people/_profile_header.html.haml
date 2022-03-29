@@ -1,0 +1,26 @@
+.row
+  .col-sm-10
+    %h2
+      %span.profile_name
+        = profile.name
+      %span.profile_handle
+        = profile.diaspora_handle
+    %small
+      = "#{profile.name} shares with you" #todo check if user shares
+  .col-sm-2.clearfix
+    .pull-right
+      .placeholder.aspect-membership-dropdown
+        - #TODO: Aspect Button here!
+.profile-horizontal-bar
+  .pull-right
+    - # Buttons
+  %ul.profile_nav
+    %li{class: current_page?(person_path(profile)) && "active"}
+      = link_to person_path(profile) do
+        %i.entypo-docs
+        = t("profile.posts")
+    %li{class: current_page?(person_photos_path(profile)) && "active"}
+      = link_to person_photos_path(profile) do
+        %i.entypo-picture
+        = t("profile.photos")
+
