@@ -79,7 +79,7 @@ class PeopleController < ApplicationController
       format.html { render "people/show", layout: "with_header" } # Person Profile
       format.json do
         render json: {
-          entries:    render_to_string(partial: "stream_elements",
+          entries:    render_to_string(partial: "streams/stream_elements",
                                        formats: [:html]),
           pagination: view_context.pagy_nav(@pagy)
         }

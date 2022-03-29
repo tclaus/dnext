@@ -1,12 +1,27 @@
 .profile_photo
   = link_to person_path(person) do
-    = image_tag person.avatar_large
+    = image_tag person.avatar_large, class: "img-rounded large img-responsive center-block"
 
 - if presenter.show_profile_info
-  %ul
+  %ul.profile-information
     -if person.profile.bio.present?
       %li
         %h4
           = t "profile.bio"
         .markdown-content
-          = person.profile.bio
+          = text_formatter(person.profile.bio)
+    - if person.profile.location.present?
+      %li
+        %h4
+          = t("profile.location")
+        = person.profile.location
+    - if person.profile.gender.present?
+      %li
+        %h4
+          = t("profile.gender")
+        = person.profile.gender
+    - if person.profile.birthday.present?
+      %li
+        %h4
+          =t("profile.born")
+        = person.profile.birthday
