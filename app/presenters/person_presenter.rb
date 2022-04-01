@@ -17,6 +17,10 @@ class PersonPresenter < BasePresenter
     public_details? || own_profile? || person_follows_current_user
   end
 
+  def show_photos?
+    photos.present?
+  end
+
   private
 
   def own_profile?

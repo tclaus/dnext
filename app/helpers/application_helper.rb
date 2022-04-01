@@ -22,6 +22,11 @@ module ApplicationHelper
     content_tag("span", content.html_safe, args)
   end
 
+  # Returns a tag formatted as a link
+  def tag_as_link(tag_name)
+    link_to("##{tag_name}", "/tags/#{tag_name}", class: "tag")
+  end
+
   def pod_name
     AppConfig.settings.pod_name
   end

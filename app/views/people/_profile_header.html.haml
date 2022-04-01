@@ -11,6 +11,10 @@
     .pull-right
       .placeholder.aspect-membership-dropdown
         - #TODO: Aspect Button here!
+.row
+  .col-sm-12
+    = render partial: "people/tags", locals: {profile: profile}
+
 .profile-horizontal-bar
   .pull-right
     - # Buttons
@@ -19,8 +23,11 @@
       = link_to person_path(profile) do
         %i.entypo-docs
         = t("profile.posts")
-    %li{class: current_page?(person_photos_path(profile)) && "active"}
-      = link_to person_photos_path(profile) do
-        %i.entypo-picture
-        = t("profile.photos")
+    - if @presenter.show_photos?
+      %li{class: current_page?(person_photos_path(profile)) && "active"}
+        = link_to person_photos_path(profile) do
+          %i.entypo-picture
+          = t("profile.photos")
+          .badge.rounded-pill.bg-secondary
+            = @presenter.photos.count
 

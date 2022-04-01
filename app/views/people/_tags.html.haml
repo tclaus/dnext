@@ -1,0 +1,11 @@
+- if profile.tags.present?
+  .description
+    %i.entypo-tag
+    - profile.tags.each do |tag|
+      = tag_as_link(tag)
+- else
+  - if @presenter.own_profile?
+    = t("profile.you_have_no_tags")
+    %span.add_tags
+      = link_to "/edit_profile" do
+        = t("profile.add_some")

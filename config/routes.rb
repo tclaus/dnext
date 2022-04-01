@@ -31,6 +31,17 @@ Rails.application.routes.draw do
   get "stream", to: "streams#multi", as: :stream
   get "streams/public", to: "streams#public", as: :public_stream
 
+  # Tags
+  resources :tags, only: %i[index]
+  get "tags/:name", to: "tags#show", as: "tag"
+
+  resources "tag_followings", only: %i[create destroy index] do
+    collection do
+      get :manage
+    end
+  end
+
+  # Users and people
   resources :people, only: %i[show index] do
     resources :photos, except: %i[new update]
   end
