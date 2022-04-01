@@ -21,11 +21,11 @@ class PersonPresenter < BasePresenter
     photos.present?
   end
 
-  private
-
   def own_profile?
     current_user.try(:person) == @presentable
   end
+
+  protected
 
   def person_follows_current_user
     return false unless current_user

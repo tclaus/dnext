@@ -39,6 +39,15 @@ describe PersonPresenter do
       expect(@person_presenter.show_photos?).to be_truthy
     end
 
+    it "should return true for own profile" do
+      expect(@person_presenter.current_user).to receive(:person).and_return(current_user)
+      expect(@person_presenter.own_profile?).to be_falsey
+    end
+
+    it "should test for own profile" do
+      expect(@person_presenter.own_profile?).to be_falsey
+    end
+
     context "relationship" do
       it "is mutual?" do
         allow(current_user).to receive(:contact_for) { mutual_contact }
