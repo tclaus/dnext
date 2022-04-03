@@ -1,0 +1,11 @@
+%article{id: dom_id(photo), class: "photo col-md-4 col-sm-6 clearfix"}
+  .media
+    .control_icons
+      - #TODO: Add Report and Ignore - buttons
+    = link_to photo.url, class: "thumbnail img-thumbnail photo-link gallery-picture" do
+      = image_tag photo.url(:thumb_large), class:"photo big-photo"
+    .card-footer
+      .footer-container
+        = local_time_ago photo.created_at, class: "timeago text-muted"
+        %div.text-muted
+          = "#{photo.text}"

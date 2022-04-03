@@ -96,13 +96,14 @@ class Photo < ApplicationRecord
     Workers::ProcessPhoto.perform_async(id)
   end
 
-  def self.visible(current_user, person, limit=:all, max_time=nil)
+  def self.visible(current_user, person, limit=:all)
     photos = if current_user
-               current_user.photos_from(person, limit: limit, max_time: max_time)
+               current_user.photos_from(person, limit: limit)
              else
                Photo.where(author_id: person.id, public: true)
              end
-    photos.where(pending: false).order("created_at DESC")
+    photos.where(pending: false)
+          .order("created_at DESC")
   end
 
   private

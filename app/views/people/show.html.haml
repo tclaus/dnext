@@ -18,6 +18,6 @@
 
         .stream.clearfix#main-stream
           - if current_page?(person_photos_path(@person))
-            = render partial:"streams/photos", locals: {photos: @photos}
+            = render partial:"photos/photos", locals: {photos: @photos}
           - else
             = render partial: "streams/stream", locals: {stream: @stream}
