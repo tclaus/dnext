@@ -3,6 +3,7 @@
 class PhotosController < ApplicationController
   before_action :authenticate_user!, except: %i[show index]
   respond_to :html, :json
+  include Pagy::Backend
 
   def show
     @photo = if user_signed_in?
@@ -22,13 +23,16 @@ class PhotosController < ApplicationController
 
     if @person
       @contact = current_user.contact_for(@person) if user_signed_in?
-      # TODO: A user might have a lot of photos, so implement a pagy way for showing
-      @photos = Photo.visible(current_user, @person, :all)
+      @pagy, @photos = pagy(Photo.visible(current_user, @person, :all), items: 21) # in desktop view 3 in a row
       respond_to do |format|
-        format.all do
-          render "people/show", layout: "with_header"
+        format.html { render "people/show", layout: "with_header" }
+        format.json do
+          render json: {
+            entries:    render_to_string(partial: "photos/photos_elements",
+                                         formats: [:html]),
+            pagination: view_context.pagy_nav(@pagy)
+          }
         end
-        format.json { render_for_api :backbone, json: @posts, root: :photos }
       end
     else
       flash[:error] = I18n.t "people.show.does_not_exist"

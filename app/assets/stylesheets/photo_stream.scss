@@ -1,0 +1,96 @@
+
+.photo > .media {
+  overflow: visible;
+  position: relative;
+}
+
+.photo > .media .control-icons {
+  background: #fff;
+  border-radius: 4px;
+  padding-left: 4px;
+  position: absolute;
+  right: 4px;
+  text-align: center;
+  top:1px
+}
+
+.photo .thumbnail {
+  background: #fff;
+  border-radius: 0;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  height: 270px;
+  margin: 0 0 15px;
+  padding: 10px;
+  text-align: center;
+  white-space:nowrap
+}
+
+.photo .thumbnail:hover, .photo .thumbnail:focus, .photo .thumbnail:active {
+  border-color: #ddd;
+  text-decoration:none
+}
+
+.photo .thumbnail::before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align:middle
+}
+
+.photo .thumbnail .big-photo {
+  display: inline;
+  margin-left: -4px;
+  max-height: 200px;
+  vertical-align:middle
+}
+
+
+.card-footer {
+  background-color: #eee;
+  border-top: 1px solid #ccc;
+  bottom: 0;
+  font-size: 11px;
+  left: 0;
+  line-height: 18px;
+  margin-left: 0;
+  min-height: 19px;
+  position: absolute;
+  width:100%
+}
+
+.card-footer .footer-container {
+  padding:1px 5px
+}
+
+.card-footer .footer-container a {
+  color: #999;
+  font-weight: normal;
+  margin-right:4px
+}
+
+.media .gallery-picture img {
+  margin-bottom: 20px
+}
+
+.media .card-footer .footer-container {
+  font-size:13px
+}
+
+.thumbnail {
+  display: block;
+  padding: 4px;
+  margin-bottom: 18px;
+  line-height: 1.42857;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition:border 0.2s ease-in-out
+}
+
+.thumbnail > img, .thumbnail a > img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-right: auto;
+  margin-left: auto;
+}

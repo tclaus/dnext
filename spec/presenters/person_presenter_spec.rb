@@ -29,6 +29,25 @@ describe PersonPresenter do
     before do
       @person_presenter = PersonPresenter.new(person, current_user)
     end
+
+    it "should not show photos if none" do
+      expect(@person_presenter.show_photos?).to be_falsey
+    end
+
+    it "should show photos if present" do
+      current_user.photos.add(FactoryBot.create(:photo))
+      expect(@person_presenter.show_photos?).to be_truthy
+    end
+
+    it "should return true for own profile" do
+      expect(@person_presenter.current_user).to receive(:person).and_return(current_user)
+      expect(@person_presenter.own_profile?).to be_falsey
+    end
+
+    it "should test for own profile" do
+      expect(@person_presenter.own_profile?).to be_falsey
+    end
+
     context "relationship" do
       it "is mutual?" do
         allow(current_user).to receive(:contact_for) { mutual_contact }

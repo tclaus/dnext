@@ -12,7 +12,6 @@ module Querying
   def photos_from(person, opts={})
     opts = prep_opts(Photo, opts)
     Photo.from_person_visible_by_user(self, person)
-         .by_max_time(opts[:max_time])
          .limit(opts[:limit])
   end
 

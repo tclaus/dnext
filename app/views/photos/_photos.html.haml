@@ -1,0 +1,5 @@
+%div{data: {controller: "infinite-scroll"}}
+  %div{data: {infinite_scroll_target: "entries"}}
+    = render partial: "photos/photos_elements", locals:{photos: photos}
+  %div{data:{infinite_scroll_target: "pagination"}}
+    != pagy_nav(@pagy)

@@ -1,0 +1,5 @@
+.row.clearfix
+  - @photos.each do |photo|
+    = render partial: "photos/photo", locals: {photo: photo}
+- if @photos.empty?
+  = render "photos/no_photos"
