@@ -6,5 +6,4 @@
     .people-stream
       - tagged_persons_stream.each do |person|
         = render partial: "people/person_card", locals:{person: person}
-  - if tagged_persons_stream.present?
-    != pagy_bootstrap_nav(tagged_persons_pagy)
+  != pagy_bootstrap_nav(tagged_persons_pagy) if tagged_persons_pagy.pages > 1

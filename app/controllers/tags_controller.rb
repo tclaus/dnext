@@ -30,7 +30,7 @@ class TagsController < ApplicationController
 
     @tag_stream_presenter = TagStreamPresenter.new(tag_stream)
     @pagy, @stream = pagy(tag_stream.stream_posts)
-    @tagged_people_pagy, @tagged_people_stream = pagy(tag_stream.tagged_people)
+    @tagged_people_pagy, @tagged_people_stream = pagy(tag_stream.tagged_people, items: 8, page_param: :page_people)
 
     respond_to do |format|
       format.html { render "tags/show" }
