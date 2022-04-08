@@ -1,0 +1,10 @@
+.sidebar
+  .sidebar-header.clearfix
+    %h3
+      = "#{tagged_persons_pagy.count} Persons are tagged with #{searched_tag}"
+  .side_stream.stream
+    .people-stream
+      - tagged_persons_stream.each do |person|
+        = render partial: "people/person_card", locals:{person: person}
+  - if tagged_persons_stream.present?
+    != pagy_bootstrap_nav(tagged_persons_pagy)

@@ -49,6 +49,7 @@ en:
     visibility:
       global: "Post is globally visible"
       limited: "Post has limited audience"
+    rehare_removed: "Original post was removed."
   tags:
     name_too_long: "Please make your tag name fewer than %{count} characters. Right now it is %{current_length} characters"
   comment-actions:

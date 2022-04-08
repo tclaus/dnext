@@ -1,0 +1,17 @@
+- content_for :page_title do
+  = @tag_stream_presenter.display_tag_name
+
+- content_for :meta_data do
+  = # metas_tags @tag_stream_presenter.metas_attributes
+
+.container-lg
+  .row
+    .col-md-3
+      = render partial: "tags/sidebar", locals: {tagged_persons_pagy: @tagged_people_pagy,
+      tagged_persons_stream: @tagged_people_stream,
+      searched_tag: @tag_stream_presenter.display_tag_name}
+    .col-md-9
+      %main
+        .stream-container
+          %h2= @tag_stream_presenter.title
+          = render partial: "streams/stream", locals:{stream: @stream}
