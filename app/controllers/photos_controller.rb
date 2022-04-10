@@ -1,19 +1,10 @@
 # frozen_string_literal: true
 
 class PhotosController < ApplicationController
+  layout "with_header"
   before_action :authenticate_user!, except: %i[show index]
   respond_to :html, :json
   include Pagy::Backend
-
-  def show
-    @photo = if user_signed_in?
-               current_user.photos_from(Person.find_by(guid: params[:person_id])).where(id: params[:id]).first
-             else
-               Photo.where(id: params[:id], public: true).first
-             end
-
-    raise ActiveRecord::RecordNotFound unless @photo
-  end
 
   def index
     @post_type = :photos
@@ -25,7 +16,7 @@ class PhotosController < ApplicationController
       @contact = current_user.contact_for(@person) if user_signed_in?
       @pagy, @photos = pagy(Photo.visible(current_user, @person, :all), items: 21) # in desktop view 3 in a row
       respond_to do |format|
-        format.html { render "people/show", layout: "with_header" }
+        format.html { render "people/show" }
         format.json do
           render json: {
             entries:    render_to_string(partial: "photos/photos_elements",
@@ -38,5 +29,15 @@ class PhotosController < ApplicationController
       flash[:error] = I18n.t "people.show.does_not_exist"
       redirect_to people_path
     end
+  end
+
+  def show
+    @photo = if user_signed_in?
+               current_user.photos_from(Person.find_by(guid: params[:person_id])).where(id: params[:id]).first
+             else
+               Photo.where(id: params[:id], public: true).first
+             end
+
+    raise ActiveRecord::RecordNotFound unless @photo
   end
 end

@@ -25,7 +25,7 @@ describe Stream::Public do
       @stream.posts
     end
 
-    it "returns posts without a defined language" do
+    it "returns no posts with a defined language" do
       english_user = FactoryBot.create(:user)
       english_user.stream_languages.create(language_id: "en")
       stream = Stream::Public.new(english_user)

@@ -58,9 +58,7 @@ module Stream
 
       likes = Like.where(author_id: @user.person_id, target_id: posts.map(&:id), target_type: "Post")
 
-      like_hash = likes.index_by do |like|
-        like.target_id
-      end
+      like_hash = likes.index_by(&:target_id)
 
       posts.each do |post|
         post.user_like = like_hash[post.id]

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module ApplicationHelper
+  include Pagy::Frontend
+
   # Changes Ruby Class names to CSS class names. Example: StatusMessage => status_message
   # @param [String] name
   # @return [String]

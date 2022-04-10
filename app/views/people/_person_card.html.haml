@@ -1,0 +1,10 @@
+.media.stream-element{id: dom_id(person)}
+  .media-object.float-start
+    .sidebar-avatar
+      = person_image_link(person, size: :thumb_medium)
+  .media-body
+    = person_link(person, class: "name")
+    .info.diaspora_handle
+      = person.diaspora_handle
+    .info.tags
+      = Diaspora::Taggable.format_tags(person.profile.tag_string)
