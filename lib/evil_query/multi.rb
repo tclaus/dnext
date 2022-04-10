@@ -1,8 +1,7 @@
 module EvilQuery
   class Multi < Base
     def initialize(user, include_spotlight: true)
-      super()
-      @user = user
+      super(user)
       @include_spotlight = include_spotlight
     end
 
@@ -29,10 +28,6 @@ module EvilQuery
 
     def mentioned_posts
       StatusMessage.where_person_is_mentioned(@user.person)
-    end
-
-    def exclude_hidden_content(relation)
-      Post.for_a_stream(relation, @user)
     end
 
     # Returns all posts authored by a person with the community spotlight role

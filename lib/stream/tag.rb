@@ -2,12 +2,13 @@
 
 module Stream
   class Tag < Stream::Base
-    attr_accessor :tag_names, :people_page, :people_per_page
+    attr_accessor :tag_names
 
+    # @param [String] user
+    # @param [String] tag_names A single string of tags divided by space and hashes ("#linux #gnu")
+    # @param [Hash] opts
     def initialize(user, tag_names, opts={})
       self.tag_names = tag_names.downcase.gsub("#", "")
-      self.people_page = opts[:page] || 1
-      self.people_per_page = 15
       super(user, opts)
     end
 
@@ -33,12 +34,22 @@ module Stream
                  else
                    StatusMessage.public_all_tag_stream(tags.pluck(:id))
                  end
+
+      filter_blocked_or_hidden_posts
     end
 
     def stream_posts
       return [] unless tags
 
       super
+    end
+
+    private
+
+    def filter_blocked_or_hidden_posts
+      query = EvilQuery::Base.new(@user)
+      p = query.exclude_hidden_content(@posts)
+      query.ignore_blocked_pods(p)
     end
   end
 end

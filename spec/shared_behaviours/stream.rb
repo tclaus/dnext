@@ -9,22 +9,5 @@ shared_examples_for "it is a stream" do
     it "#posts" do
       expect(@stream.posts).not_to be_nil
     end
-
-    it "#people" do
-      expect(@stream.people).not_to be_nil
-    end
-
-    it "#publisher_opts" do
-      expect(@stream.send(:publisher_opts)).not_to be_nil
-    end
-
-    it "should always have an order (default created_at)" do
-      @stream.order = nil
-      expect(@stream.order).not_to be_nil
-    end
-
-    it "initializes a publisher" do
-      expect(@stream.publisher).to be_a(Publisher)
-    end
   end
 end

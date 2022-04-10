@@ -142,7 +142,10 @@ class Post < ApplicationRecord
   end
 
   # Adds a relation to filter out blocked user and hidden content
-  # @return [Object]
+  # @param [ActiveRecord:Relation] relation
+  # @param [User] user The current logged in user or nil
+  # @param [FalseClass] ignore_blocks True to ignore blocks
+  # @return [ActiveRecord:Relation] An ActiveRecord Relation filtered by blocked or invisible content
   def self.for_a_stream(relation, user=nil, ignore_blocks: false)
     relation = relation
                .includes_for_a_stream
