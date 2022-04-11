@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "sidekiq/web"
 
 Rails.application.routes.draw do
@@ -14,6 +16,12 @@ Rails.application.routes.draw do
   controller :users do
     get "public/:username", action: :public, as: :users_public
     get "getting_started", action: :getting_started, as: :getting_started
+  end
+
+  resource :two_factor_authentication, only: %i[show create destroy] do
+    get :confirm, action: :confirm_2fa
+    post :confirm, action: :confirm_and_activate_2fa
+    get :recovery_codes
   end
 
   devise_for :users, controllers: {sessions: :sessions}, skip: :registration

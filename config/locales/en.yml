@@ -140,4 +140,6 @@ en:
     too_long: "Post message length exceeds maximun length."
   stream_helper:
     no_more_posts: "You have reached the end of the stream."
+  two_factor_auth:
+    invalid_token: "Invalid two factor token"
 

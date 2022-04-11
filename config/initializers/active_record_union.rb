@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Thanks for the insporation of https://joshfrankel.me/blog/a-journey-into-writing-union-queries-with-active-record/
+# Thanks for the inspiration of https://joshfrankel.me/blog/a-journey-into-writing-union-queries-with-active-record/
 module ActiveRecordUnion
   extend ActiveSupport::Concern
 
