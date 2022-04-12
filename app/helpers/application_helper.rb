@@ -49,4 +49,9 @@ module ApplicationHelper
       end
     end.join(" ").html_safe
   end
+
+  def qrcode_uri
+    label = current_user.username
+    current_user.otp_provisioning_uri(label, issuer: AppConfig.environment.url)
+  end
 end

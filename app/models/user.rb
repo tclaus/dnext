@@ -3,12 +3,19 @@
 class User < ApplicationRecord
   include Querying
 
-  encrypts :otp_secret
+  # attr_accessor :plain_otp_secret
 
-  # Include default devise modules. Others available are:
-  devise :database_authenticatable, :registerable,
+  # encrypts :otp_secret
+
+  # Include default devise modules.
+  devise :registerable,
          :recoverable, :rememberable, :validatable, :trackable, :lockable,
          :lastseenable, lock_strategy: :none, unlock_strategy: :none
+
+  devise :two_factor_authenticatable,
+         :two_factor_backupable,
+         otp_backup_code_length:     16,
+         otp_number_of_backup_codes: 10
 
   has_one :person, inverse_of: :owner, foreign_key: :owner_id, dependent: :destroy
 
@@ -42,6 +49,7 @@ class User < ApplicationRecord
   validate :no_person_with_same_username
 
   serialize :hidden_shareables, Hash
+  serialize :otp_backup_codes, Array
 
   delegate :guid, :public_key, :posts, :photos, :owns?, :image_url,
            :diaspora_handle, :name, :atom_url, :profile_url, :profile, :url,
@@ -84,6 +92,14 @@ class User < ApplicationRecord
     set_person(Person.new((opts[:person] || {}).except(:id)))
     generate_keys
     self
+  end
+
+  def otp_secret
+    plain_otp_secret
+  end
+
+  def otp_secret=(val)
+    self.plain_otp_secret = val
   end
 
   # Ensure that the unconfirmed email isn't already someone's email
@@ -172,6 +188,7 @@ class User < ApplicationRecord
   end
 
   def encryption_key
+    # This replaces the 2FA encryption key
     OpenSSL::PKey::RSA.new(serialized_private_key)
   end
 

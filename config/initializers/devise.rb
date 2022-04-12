@@ -27,7 +27,7 @@ Devise.setup do |config|
   if AppConfig.mail.sender_address.present?
     config.mailer_sender = AppConfig.mail.sender_address
   elsif AppConfig.mail.enable?
-    unless Rails.env == 'test'
+    unless Rails.env.test?
       Rails.logger.warn("No smtp sender address set, mail may fail.")
       warn "WARNING: No smtp sender address set, mail may fail."
     end
@@ -236,7 +236,10 @@ Devise.setup do |config|
 
   # When set to false, does not sign a users in automatically after their password is
   # reset. Defaults to true, so a users is signed in automatically after a reset.
-  # config.sign_in_after_reset_password = true
+  #
+  # if a user enables 2fa this would log them in without requiring them
+  # to enter a token
+  config.sign_in_after_reset_password = false
 
   # ==> Configuration for :encryptable
   # Allow you to use another hashing or encryption algorithm besides bcrypt (default).
@@ -286,10 +289,10 @@ Devise.setup do |config|
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.
   #
-  # config.warden do |manager|
-  #   manager.intercept_401 = false
-  #   manager.default_strategies(scope: :users).unshift :some_external_strategy
-  # end
+  config.warden do |manager|
+    #   manager.intercept_401 = false
+    manager.default_strategies(scope: :users).unshift :two_factor_backupable
+  end
 
   # ==> Mountable engine configurations
   # When using Devise inside an engine, let's call it `MyEngine`, and this engine

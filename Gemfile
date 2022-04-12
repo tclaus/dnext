@@ -57,7 +57,7 @@ gem "haml"
 gem "pagy", "~> 5.6", ">= 5.6.6"
 
 # Rendering
-gem "entypo-rails", github: "wangliyao/entypo-rails" # Entypo-Rails can not directly used for Rails > 6
+gem "entypo-rails", git: "git@github.com:wangliyao/entypo-rails" # Entypo-Rails can not directly used for Rails > 6
 gem "local_time"
 gem "open_graph_reader", "~> 0.7.2"
 gem "ruby-oembed", "~> 0.15.0"
@@ -88,12 +88,15 @@ gem "eye", "~> 0.10.0"
 gem "addressable", "~> 2.8"
 
 # Authentication
+# See: https://pagertree.com/2021/04/13/rails-7-attr-encrypted-migration/
+gem "attr_encrypted", git: "git@github.com:PagerTree/attr_encrypted", branch: "rails-7-0-support"
 gem "devise", "~>4.8.1"
 gem "devise-i18n", "~> 1.10", ">= 1.10.1"
 gem "devise_last_seen"
-# gem "devise-two-factor", github: "kivanio/devise-two-factor" # Rails 7 support currently not included in main
-
-gem "rqrcode", "~> 2.1"
+gem "devise-two-factor", "~>4.0", ">=4.0.2"
+# QR Code generation for 2FA.
+# See: https://github.com/whomwah/rqrcode
+gem "rqrcode", "~> 2.1", ">= 2.1.1"
 #
 # Captcha
 
@@ -131,11 +134,11 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
 
   gem "capybara"
+  gem "diaspora_federation-json_schema", "~> 0.3.0"
   gem "json-schema-rspec", "0.0.4"
   gem "rspec-json_expectations", "~> 2.1"
   gem "selenium-webdriver"
   gem "shoulda-matchers", "~> 5.1"
   gem "webdrivers"
   gem "webmock", "3.14.0", require: false
-  gem 'diaspora_federation-json_schema', '~> 0.3.0'
 end
