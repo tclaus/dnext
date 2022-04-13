@@ -6,6 +6,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery except: :receive, with: :exception, prepend: true
   layout "with_header_with_footer"
 
+  helper_method :countless_stream_next_tag
+
   rescue_from ActionController::InvalidAuthenticityToken do
     if user_signed_in?
       logger.warn "#{current_user.diaspora_handle} CSRF token fail. referer: #{request.referer || 'empty'}"
@@ -69,5 +71,13 @@ class ApplicationController < ActionController::Base
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_in, keys: [:otp_attempt])
+  end
+
+  # This method helps to mark the end of a paginated endless stream of data
+  # @param [Pagy] pagy
+  # @return [String] A html tag with a next marker
+  def countless_stream_next_tag(pagy)
+    "<a href='#{request.path}?#{pagy.vars[:page_param]}=#{pagy.vars[:page].to_i + 1}' rel='next'>Next</a>"
+      .html_safe # rubocop:disable Rails/OutputSafety
   end
 end
