@@ -2,4 +2,4 @@
   - unless comments.empty?
     .comments
       - comments.each do |comment|
-        = render "streams/comments/comment", comment: comment
+        = render "streams/comments/comment", comment: comment if comment.is_root_comment?

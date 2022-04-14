@@ -23,6 +23,7 @@ class Comment < ApplicationRecord
 
   validates :text, presence: true, length: {maximum: 65_535}
   has_many :reports, as: :reportable, dependent: :destroy
+  has_many :comments, foreign_key: :thread_parent_guid, primary_key: :guid, dependent: :destroy
 
   acts_as_taggable_on :tags
   extract_tags_from :text
@@ -42,5 +43,13 @@ class Comment < ApplicationRecord
 
   def rendered_text
     Diaspora::MessageRenderer.new(text).markdownified
+  end
+
+  def has_parent_comment?
+    thread_parent_guid.present?
+  end
+
+  def is_root_comment?
+    thread_parent_guid.nil?
   end
 end

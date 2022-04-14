@@ -10,3 +10,6 @@
     = link_to "#", rel: "nofollow", role: "button" do
       %i.bi.bi-chat
       = t("comment-actions.answer")
+  - comment.comments.each do |comment|
+    .threaded-comment
+      = render partial: "streams/comments/comment", locals: {comment: comment}
