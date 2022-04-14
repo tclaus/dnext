@@ -29,7 +29,7 @@ class TagsController < ApplicationController
     redirect_to(action: :show, name: downcase_tag_name) && return if tag_has_capitals?
 
     @tag_stream_presenter = TagStreamPresenter.new(tag_stream)
-    @pagy, @stream = pagy(tag_stream.stream_posts)
+    @pagy, @stream = pagy_countless(tag_stream.stream_posts)
     @tagged_people_pagy, @tagged_people_stream = pagy(tag_stream.tagged_people, items: 8, page_param: :page_people)
 
     respond_to do |format|
@@ -38,7 +38,7 @@ class TagsController < ApplicationController
         render json: {
           entries:    render_to_string(partial: "streams/stream_elements",
                                        formats: [:html]),
-          pagination: view_context.pagy_nav(@pagy)
+          pagination: countless_stream_next_tag(@pagy)
         }
       end
     end
