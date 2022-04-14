@@ -70,3 +70,4 @@ capybara-*.html
 .idea
 .vscode
 /dump.rdb
+/config/credentials.yml.enc

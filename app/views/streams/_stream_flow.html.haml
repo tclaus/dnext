@@ -2,4 +2,5 @@
   %div{data: {infinite_scroll_target: "entries"}}
     = render partial: "streams/stream_elements", locals:{stream: stream}
   %div{data:{infinite_scroll_target: "pagination"}}
-    != pagy_nav(@pagy) if @pagy.pages > 1
+    - if @pagy.vars[:items]>= @stream.size
+      = countless_stream_next_tag(@pagy)
