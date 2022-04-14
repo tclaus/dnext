@@ -1,4 +1,4 @@
 - @stream.each do |post|
-  = render partial: "streams/stream_element", locals: {post: post}
+  = render partial: "streams/stream_element_container", locals: {post: post}
 - if @stream.empty?
   = render "streams/end_of_stream"

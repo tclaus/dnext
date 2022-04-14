@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 module Querying
+  def find_visible_shareable_by_id(klass, id, opts={})
+    key = (opts.delete(:key) || :id)
+    EvilQuery::VisibleShareableById.new(self, klass, key, id, opts).post!
+  end
+
   # @param [TrueClass] with_order
   def posts_from(person, with_order: true)
     base_query = Post.from_person_visible_by_user(self, person)

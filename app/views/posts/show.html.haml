@@ -1,0 +1,9 @@
+.container-lg
+  .row
+    .col-md-6
+      %article{id: dom_id(post), class: "stream-element"}
+        = render partial: "streams/stream_element", locals: {post: post}
+    .col-md-6
+      .stream-element
+        = render partial: "streams/comments/comments", locals: {comments: post.comments}
+     
