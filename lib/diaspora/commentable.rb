@@ -16,5 +16,11 @@ module Diaspora
       # INSTEAD OF DOING THE FOLLOWING, AS EXPECTED (THX AR):
       comments.order("created_at DESC").limit(3).includes(author: :profile).reverse
     end
+
+    def root_comments
+      comments
+        .where(thread_parent_guid: nil)
+        .order(created_at: :asc)
+    end
   end
 end

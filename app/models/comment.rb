@@ -23,7 +23,7 @@ class Comment < ApplicationRecord
 
   validates :text, presence: true, length: {maximum: 65_535}
   has_many :reports, as: :reportable, dependent: :destroy
-  has_many :comments, foreign_key: :thread_parent_guid, primary_key: :guid, dependent: :destroy
+  has_many :sub_comments, class_name:"Comment", foreign_key: :thread_parent_guid, primary_key: :guid, dependent: :destroy
 
   acts_as_taggable_on :tags
   extract_tags_from :text
