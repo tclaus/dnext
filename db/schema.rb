@@ -16,14 +16,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
 
   create_table "account_deletions", id: :serial, force: :cascade do |t|
     t.integer "person_id"
-    t.datetime "completed_at", precision: nil
+    t.datetime "completed_at"
     t.index ["person_id"], name: "index_account_deletions_on_person_id", unique: true
   end
 
   create_table "account_migrations", force: :cascade do |t|
     t.integer "old_person_id", null: false
     t.integer "new_person_id", null: false
-    t.datetime "completed_at", precision: nil
+    t.datetime "completed_at"
     t.text "signature"
     t.text "remote_photo_path"
     t.index ["old_person_id", "new_person_id"], name: "index_account_migrations_on_old_person_id_and_new_person_id", unique: true
@@ -33,8 +33,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
   create_table "aspect_memberships", id: :serial, force: :cascade do |t|
     t.integer "aspect_id", null: false
     t.integer "contact_id", null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["aspect_id", "contact_id"], name: "index_aspect_memberships_on_aspect_id_and_contact_id", unique: true
     t.index ["aspect_id"], name: "index_aspect_memberships_on_aspect_id"
     t.index ["contact_id"], name: "index_aspect_memberships_on_contact_id"
@@ -52,8 +52,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
   create_table "aspects", id: :serial, force: :cascade do |t|
     t.string "name", null: false
     t.integer "user_id", null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "order_id"
     t.boolean "post_default", default: true
     t.index ["user_id", "name"], name: "index_aspects_on_user_id_and_name", unique: true
@@ -69,8 +69,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
     t.string "nonce"
     t.text "scopes"
     t.boolean "code_used", default: false
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["o_auth_application_id"], name: "index_authorizations_on_o_auth_application_id"
     t.index ["user_id"], name: "index_authorizations_on_user_id"
   end
@@ -94,8 +94,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
     t.integer "commentable_id", null: false
     t.integer "author_id", null: false
     t.string "guid", null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "likes_count", default: 0, null: false
     t.string "commentable_type", limit: 60, default: "Post", null: false
     t.string "thread_parent_guid"
@@ -108,8 +108,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
   create_table "contacts", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "person_id", null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "sharing", default: false, null: false
     t.boolean "receiving", default: false, null: false
     t.index ["person_id"], name: "index_contacts_on_person_id"
@@ -120,8 +120,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
     t.integer "conversation_id", null: false
     t.integer "person_id", null: false
     t.integer "unread", default: 0, null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["conversation_id", "person_id"], name: "index_conversation_visibilities_usefully", unique: true
     t.index ["conversation_id"], name: "index_conversation_visibilities_on_conversation_id"
     t.index ["person_id"], name: "index_conversation_visibilities_on_person_id"
@@ -131,16 +131,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
     t.string "subject"
     t.string "guid", null: false
     t.integer "author_id", null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["author_id"], name: "conversations_author_id_fk"
     t.index ["guid"], name: "index_conversations_on_guid", unique: true
   end
 
   create_table "ignoring_tags", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["name"], name: "index_ignoring_tags_on_name", unique: true
   end
 
@@ -148,8 +148,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
     t.string "token"
     t.integer "user_id"
     t.integer "count"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "like_signatures", id: false, force: :cascade do |t|
@@ -165,8 +165,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
     t.integer "target_id"
     t.integer "author_id"
     t.string "guid"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "target_type", limit: 60, null: false
     t.index ["author_id"], name: "likes_author_id_fk"
     t.index ["guid"], name: "index_likes_on_guid", unique: true
@@ -179,8 +179,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
     t.string "lat"
     t.string "lng"
     t.integer "status_message_id"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["status_message_id"], name: "index_locations_on_status_message_id"
   end
 
@@ -198,8 +198,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
     t.integer "author_id", null: false
     t.string "guid", null: false
     t.text "text", null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["author_id"], name: "index_messages_on_author_id"
     t.index ["conversation_id"], name: "messages_conversation_id_fk"
     t.index ["guid"], name: "index_messages_on_guid", unique: true
@@ -208,8 +208,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
   create_table "notification_actors", id: :serial, force: :cascade do |t|
     t.integer "notification_id"
     t.integer "person_id"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["notification_id", "person_id"], name: "index_notification_actors_on_notification_id_and_person_id", unique: true
     t.index ["notification_id"], name: "index_notification_actors_on_notification_id"
     t.index ["person_id"], name: "index_notification_actors_on_person_id"
@@ -220,8 +220,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
     t.integer "target_id"
     t.integer "recipient_id", null: false
     t.boolean "unread", default: true, null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "type"
     t.string "guid", null: false
     t.index ["guid"], name: "index_notifications_on_guid", unique: true
@@ -233,9 +233,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
   create_table "o_auth_access_tokens", id: :serial, force: :cascade do |t|
     t.integer "authorization_id"
     t.string "token"
-    t.datetime "expires_at", precision: nil
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["authorization_id"], name: "index_o_auth_access_tokens_on_authorization_id"
     t.index ["token"], name: "index_o_auth_access_tokens_on_token", unique: true
   end
@@ -259,8 +259,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
     t.text "jwks"
     t.string "jwks_uri"
     t.boolean "ppid", default: false
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_o_auth_applications_on_client_id", unique: true
     t.index ["user_id"], name: "index_o_auth_applications_on_user_id"
   end
@@ -287,8 +287,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
     t.integer "target_id"
     t.string "target_type", limit: 60, null: false
     t.integer "author_id"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "count", default: 1, null: false
     t.index ["author_id"], name: "index_participations_on_author_id"
     t.index ["guid"], name: "index_participations_on_guid"
@@ -300,8 +300,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
     t.string "diaspora_handle", null: false
     t.text "serialized_public_key", null: false
     t.integer "owner_id"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "closed_account", default: false
     t.integer "fetch_status", default: 0
     t.integer "pod_id"
@@ -321,8 +321,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
     t.string "remote_photo_name"
     t.string "random_string"
     t.string "processed_image"
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string "unprocessed_image"
     t.string "status_message_guid"
     t.integer "height"
@@ -335,11 +335,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
   create_table "pods", id: :serial, force: :cascade do |t|
     t.string "host", null: false
     t.boolean "ssl"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "status", default: 0
-    t.datetime "checked_at", precision: nil, default: "1970-01-01 00:00:00"
-    t.datetime "offline_since", precision: nil
+    t.datetime "checked_at", default: "1970-01-01 00:00:00"
+    t.datetime "offline_since"
     t.integer "response_time", default: -1
     t.string "software"
     t.string "error"
@@ -375,8 +375,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
     t.integer "author_id", null: false
     t.integer "poll_id", null: false
     t.string "guid"
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["guid"], name: "index_poll_participations_on_guid", unique: true
     t.index ["poll_id", "author_id"], name: "index_poll_participations_on_poll_id_and_author_id", unique: true
   end
@@ -386,8 +386,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
     t.integer "status_message_id", null: false
     t.boolean "status"
     t.string "guid"
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["guid"], name: "index_polls_on_guid", unique: true
     t.index ["status_message_id"], name: "index_polls_on_status_message_id"
   end
@@ -398,15 +398,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
     t.string "guid", null: false
     t.string "type", limit: 40, null: false
     t.text "text"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "provider_display_name"
     t.string "root_guid"
     t.integer "likes_count", default: 0
     t.integer "comments_count", default: 0
     t.integer "o_embed_cache_id"
     t.integer "reshares_count", default: 0
-    t.datetime "interacted_at", precision: nil
+    t.datetime "interacted_at"
     t.string "tweet_id"
     t.integer "open_graph_cache_id"
     t.text "tumblr_ids"
@@ -442,8 +442,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
     t.text "bio"
     t.boolean "searchable", default: true, null: false
     t.integer "person_id", null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "location"
     t.string "full_name", limit: 70
     t.boolean "nsfw", default: false
@@ -467,8 +467,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
     t.string "item_type", null: false
     t.boolean "reviewed", default: false
     t.text "text"
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer "user_id", null: false
     t.string "action"
     t.string "originator_diaspora_handle"
@@ -478,16 +478,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
   create_table "roles", id: :serial, force: :cascade do |t|
     t.integer "person_id"
     t.string "name"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["person_id", "name"], name: "index_roles_on_person_id_and_name", unique: true
   end
 
   create_table "search_histories", force: :cascade do |t|
     t.integer "user_id"
     t.string "search_term"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["search_term"], name: "index_search_histories_on_search_term"
     t.index ["user_id"], name: "index_search_histories_on_user_id"
   end
@@ -499,8 +499,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
     t.string "access_token"
     t.string "access_secret"
     t.string "nickname"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["type", "uid"], name: "index_services_on_type_and_uid"
     t.index ["user_id"], name: "index_services_on_user_id"
   end
@@ -524,24 +524,24 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
   create_table "simple_captcha_data", id: :serial, force: :cascade do |t|
     t.string "key", limit: 40
     t.string "value", limit: 12
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["key"], name: "idx_key"
   end
 
   create_table "stream_languages", force: :cascade do |t|
     t.integer "user_id"
     t.string "language_id"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_stream_languages_on_user_id"
   end
 
   create_table "tag_followings", id: :serial, force: :cascade do |t|
     t.integer "tag_id", null: false
     t.integer "user_id", null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["tag_id", "user_id"], name: "index_tag_followings_on_tag_id_and_user_id", unique: true
     t.index ["tag_id"], name: "index_tag_followings_on_tag_id"
     t.index ["user_id"], name: "index_tag_followings_on_user_id"
@@ -550,8 +550,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
   create_table "tag_synonyms", force: :cascade do |t|
     t.string "synonym", null: false
     t.string "tag_name", null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["synonym"], name: "index_tag_synonyms_on_synonym", unique: true
     t.index ["tag_name"], name: "index_tag_synonyms_on_tag_name"
   end
@@ -563,7 +563,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
     t.integer "tagger_id"
     t.string "tagger_type", limit: 127
     t.string "context", limit: 127
-    t.datetime "created_at", precision: nil
+    t.datetime "created_at"
     t.index ["created_at"], name: "index_taggings_on_created_at"
     t.index ["tag_id"], name: "index_taggings_on_tag_id"
     t.index ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context"
@@ -580,8 +580,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
   create_table "user_preferences", id: :serial, force: :cascade do |t|
     t.string "email_type"
     t.integer "user_id"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["user_id", "email_type"], name: "index_user_preferences_on_user_id_and_email_type"
   end
 
@@ -594,31 +594,31 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
-    t.datetime "remember_created_at", precision: nil
+    t.datetime "remember_created_at"
     t.integer "sign_in_count", default: 0
-    t.datetime "current_sign_in_at", precision: nil
-    t.datetime "last_sign_in_at", precision: nil
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "invited_by_id"
     t.string "unconfirmed_email"
     t.string "confirm_email_token", limit: 30
-    t.datetime "locked_at", precision: nil
+    t.datetime "locked_at"
     t.boolean "show_community_spotlight_in_stream", default: true, null: false
     t.boolean "auto_follow_back", default: false
     t.integer "auto_follow_back_aspect_id"
     t.text "hidden_shareables"
-    t.datetime "reset_password_sent_at", precision: nil
-    t.datetime "last_seen", precision: nil
-    t.datetime "remove_after", precision: nil
+    t.datetime "reset_password_sent_at"
+    t.datetime "last_seen"
+    t.datetime "remove_after"
     t.string "export"
-    t.datetime "exported_at", precision: nil
+    t.datetime "exported_at"
     t.boolean "exporting", default: false
     t.boolean "strip_exif", default: true
     t.string "exported_photos_file"
-    t.datetime "exported_photos_at", precision: nil
+    t.datetime "exported_photos_at"
     t.boolean "exporting_photos", default: false
     t.string "color_theme"
     t.boolean "post_default_public", default: false

@@ -15,12 +15,13 @@ module ApplicationHelper
   def range_tag(post, *args)
     if post.public?
       visibility = t("post.visibility.global")
-      content = "<i class=\"bi bi-globe\" role=\"img\" aria-label=\"#{visibility}\" title=\"#{visibility}\"></i>"
+      content = "<i class=\"bi bi-globe\" role=\"img\" aria-label=\"#{visibility}\"
+                  data-bs-toggle=\"tooltip\" title=\"#{visibility}\"></i>"
     else
       visibility = t("post.visibility.limited")
-      content = "<i class=\"bi bi-people-fill\" role=\"img\" aria-label=\"#{visibility}\" title=\"#{visibility}\"></i>"
+      content = "<i class=\"bi bi-people-fill\" role=\"img\" aria-label=\"#{visibility}\"
+                  data-bs-toggle=\"tooltip\" title=\"#{visibility}\"></i>"
     end
-
     content_tag("span", content.html_safe, args)
   end
 
