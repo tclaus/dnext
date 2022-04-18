@@ -5,5 +5,6 @@
         = render partial: "streams/stream_element", locals: {post: post}
     .col-md-6
       .stream-element
+        = render partial: "posts/single_post_interactions", locals: {post: post}
         = render partial: "streams/comments/comments", locals: {comments: post.root_comments}
      

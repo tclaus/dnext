@@ -5,6 +5,8 @@ import "popper"
 import "bootstrap"
 
 import "controllers"
-import LocalTime from "local-time"
 
+import "custom/tooltips"
+
+import LocalTime from "local-time"
 LocalTime.start()

@@ -20,11 +20,10 @@ class Post < ApplicationRecord
   acts_as_taggable_on :tags
   extract_tags_from :text
 
-  has_many :participations, dependent: :delete_all, as: :target, inverse_of: :target
-  has_many :participants, through: :participations, source: :author
-
   attr_accessor :user_like
 
+  has_many :participations, dependent: :delete_all, as: :target, inverse_of: :target
+  has_many :participants, through: :participations, source: :author
   has_many :reports, as: :item
 
   has_many :reshares, class_name: "Reshare", foreign_key: :root_guid, primary_key: :guid

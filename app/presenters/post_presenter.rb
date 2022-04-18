@@ -11,4 +11,17 @@ class PostPresenter < BasePresenter
   def page_title
     post_page_title @post
   end
+
+  def likes
+    LikeService.new(current_user)
+               .find_for_post(@post.id)
+               .limit(30)
+  end
+
+  def reshares
+    ReshareService.new(current_user)
+                  .find_for_post(@post.id)
+                  .limit(30)
+  end
+
 end

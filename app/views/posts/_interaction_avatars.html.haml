@@ -1,0 +1,6 @@
+- interaction.each do |interaction|
+  = link_to person_path(interaction.author), class: "img" do
+    = image_tag(interaction.author.avatar_small, class: "avatar avatar-micro",
+    data: {bs_toggle:"tooltip",
+    bs_content:"What a content"},
+    title: interaction.author.name)

@@ -1,0 +1,30 @@
+.single-post-interactions
+  - if post.reshares_count > 0
+    .reshares.clearfix
+      .count.float-start
+        %i.entypo-reshare.middle.gray
+        %span
+          = post.reshares_count
+      .interaction-avatars
+        = render partial: "posts/interaction_avatars", locals: {interaction: post.reshares}
+  - if post.likes_count > 0
+    .likes.clearfix
+      .count.float-start
+        %i.entypo-heart.middle.gray
+        %span
+          = post.likes_count
+      .interaction-avatars
+        = render partial: "posts/interaction_avatars", locals: {interaction: post.likes}
+  - if post.comments_count > 0
+    .comments.clearfix
+      .count.float-start
+        %i.entypo-comment.middle.gray
+        %span
+          = post.comments_count
+  - else
+    .no-comments.clearfix
+      %h4
+        = t("comments.no_comments")
+
+
+
