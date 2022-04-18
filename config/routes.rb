@@ -34,6 +34,14 @@ Rails.application.routes.draw do
 
   get "login" => redirect("/users/sign_in")
 
+  resources :posts, only: %i[show destroy] do
+    resources :likes, only: %i[create destroy index]
+    resources :comments, only: %i[new create destroy index]
+    resources :reshares, only: :index
+  end
+
+  get "p/:id", to: "posts#show", as: "short_post"
+
   # Streams
   get "public", to: redirect("streams/public")
   get "stream", to: "streams#multi", as: :stream

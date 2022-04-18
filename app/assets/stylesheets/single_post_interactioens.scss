@@ -1,0 +1,29 @@
+
+.single-post-interactions>.likes,
+.single-post-interactions>.reshares,
+.single-post-interactions>.comments {
+
+  margin-left: 10px;
+  padding: 10px 0;
+  color: gray;
+}
+.single-post-interactions {
+  .no-comments {
+    text-align: center;
+  }
+  a {
+    text-decoration: none;
+  }
+  .count i{
+    vertical-align: middle;
+  }
+
+  .interaction-avatars {
+    margin-left: 40px;
+    margin-top: 5px;
+
+    .avatar {
+      border: 1px solid lightgray;
+    }
+  }
+}

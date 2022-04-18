@@ -79,6 +79,12 @@
     border-top: 1px dotted #ddd;
     padding-top: 10px;
   }
+
+  .threaded-comment {
+    margin-left: 10px;
+    border-left: 3px solid darkgray;
+    padding-left: 5px;
+  }
 }
 
 .stream-element-footer {

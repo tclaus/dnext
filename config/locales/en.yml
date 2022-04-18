@@ -175,4 +175,6 @@ en:
       success_activation: "Successfully activated two-factor authentication"
       success_deactivation: "Successfully deactivated two-factor authentication"
       error_token: "Token was incorrect or invalid"
+  comments:
+    no_comments: "There are no comments yet."
 

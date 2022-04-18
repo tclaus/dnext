@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_01_03_204111) do
+ActiveRecord::Schema[7.0].define(version: 2022_03_31_174032) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -98,9 +98,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_01_03_204111) do
     t.datetime "updated_at", precision: nil, null: false
     t.integer "likes_count", default: 0, null: false
     t.string "commentable_type", limit: 60, default: "Post", null: false
+    t.string "thread_parent_guid"
     t.index ["author_id"], name: "index_comments_on_person_id"
     t.index ["commentable_id", "commentable_type"], name: "index_comments_on_commentable_id_and_commentable_type"
     t.index ["guid"], name: "index_comments_on_guid", unique: true
+    t.index ["thread_parent_guid"], name: "index_thread_parent_guid"
   end
 
   create_table "contacts", id: :serial, force: :cascade do |t|
@@ -344,6 +346,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_01_03_204111) do
     t.integer "port"
     t.boolean "blocked", default: false
     t.boolean "scheduled_check", default: false, null: false
+    t.index ["blocked"], name: "index_pods_blocked"
     t.index ["checked_at"], name: "index_pods_on_checked_at"
     t.index ["host", "port"], name: "index_pods_on_host_and_port", unique: true
     t.index ["offline_since"], name: "index_pods_on_offline_since"
@@ -410,6 +413,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_01_03_204111) do
     t.string "language_id"
     t.index ["author_id", "root_guid"], name: "index_posts_on_author_id_and_root_guid", unique: true
     t.index ["author_id"], name: "index_posts_on_person_id"
+    t.index ["created_at", "author_id", "id"], name: "index_on_created_at"
     t.index ["created_at", "id"], name: "index_posts_on_created_at_and_id"
     t.index ["guid"], name: "index_posts_on_guid", unique: true
     t.index ["id", "type"], name: "index_posts_on_id_and_type"

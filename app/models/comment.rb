@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Comment < ApplicationRecord
   include Diaspora::Commentable
   include Diaspora::Federated::Base
@@ -11,6 +13,7 @@ class Comment < ApplicationRecord
 
   belongs_to :commentable, class_name: "Comment", touch: true, polymorphic: true, counter_cache: true
   has_one :signature, class_name: "CommentSignature", dependent: :delete
+
   alias_attribute :post, :commentable
   alias_attribute :parent, :commentable
 
@@ -18,8 +21,9 @@ class Comment < ApplicationRecord
   delegate :comment_email_subject, to: :parent
   delegate :author_name, to: :parent, prefix: true
 
-  validates :text, presence: true, length: { maximum: 65535 }
-  has_many :reports, as: :reportable
+  validates :text, presence: true, length: {maximum: 65_535}
+  has_many :reports, as: :reportable, dependent: :destroy
+  has_many :sub_comments, class_name:"Comment", foreign_key: :thread_parent_guid, primary_key: :guid, dependent: :destroy
 
   acts_as_taggable_on :tags
   extract_tags_from :text
@@ -39,5 +43,13 @@ class Comment < ApplicationRecord
 
   def rendered_text
     Diaspora::MessageRenderer.new(text).markdownified
+  end
+
+  def has_parent_comment?
+    thread_parent_guid.present?
+  end
+
+  def is_root_comment?
+    thread_parent_guid.nil?
   end
 end
