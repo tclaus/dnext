@@ -1,0 +1,7 @@
+- if post.own_interaction_state[:liked]
+  - if post.likes_count == 1
+    = t("post-status.you_like_it")
+  - else
+    = t("post-status.you_and_others_like_it", count: post.likes_count.to_fs(:human))
+- else
+  = t("post-status.likes", count: post.likes_count.to_fs(:human))

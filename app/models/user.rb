@@ -2,6 +2,7 @@
 
 class User < ApplicationRecord
   include Querying
+  include SocialActions
 
   # attr_accessor :plain_otp_secret
 
@@ -295,5 +296,12 @@ class User < ApplicationRecord
     return if unconfirmed_email.blank?
 
     Workers::Mail::ConfirmEmail.perform_async(id)
+  end
+
+  ######### Posts and Such ###############
+  def retract(target)
+    retraction = Diaspora::Federated::Retraction.for(target)
+    retraction.defer_dispatch(self)
+    retraction.perform
   end
 end

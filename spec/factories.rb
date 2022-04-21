@@ -132,7 +132,7 @@ FactoryBot.define do
     end
 
     factory(:status_message_in_aspect) do
-      public { false } # rubocop:disable Layout/EmptyLinesAroundAccessModifier
+      public { false }
       author { FactoryBot.create(:user_with_aspect).person }
       after(:build) do |sm|
         sm.aspects << sm.author.owner.aspects.first
@@ -159,8 +159,8 @@ FactoryBot.define do
 
   factory(:location) do
     sequence(:address) {|n| "Fernsehturm Berlin, #{n}, Berlin, Germany" }
-    sequence(:lat) {|n| 52.520645 + 0.0000001 * n }
-    sequence(:lng) {|n| 13.409779 + 0.0000001 * n }
+    sequence(:lat) {|n| 52.520645 + (0.0000001 * n) }
+    sequence(:lng) {|n| 13.409779 + (0.0000001 * n) }
   end
 
   factory :participation do

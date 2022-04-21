@@ -431,7 +431,7 @@ class Person < ApplicationRecord
     lock_access!
     owner.lock_access! if owner.present?
     AccountDeletion.create(person: self) unless AccountDeletion.exists?(person: self)
-    Workers::WipeAccount.perform_async(id)
+    Workers::WipeAccount.perform_later(id)
   end
 
   def clear_profile!

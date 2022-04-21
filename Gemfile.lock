@@ -497,6 +497,7 @@ DEPENDENCIES
   rqrcode (~> 2.1, >= 2.1.1)
   rspec-json_expectations (~> 2.1)
   rspec-rails (~> 5.1)
+  rubocop
   rubocop-rails (~> 2.13, >= 2.13.2)
   ruby-oembed (~> 0.15.0)
   sassc-rails (~> 2.1, >= 2.1.2)

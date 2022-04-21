@@ -3,7 +3,7 @@
     - if post.likes_count > 0
       %div
         %i.bi.bi-heart
-        = t("post-status.likes", count: post.likes_count)
+        = render partial: "streams/interactions/like_counts", locals: {post: post}
     - if post.comments_count > 0
       %div
         %i.bi.bi-chat

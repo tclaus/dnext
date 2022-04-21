@@ -9,3 +9,7 @@ de:
       title: "Öffentliche Aktivität"
     multi:
       title: "Stream"
+  post-status:
+    you_like_it: "Dir gefällt das"
+    you_and_others_like_it: "Dir und %{count} anderen gefällt das"
+    likes: "%{count} gefällt das"

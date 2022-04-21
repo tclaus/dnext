@@ -10,16 +10,16 @@ module Diaspora
         @target = target
       end
 
-      def create!(options = {})
+      def create!(options={})
         relayable = build(options)
-        if relayable.save!
-          logger.info "user:#{@user.id} dispatching #{relayable.class}:#{relayable.guid}"
-          Diaspora::Federation::Dispatcher.defer_dispatch(@user, relayable)
-          relayable
-        end
+        return unless relayable.save!
+
+        logger.info "user:#{@user.id} dispatching #{relayable.class}:#{relayable.guid}"
+        Diaspora::Federation::Dispatcher.defer_dispatch(@user, relayable)
+        relayable
       end
 
-      def build(options = {})
+      def build(options={})
         self.class.federated_class.new(options.merge(relayable_options).merge(author_id: @user.person.id))
       end
 
