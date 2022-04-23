@@ -8,7 +8,6 @@ class Post < ApplicationRecord
   self.include_root_in_json = false
 
   include ApplicationHelper
-
   include Diaspora::Commentable
   include Diaspora::Federated::Base
   include Diaspora::Federated::Fetchable
@@ -41,6 +40,20 @@ class Post < ApplicationRecord
 
   before_destroy do
     reshares.update_all(root_guid: nil)
+  end
+
+  after_update_commit -> {
+    broadcast_like_updates
+  }
+
+  def broadcast_like_updates
+    broadcast_update_to(:posts, partial: "streams/interactions/own_interactions",
+                                locals:  {post: self},
+                                target:  "post_own_like_#{id}")
+
+    broadcast_update_to(:posts, partial: "streams/interactions/other_interactions",
+                                locals:  {post: self},
+                                target:  "post_like_#{id}")
   end
 
   # scopes

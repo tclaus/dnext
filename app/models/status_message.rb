@@ -1,8 +1,7 @@
 class StatusMessage < Post
+  include PeopleHelper
   include Reference::Source
   include Reference::Target
-
-  include PeopleHelper
 
   validates :text, length: {maximum: 65_535, message: proc {|_p, v|
                                                         I18n.t("status_messages.too_long", count: 65_535, current_length: v[:value].length)

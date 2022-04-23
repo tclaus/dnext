@@ -7,7 +7,7 @@ export default class extends Controller {
     controller_path = "/likes";
 
     initialized() {
-        console.log("Started stimulus container")
+        console.debug("Started stimulus container")
     }
 
     destroyLike(event) {
@@ -24,16 +24,18 @@ export default class extends Controller {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
+                Accept: "application/json",
                 'X-CSRF-Token': this.getCSRFToken(),
             },
             body: JSON.stringify({id: own_like_id})
         })
-            .then(response => {
-                if (!response.ok) {
-                    console.error("Could not remove like: " + response.statusText)
-                } else {
-                    console.info("Remove like received")
-                }
+            .then(response => response.json())
+            .then(data => {
+                console.info("Remove like received")
+                this.replaceInteractionHtml(data)
+            })
+            .catch((error) => {
+                console.error("Error in removing a like: ", error)
             })
     }
 
@@ -49,17 +51,24 @@ export default class extends Controller {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                Accept: "application/json",
                 'X-CSRF-Token': this.getCSRFToken(),
             },
             body: JSON.stringify(this.createLikeParams())
         })
-            .then(response => {
-                if (!response.ok) {
-                    console.error("Could not create like: " + response.statusText)
-                } else {
-                    console.info("Create like received")
-                }
+            .then(response => response.json())
+            .then(data => {
+                console.info("Create like received")
+                this.replaceInteractionHtml(data)
             })
+            .catch((error) => {
+                console.error("Error in creating a new like: ", error)
+            })
+    }
+
+    replaceInteractionHtml(data) {
+        let parent = this.element.parentNode
+        parent.outerHTML = data.element_footer
     }
 
     createLikeParams() {

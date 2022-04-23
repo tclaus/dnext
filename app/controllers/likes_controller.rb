@@ -16,17 +16,36 @@ class LikesController < ApplicationController
             else
               raise "Invalid entity type received."
             end
+    # TODO: ! Comments
+    @post = PostPresenter.new(Post.find(post_id), current_user)
   rescue ActiveRecord::RecordNotFound, ActiveRecord::RecordInvalid
     render plain: I18n.t("likes.create.error"), status: :unprocessable_entity
   else
     respond_to do |format|
       format.html { head :created }
+      format.json do
+        render json: {
+          element_footer: render_to_string(partial: "streams/stream_footer",
+                                           locals:  {post: @post},
+                                           formats: [:html])
+        }
+      end
     end
   end
 
   def destroy
-    if like_service.destroy(params[:id])
-      head :no_content
+    like = Like.find(like_id)
+    if like && like_service.destroy(like.id)
+      respond_to do |format|
+        format.json do
+          post = PostPresenter.new(like.parent, current_user)
+          render json: {
+            element_footer: render_to_string(partial: "streams/stream_footer",
+                                             locals:  {post: post},
+                                             formats: [:html])
+          }
+        end
+      end
     else
       render plain: I18n.t("likes.destroy.error"), status: :not_found
     end
@@ -45,7 +64,10 @@ class LikesController < ApplicationController
 
   private
 
-  # @return [Numeric] A post Id or the Id of a reshare
+  def like_id
+    params[:id]
+  end
+
   def post_id
     params[:post_id]
   end

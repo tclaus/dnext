@@ -3,6 +3,8 @@
 class PostPresenter < BasePresenter
   attr_accessor :post
 
+  # @param [Post] presentable A post or a comment
+  # @param [User] current_user
   def initialize(presentable, current_user=nil)
     @post = presentable
     super
