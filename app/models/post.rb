@@ -47,13 +47,22 @@ class Post < ApplicationRecord
   }
 
   def broadcast_like_updates
-    broadcast_update_to(:posts, partial: "streams/interactions/own_interactions",
-                                locals:  {post: self},
-                                target:  "post_own_like_#{id}")
+    broadcast_update_to_languages(:posts, partial: "streams/interactions/own_interactions",
+                                          locals:  {post: self},
+                                          target:  "post_own_like_#{id}")
 
-    broadcast_update_to(:posts, partial: "streams/interactions/other_interactions",
-                                locals:  {post: self},
-                                target:  "post_like_#{id}")
+    broadcast_update_to_languages(:posts, partial: "streams/interactions/other_interactions",
+                                          locals:  {post: self},
+                                          target:  "post_like_#{id}")
+  end
+
+  def broadcast_update_to_languages(*streamables, **rendering)
+    # TODO: Run through languages with language Files (AVAILABLE_LANGUAGES)
+    I18n.available_locales.each do |language_id, _language_name|
+      cloned_renderings = rendering.clone
+      cloned_renderings[:target] = "#{rendering[:target]}_#{language_id}"
+      broadcast_update_to(*streamables, **cloned_renderings)
+    end
   end
 
   # scopes

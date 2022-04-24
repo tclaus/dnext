@@ -1,6 +1,6 @@
 import {Controller} from "@hotwired/stimulus"
 
-const timeout = 30_000;
+const timeoutMs = 30_000;
 
 export default class extends Controller {
     static targets = ["unlike"]
@@ -17,7 +17,7 @@ export default class extends Controller {
         const own_like_id = this.unlikeTarget.dataset.likeid
 
         const abort_controller = new AbortController();
-        const timeoutId = setTimeout(() => abort_controller.abort(), timeout);
+        const timeoutId = setTimeout(() => abort_controller.abort(), timeoutMs);
 
         fetch(this.controller_path, {
             signal: abort_controller.signal,
@@ -44,7 +44,7 @@ export default class extends Controller {
         event.stopPropagation()
 
         const abort_controller = new AbortController();
-        const timeoutId = setTimeout(() => abort_controller.abort(), timeout);
+        const timeoutId = setTimeout(() => abort_controller.abort(), timeoutMs);
 
         fetch(this.controller_path, {
             signal: abort_controller.signal,
