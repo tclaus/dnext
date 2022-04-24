@@ -22,11 +22,7 @@ export default class extends Controller {
         fetch(this.controller_path, {
             signal: abort_controller.signal,
             method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: "application/json",
-                'X-CSRF-Token': this.getCSRFToken(),
-            },
+            headers: this.defaultHeader(),
             body: JSON.stringify({id: own_like_id})
         })
             .then(response => response.json())
@@ -49,11 +45,7 @@ export default class extends Controller {
         fetch(this.controller_path, {
             signal: abort_controller.signal,
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: "application/json",
-                'X-CSRF-Token': this.getCSRFToken(),
-            },
+            headers: this.defaultHeader(),
             body: JSON.stringify(this.createLikeParams())
         })
             .then(response => response.json())
@@ -64,6 +56,14 @@ export default class extends Controller {
             .catch((error) => {
                 console.error("Error in creating a new like: ", error)
             })
+    }
+
+    defaultHeader() {
+        return  {
+            'Content-Type': 'application/json',
+            Accept: "application/json",
+            'X-CSRF-Token': this.getCSRFToken(),
+        }
     }
 
     replaceInteractionHtml(data) {

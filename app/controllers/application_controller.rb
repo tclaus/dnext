@@ -31,6 +31,7 @@ class ApplicationController < ActionController::Base
   def set_locale(&action)
     if user_signed_in?
       locale = current_user.try(:language) || I18n.default_locale
+      locale = DEFAULT_LANGUAGE unless AVAILABLE_LANGUAGE_CODES.include?(locale)
     else
       locale = http_accept_language.language_region_compatible_from AVAILABLE_LANGUAGE_CODES
       locale ||= DEFAULT_LANGUAGE

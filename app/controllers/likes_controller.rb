@@ -52,10 +52,10 @@ class LikesController < ApplicationController
   end
 
   def index
-    like = if params[:post_id]
-             like_service.find_for_post(params[:post_id])
+    like = if like_for_post?
+             like_service.find_for_post(post_id)
            else
-             like_service.find_for_comment(params[:comment_id])
+             like_service.find_for_comment(comment_id)
            end
     render json: like
       .includes(author: :profile)
