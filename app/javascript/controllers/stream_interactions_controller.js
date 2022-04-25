@@ -12,7 +12,7 @@ export default class extends Controller {
 
     destroyLike(event) {
         console.info("Destroy like on: ", this.getType())
-        event.stopPropagation()
+        event.preventDefault()
 
         const own_like_id = this.unlikeTarget.dataset.likeid
 
@@ -37,7 +37,7 @@ export default class extends Controller {
 
     createLike(event) {
         console.info("Create like on: ", this.getType())
-        event.stopPropagation()
+        event.preventDefault()
 
         const abort_controller = new AbortController();
         const timeoutId = setTimeout(() => abort_controller.abort(), timeoutMs);
