@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 class Contact < ApplicationRecord
+  include Diaspora::Federated::Base
+
   belongs_to :user
   belongs_to :person
 
-  validates :person_id, uniqueness: { scope: :user_id }
+  validates :person_id, uniqueness: {scope: :user_id}
 
   delegate :name, :diaspora_handle, :guid, :first_name,
            to: :person, prefix: true
@@ -34,10 +36,10 @@ class Contact < ApplicationRecord
 
   def destroy_notifications
     Notification.where(
-      target_type: "Person",
-      target_id: person_id,
+      target_type:  "Person",
+      target_id:    person_id,
       recipient_id: user_id,
-      type: "Notifications::StartedSharing"
+      type:         "Notifications::StartedSharing"
     ).destroy_all
   end
 
@@ -47,9 +49,9 @@ class Contact < ApplicationRecord
 
   def in_aspect?(aspect)
     if aspect_memberships.loaded?
-      aspect_memberships.detect { |am| am.aspect_id == aspect.id }
+      aspect_memberships.detect {|am| am.aspect_id == aspect.id }
     elsif aspects.loaded?
-      aspects.detect { |a| a.id == aspect.id }
+      aspects.detect {|a| a.id == aspect.id }
     else
       AspectMembership.exists?(contact_id: id, aspect_id: aspect.id)
     end

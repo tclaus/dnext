@@ -27,7 +27,6 @@ module Diaspora
       # host: AppConfig.pod_uri.authority,
       # protocol: AppConfig.pod_uri.scheme
     }
-    config.active_job.queue_adapter = :sidekiq
 
     # Support unencrypted data in encrypted fields
     # Used for  plain_otp_secret

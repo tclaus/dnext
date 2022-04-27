@@ -39,7 +39,7 @@ class Post < ApplicationRecord
   end
 
   before_destroy do
-    reshares.update_all(root_guid: nil)
+    reshares.update_all(root_guid: nil) # rubocop:disable Rails/SkipsModelValidations
   end
 
   after_update_commit -> {
@@ -48,11 +48,11 @@ class Post < ApplicationRecord
 
   def broadcast_like_updates
     broadcast_update_to_languages(:posts, partial: "streams/interactions/own_interactions",
-                                          locals:  {post: self},
+                                          locals:  {entry: self},
                                           target:  "post_own_like_#{id}")
 
     broadcast_update_to_languages(:posts, partial: "streams/interactions/other_interactions",
-                                          locals:  {post: self},
+                                          locals:  {entry: self},
                                           target:  "post_like_#{id}")
   end
 
@@ -198,7 +198,7 @@ class Post < ApplicationRecord
 
   # @return [Integer]
   def update_reshares_counter
-    self.class.where(id: id).update_all(reshares_count: reshares.count)
+    self.class.where(id: id).update_all(reshares_count: reshares.count) # rubocop:disable Rails/SkipsModelValidations
   end
 
   def self.diaspora_initialize(params)

@@ -1,0 +1,7 @@
+- if comment.likes_count > 0
+  %div
+    %i.bi.bi-heart
+      - if comment.own_interaction_state[:liked]
+        = render partial: "streams/interactions/own_interactions", locals:{entry: comment}
+      - else
+        = render partial: "streams/interactions/other_interactions", locals: {entry: comment}

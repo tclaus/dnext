@@ -7,7 +7,7 @@ export default class extends Controller {
     controller_path = "/likes";
 
     initialized() {
-        console.debug("Started stimulus container")
+        console.debug("Started stream-interactions controller")
     }
 
     destroyLike(event) {
@@ -67,8 +67,14 @@ export default class extends Controller {
     }
 
     replaceInteractionHtml(data) {
-        let parent = this.element.parentNode
-        parent.outerHTML = data.element_footer
+        if (this.getType() === "post" || this.getType() === "reshare") {
+            let parent = this.element.parentNode
+            parent.outerHTML = data.element_footer
+        }
+        if (this.getType() === "comment") {
+            let comment_interactions = this.element.querySelector(".comment-interactions")
+            comment_interactions.innerHTML = data.element_footer
+        }
     }
 
     createLikeParams() {

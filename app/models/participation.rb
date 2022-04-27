@@ -1,5 +1,5 @@
 class Participation < ApplicationRecord
-  # include Diaspora::Federated::Base
+  include Diaspora::Federated::Base
   include Diaspora::Fields::Guid
   include Diaspora::Fields::Author
   include Diaspora::Fields::Target
@@ -10,7 +10,7 @@ class Participation < ApplicationRecord
     end
 
     def relayable_options
-      { target: @target }
+      {target: @target}
     end
   end
 

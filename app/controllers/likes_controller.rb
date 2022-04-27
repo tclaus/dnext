@@ -9,43 +9,23 @@ class LikesController < ApplicationController
   end
 
   def create
-    @like = if like_for_post?
-              like_service.create_for_post(post_id)
-            elsif like_for_comment?
-              like_service.create_for_comment(comment_id)
-            else
-              raise "Invalid entity type received."
-            end
-    # TODO: ! Comments
-    @post = PostPresenter.new(Post.find(post_id), current_user)
+    if like_for_post?
+      create_for_post
+    elsif like_for_comment?
+      create_for_comment
+    else
+      raise "Invalid entity type received."
+    end
   rescue ActiveRecord::RecordNotFound, ActiveRecord::RecordInvalid
     render plain: I18n.t("likes.create.error"), status: :unprocessable_entity
-  else
-    respond_to do |format|
-      format.html { head :created }
-      format.json do
-        render json: {
-          element_footer: render_to_string(partial: "streams/stream_footer",
-                                           locals:  {post: @post},
-                                           formats: [:html])
-        }
-      end
-    end
   end
 
   def destroy
     like = Like.find(like_id)
     if like && like_service.destroy(like.id)
-      respond_to do |format|
-        format.json do
-          post = PostPresenter.new(like.parent, current_user)
-          render json: {
-            element_footer: render_to_string(partial: "streams/stream_footer",
-                                             locals:  {post: post},
-                                             formats: [:html])
-          }
-        end
-      end
+      return response_for_comment(like.parent) if like.target_type.eql?("Comment")
+
+      return response_for_post(like.parent) if like.target_type.eql?("Post")
     else
       render plain: I18n.t("likes.destroy.error"), status: :not_found
     end
@@ -63,6 +43,45 @@ class LikesController < ApplicationController
   end
 
   private
+
+  def create_for_comment
+    @like = like_service.create_for_comment(comment_id)
+    response_for_comment(@like.parent)
+  end
+
+  def create_for_post
+    @like = like_service.create_for_post(post_id)
+    response_for_post(@like.parent)
+  end
+
+  def response_for_comment(comment)
+    comment.reload
+    respond_to do |format|
+      format.html { head :created }
+      format.json do
+        comment = CommentPresenter.new(comment, current_user)
+        render json: {
+          element_footer: render_to_string(partial: "streams/comments/comment_interactions",
+                                           locals:  {comment: comment},
+                                           formats: [:html])
+        }
+      end
+    end
+  end
+
+  def response_for_post(post)
+    respond_to do |format|
+      format.html { head :created }
+      format.json do
+        post = PostPresenter.new(post, current_user)
+        render json: {
+          element_footer: render_to_string(partial: "streams/stream_footer",
+                                           locals:  {post: post},
+                                           formats: [:html])
+        }
+      end
+    end
+  end
 
   def like_id
     params[:id]

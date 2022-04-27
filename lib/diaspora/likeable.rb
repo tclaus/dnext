@@ -13,13 +13,12 @@ module Diaspora
       end
     end
 
-    # @return [Integer]
     def update_likes_counter
       likeable = self.class.where(id: id)
-      if likeable
-        likeable.update_all(likes_count: likes.count)
-        likeable.first.broadcast_like_updates
-      end
+      return unless likeable
+
+      likeable.update_all(likes_count: likes.count) # rubocop:disable Rails/SkipsModelValidations
+      likeable.first.broadcast_like_updates
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class StatusMessage < Post
   include PeopleHelper
   include Reference::Source
