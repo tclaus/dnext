@@ -1,15 +1,10 @@
-.comment{data: {id: "#{comment.guid}"}}
+.comment{id: dom_id(comment), data: { controller: "stream-interactions"}}
   .img
     = render "streams/comments/comment_author", {author: comment.author, created_at: comment.created_at}
   = comment.rendered_text
-  .div
-    = link_to "#", rel: "nofollow", role: "button" do
-      %i.bi.bi-heart
-      = t("comment-actions.like")
-    &#8231
-    = link_to "#", rel: "nofollow", role: "button" do
-      %i.bi.bi-chat
-      = t("comment-actions.answer")
-  - comment.sub_comments.each do |comment|
+  %div.comment-interactions
+    = render partial: "streams/comments/comment_interactions", locals: {comment: comment}
+  %div
+  - comment.sub_comments.each do |sub_comment|
     .threaded-comment
-      = render partial: "streams/comments/comment", locals: {comment: comment}
+      = render partial: "streams/comments/comment", locals: {comment: sub_comment}

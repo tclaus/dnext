@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Notification < ApplicationRecord
   include Diaspora::Fields::Guid
 
@@ -6,7 +8,7 @@ class Notification < ApplicationRecord
   has_many :actors, class_name: "Person", through: :notification_actors, source: :person
   belongs_to :target, polymorphic: true
 
-  def self.for(recipient, opts = {})
+  def self.for(recipient, opts={})
     where(opts.merge!(recipient_id: recipient.id)).order("updated_at DESC")
   end
 

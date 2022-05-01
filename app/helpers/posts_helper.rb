@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PostsHelper
   def post_page_title(post, opts={})
     if post.is_a?(Photo)

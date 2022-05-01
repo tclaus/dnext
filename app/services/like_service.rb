@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class LikeService
-  def initialize(user = nil)
+  def initialize(user=nil)
     @user = user
   end
 
@@ -40,17 +40,17 @@ class LikeService
 
   def unlike_post(post_id)
     likes = post_service.find!(post_id).likes
-    likes = likes.order(Arel.sql("author_id = #{user.person.id} DESC"))
-    if !likes.empty? && user.owns?(likes[0])
-      user.retract(likes[0])
-      true
-    else
-      false
-    end
+    retract_own_like(likes)
   end
 
   def unlike_comment(comment_id)
     likes = comment_service.find!(comment_id).likes
+    retract_own_like(likes)
+  end
+
+  private
+
+  def retract_own_like(likes)
     likes = likes.order(Arel.sql("author_id = #{user.person.id} DESC"))
     if !likes.empty? && user.owns?(likes[0])
       user.retract(likes[0])
@@ -59,8 +59,6 @@ class LikeService
       false
     end
   end
-
-  private
 
   attr_reader :user
 

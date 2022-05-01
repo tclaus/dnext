@@ -8,7 +8,6 @@ class Post < ApplicationRecord
   self.include_root_in_json = false
 
   include ApplicationHelper
-
   include Diaspora::Commentable
   include Diaspora::Federated::Base
   include Diaspora::Federated::Fetchable
@@ -40,7 +39,31 @@ class Post < ApplicationRecord
   end
 
   before_destroy do
-    reshares.update_all(root_guid: nil)
+    reshares.update_all(root_guid: nil) # rubocop:disable Rails/SkipsModelValidations
+  end
+
+  after_update_commit -> {
+    broadcast_like_updates
+  }
+
+  def broadcast_like_updates
+    broadcast_update_to_languages(:posts, partial: "streams/interactions/own_interactions",
+                                          locals:  {entry: self},
+                                          target:  "post_own_like_#{id}")
+
+    broadcast_update_to_languages(:posts, partial: "streams/interactions/other_interactions",
+                                          locals:  {entry: self},
+                                          target:  "post_like_#{id}")
+  end
+
+  def broadcast_update_to_languages(*streamables, **rendering)
+    AVAILABLE_LANGUAGES.each do |language_id, _language_name|
+      cloned_renderings = rendering.clone
+      cloned_renderings[:target] = "#{rendering[:target]}_#{language_id}"
+      I18n.with_locale(language_id) do
+        broadcast_update_to(*streamables, **cloned_renderings)
+      end
+    end
   end
 
   # scopes
@@ -175,7 +198,7 @@ class Post < ApplicationRecord
 
   # @return [Integer]
   def update_reshares_counter
-    self.class.where(id: id).update_all(reshares_count: reshares.count)
+    self.class.where(id: id).update_all(reshares_count: reshares.count) # rubocop:disable Rails/SkipsModelValidations
   end
 
   def self.diaspora_initialize(params)

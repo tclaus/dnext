@@ -3,12 +3,12 @@
     - if post.likes_count > 0
       %div
         %i.bi.bi-heart
-        = t("post-status.likes", count: post.likes_count)
+        = render partial: "streams/interactions/like_counts", locals: {entry: post}
     - if post.comments_count > 0
       %div
         %i.bi.bi-chat
-        = t("post-status.comments", count: post.comments_count)
+        = t("post-status.comments", count: post.comments_count.to_fs(:human))
     - if post.reshares_count > 0
       %div
         %i.bi.bi-share
-        = t("post-status.shares", count: post.reshares_count)
+        = t("post-status.shares", count: post.reshares_count.to_fs(:human))

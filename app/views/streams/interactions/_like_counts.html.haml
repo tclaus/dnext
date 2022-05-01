@@ -1,0 +1,6 @@
+- if entry.own_interaction_state[:liked]
+  = turbo_frame_tag "post_own_like_#{entry.id}_#{I18n.locale}" do
+    = render partial: "streams/interactions/own_interactions", locals:{entry: entry}
+- else
+  = turbo_frame_tag "post_like_#{entry.id}_#{I18n.locale}" do
+    = render partial: "streams/interactions/other_interactions", locals: {entry: entry}

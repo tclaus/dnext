@@ -41,15 +41,19 @@ en:
     like: "Like"
     comment: "Comment"
     share: "Share"
+    unlike: "Unlike"
   post-status:
     likes: "%{count} Likes"
     comments: "%{count} Comments"
     shares: "%{count} Shares"
+    you_like_it: "You like that."
+    you_and_others_like_it: "You and %{count} others like that."
+    you_and_one_other_person_like_it: "You and one other person like that."
   post:
     visibility:
       global: "Post is globally visible"
       limited: "Post has limited audience"
-    rehare_removed: "Original post was removed."
+    reshare_removed: "Original post was removed."
   tags:
     name_too_long: "Please make your tag name fewer than %{count} characters. Right now it is %{current_length} characters"
   comment-actions:
@@ -177,4 +181,11 @@ en:
       error_token: "Token was incorrect or invalid"
   comments:
     no_comments: "There are no comments yet."
+  likes:
+    create:
+      error: "Could not create a like"
+    destroy:
+      error: "Could not remove a like."
+  pot-status:
+    you_and_other_like_it: "You and :count people like it"
 

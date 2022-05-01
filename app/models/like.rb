@@ -1,4 +1,5 @@
 class Like < ApplicationRecord
+  include Diaspora::Federated::Base
   include Diaspora::Fields::Guid
   include Diaspora::Fields::Author
   include Diaspora::Fields::Target
@@ -8,18 +9,18 @@ class Like < ApplicationRecord
 
   alias_attribute :parent, :target
 
+  after_commit on: :create do
+    parent.update_likes_counter
+  end
+
   class Generator < Diaspora::Federated::Generator
     def self.federated_class
       Like
     end
 
     def relayable_options
-      { target: @target, positive: true }
+      {target: @target, positive: true}
     end
-  end
-
-  after_commit on: :create do
-    parent.update_likes_counter
   end
 
   after_destroy do

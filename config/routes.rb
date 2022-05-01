@@ -57,6 +57,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resource :likes, only: [:create, :destroy]
+
   # Users and people
   resources :people, only: %i[show index] do
     resources :photos, except: %i[new update]

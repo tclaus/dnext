@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
   rescue_from ActionController::InvalidAuthenticityToken do
     if user_signed_in?
       logger.warn "#{current_user.diaspora_handle} CSRF token fail. referer: #{request.referer || 'empty'}"
-      Workers::Mail::CsrfTokenFail.perform_async(current_user.id)
+      CsrfTokenFail.perform_later(current_user.id)
       sign_out current_user
     end
     flash[:error] = I18n.t("error_messages.csrf_token_fail")
@@ -27,15 +27,18 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # rubocop:disable Naming/AccessorMethodName
   def set_locale(&action)
     if user_signed_in?
       locale = current_user.try(:language) || I18n.default_locale
+      locale = DEFAULT_LANGUAGE unless AVAILABLE_LANGUAGE_CODES.include?(locale)
     else
       locale = http_accept_language.language_region_compatible_from AVAILABLE_LANGUAGE_CODES
       locale ||= DEFAULT_LANGUAGE
     end
     I18n.with_locale(locale, &action)
   end
+  # rubocop:enable Naming/AccessorMethodName
 
   def redirect_unless_admin
     return if current_user.admin?

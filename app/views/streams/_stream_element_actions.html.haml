@@ -2,15 +2,13 @@
   -if post.provider_display_name.present?
     %strong
       = t("via", provider: post.provider_display_name)
-  %div.post-actions
-    = link_to "#", rel: "nofollow", role: "button" do
-      %i.bi.bi-heart
-      = t("post-actions.like")
-    &#8231
-    = link_to "#", rel: "nofollow", role: "button" do
-      %i.bi.bi-chat
-      = t("post-actions.comment")
-    &#8231
-    = link_to "#", rel: "nofollow", role: "button" do
-      %i.bi.bi-share
-      = t("post-actions.share")
+  = render partial: "streams/interactions/like_action" unless post.own_interaction_state[:liked]
+  = render partial: "streams/interactions/unlike_action", locals: {post: post} if post.own_interaction_state[:liked]
+  &#8231
+  = link_to "#", rel: "nofollow", role: "button" do
+    %i.bi.bi-chat
+    = t("post-actions.comment")
+  &#8231
+  = link_to "#", rel: "nofollow", role: "button" do
+    %i.bi.bi-share
+    = t("post-actions.share")

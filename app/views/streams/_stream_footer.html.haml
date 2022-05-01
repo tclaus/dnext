@@ -1,3 +1,4 @@
 .stream-element-footer
-  = render partial: "streams/stream_element_actions", locals:{post: post}
-  = render partial: "streams/stream_element_status", locals:{post: post}
+  %div{id: dom_id(post), data:{controller: "stream-interactions"}}
+    = render partial: "streams/stream_element_actions", locals:{post: post}
+    = render partial: "streams/stream_element_status", locals:{post: post}

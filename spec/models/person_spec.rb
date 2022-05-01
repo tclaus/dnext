@@ -729,7 +729,7 @@ describe Person, type: :model do
     end
 
     it "closes and wipes the account" do
-      expect(Workers::WipeAccount).to receive(:perform_async).with(@user.person.id)
+      expect(Workers::WipeAccount).to receive(:perform_later).with(@user.person.id)
       @user.post(:status_message, text: "hello", to: @user.aspect_ids)
       @user.person.wipe_and_close_account!
       expect(@user.person.reload.closed_account?).to be true
