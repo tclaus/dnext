@@ -3,8 +3,6 @@
 module Diaspora
   module Federation
     module Mappings
-      # rubocop:disable Metrics/CyclomaticComplexity
-
       # used in Diaspora::Federation::Receive
       def self.receiver_for(federation_entity)
         case federation_entity
@@ -40,9 +38,9 @@ module Diaspora
         when PollParticipation then :poll_participation
         when Profile           then :profile
         when Reshare           then :reshare
-        when Retraction        then :retraction
-        when ContactRetraction then :retraction
-        when StatusMessage     then :status_message
+        when Diaspora::Federated::Retraction        then :retraction
+        when Diaspora::Federated::ContactRetraction then :retraction
+        when StatusMessage then :status_message
         else not_found(diaspora_entity.class)
         end
       end
@@ -75,8 +73,6 @@ module Diaspora
         else not_found(model.class)
         end
       end
-      # rubocop:enable Metrics/CyclomaticComplexity
-
       private_class_method def self.not_found(key)
         raise DiasporaFederation::Entity::UnknownEntity, "unknown entity: #{key}"
       end
