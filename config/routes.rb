@@ -35,7 +35,7 @@ Rails.application.routes.draw do
   get "login" => redirect("/users/sign_in")
 
   resources :posts, only: %i[show destroy] do
-    resources :likes, only: %i[create destroy index]
+    resources :likes, only: %i[create destroy]
     resources :comments, only: %i[new create destroy index]
     resources :reshares, only: :index
   end
@@ -57,7 +57,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resource :likes, only: [:create, :destroy]
+  resource :likes, only: %i[create destroy]
 
   # Users and people
   resources :people, only: %i[show index] do

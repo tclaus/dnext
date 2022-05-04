@@ -1,0 +1,8 @@
+= link_to "#",
+  rel: "nofollow", role: "button",
+  data:{bs_toggle:"tooltip",
+  action: "click->single-stream-interactions#unlike",
+  single_stream_interactions_target: "unlike",
+  likeid: post.own_like.id },
+  title: t("post-actions.unlike") do
+  %i.entypo-heart.red.large

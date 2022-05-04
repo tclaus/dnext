@@ -8,8 +8,5 @@ import "controllers"
 
 import "custom/tooltips"
 
-application.debug = false
-window.Stimulus   = application
-
 import LocalTime from "local-time"
 LocalTime.start()

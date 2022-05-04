@@ -1,8 +1,7 @@
-import {Controller} from "@hotwired/stimulus"
+import Base from "./base"
 
-const timeoutMs = 30_000;
 
-export default class extends Controller {
+export default class extends Base {
     static targets = ["unlike"]
     controller_path = "/likes";
 
@@ -16,11 +15,8 @@ export default class extends Controller {
 
         const own_like_id = this.unlikeTarget.dataset.likeid
 
-        const abort_controller = new AbortController();
-        const timeoutId = setTimeout(() => abort_controller.abort(), timeoutMs);
-
         fetch(this.controller_path, {
-            signal: abort_controller.signal,
+            signal: this.createAbortController().signal,
             method: 'DELETE',
             headers: this.defaultHeader(),
             body: JSON.stringify({id: own_like_id})
@@ -39,11 +35,8 @@ export default class extends Controller {
         console.info("Create like on: ", this.getType())
         event.preventDefault()
 
-        const abort_controller = new AbortController();
-        const timeoutId = setTimeout(() => abort_controller.abort(), timeoutMs);
-
         fetch(this.controller_path, {
-            signal: abort_controller.signal,
+            signal: this.createAbortController().signal,
             method: 'POST',
             headers: this.defaultHeader(),
             body: JSON.stringify(this.createLikeParams())
@@ -56,14 +49,6 @@ export default class extends Controller {
             .catch((error) => {
                 console.error("Error in creating a new like: ", error)
             })
-    }
-
-    defaultHeader() {
-        return  {
-            'Content-Type': 'application/json',
-            Accept: "application/json",
-            'X-CSRF-Token': this.getCSRFToken(),
-        }
     }
 
     replaceInteractionHtml(data) {
@@ -94,11 +79,5 @@ export default class extends Controller {
 
     getId() {
         return this.element.id.split("_")[1]
-    }
-
-    getCSRFToken() {
-        return document.getElementsByName(
-            "csrf-token"
-        )[0].content;
     }
 }

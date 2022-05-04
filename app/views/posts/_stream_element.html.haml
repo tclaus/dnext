@@ -1,0 +1,8 @@
+.row
+  .col-md-8
+    = render partial: "streams/stream_post_author", locals: {author: post.author, created_at: post.created_at, type: "post"}
+    = render partial: "streams/post_header_information", locals: {post: post}
+  .col-md-4
+    = render partial: "posts/single_post_actions", locals: {post: post}
+  %div{class: classify(post.type)}
+    = render partial: "streams/element_body", locals: {post: post}

@@ -31,17 +31,6 @@ class LikesController < ApplicationController
     end
   end
 
-  def index
-    like = if like_for_post?
-             like_service.find_for_post(post_id)
-           else
-             like_service.find_for_comment(comment_id)
-           end
-    render json: like
-      .includes(author: :profile)
-      .as_api_response(:backbone)
-  end
-
   private
 
   def create_for_comment
@@ -73,10 +62,13 @@ class LikesController < ApplicationController
     respond_to do |format|
       format.html { head :created }
       format.json do
-        post = PostPresenter.new(post, current_user)
+        post_presenter = PostPresenter.new(post, current_user)
         render json: {
           element_footer: render_to_string(partial: "streams/stream_footer",
-                                           locals:  {post: post},
+                                           locals:  {post: post_presenter},
+                                           formats: [:html]),
+          sp_actions:     render_to_string(partial: "posts/single_post_actions",
+                                           locals:  {post: post_presenter},
                                            formats: [:html])
         }
       end
