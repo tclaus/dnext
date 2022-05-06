@@ -1,14 +1,39 @@
-import Base from "base"
+import {Controller} from "@hotwired/stimulus"
+import {queryHelper} from "./mixins/queryHelper"
 
-export default class extends Base {
+export default class extends Controller {
     static targets = ["unlike"]
     controller_path = "/likes";
+
+    connect() {
+        queryHelper(this)
+    }
 
     initialized() {
         console.debug("Started stream-interactions controller")
     }
 
-    destroyLike(event) {
+    like(event) {
+        console.info("Create like on: ", this.getType())
+        event.preventDefault()
+
+        fetch(this.controller_path, {
+            signal: this.createAbortController().signal,
+            method: 'POST',
+            headers: this.defaultHeader(),
+            body: JSON.stringify(this.createLikeParams())
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.info("Create like received")
+                this.replaceInteractionHtml(data)
+            })
+            .catch((error) => {
+                console.error("Error in creating a new like: ", error)
+            })
+    }
+
+    unlike(event) {
         console.info("Destroy like on: ", this.getType())
         event.preventDefault()
 
@@ -27,26 +52,6 @@ export default class extends Base {
             })
             .catch((error) => {
                 console.error("Error in removing a like: ", error)
-            })
-    }
-
-    createLike(event) {
-        console.info("Create like on: ", this.getType())
-        event.preventDefault()
-
-        fetch(this.controller_path, {
-            signal: this.createAbortController().signal,
-            method: 'POST',
-            headers: this.defaultHeader(),
-            body: JSON.stringify(this.createLikeParams())
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.info("Create like received")
-                this.replaceInteractionHtml(data)
-            })
-            .catch((error) => {
-                console.error("Error in creating a new like: ", error)
             })
     }
 

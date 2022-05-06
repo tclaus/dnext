@@ -1,8 +1,13 @@
-import Base from "base"
+import {Controller} from "@hotwired/stimulus"
+import {queryHelper} from "./mixins/queryHelper";
 
-export default class extends Base {
+export default class extends Controller {
     static targets = ["unlike"]
     controller_path = "/likes";
+
+    connect() {
+        queryHelper(this)
+    }
 
     initialized() {
         console.debug("Started single-stream-interactions controller")
