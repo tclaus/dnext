@@ -1,5 +1,5 @@
 import {Controller} from "@hotwired/stimulus"
-import {queryHelper} from "./mixins/queryHelper";
+import {queryHelper} from "../custom/mixins/queryHelper";
 
 export default class extends Controller {
     static targets = ["unlike"]
@@ -14,7 +14,7 @@ export default class extends Controller {
     }
 
     like(event) {
-        console.info("Like on single post:", this.getPostId())
+        console.info("Like on post:", this.getPostId())
         event.preventDefault()
 
         fetch(this.controller_path, {

@@ -1,4 +1,3 @@
-import {Controller} from "@hotwired/stimulus"
 const timeoutMs = 30_000;
 
 export const queryHelper = controller => {
