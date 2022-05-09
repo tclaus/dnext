@@ -1,4 +1,4 @@
 %article{id: dom_id(post), class: "stream-element"}
   = render partial: "streams/stream_element", locals: {post: post}
-  = render partial: "streams/stream_footer",locals:{post: post}
+  = render partial: "streams/stream_element_footer",locals:{post: post}
   = render partial: "streams/comments/comments", locals: {comments: post.last_three_comments}

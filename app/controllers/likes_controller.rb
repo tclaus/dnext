@@ -34,13 +34,13 @@ class LikesController < ApplicationController
   private
 
   def create_for_comment
-    @like = like_service.create_for_comment(comment_id)
-    response_for_comment(@like.parent)
+    like = like_service.create_for_comment(comment_id)
+    response_for_comment(like.parent)
   end
 
   def create_for_post
-    @like = like_service.create_for_post(post_id)
-    response_for_post(@like.parent)
+    like = like_service.create_for_post(post_id)
+    response_for_post(like.parent)
   end
 
   def response_for_comment(comment)
@@ -64,12 +64,12 @@ class LikesController < ApplicationController
       format.json do
         post_presenter = PostPresenter.new(post, current_user)
         render json: {
-          element_footer: render_to_string(partial: "streams/stream_footer",
-                                           locals:  {post: post_presenter},
-                                           formats: [:html]),
-          sp_actions:     render_to_string(partial: "posts/single_post_actions",
-                                           locals:  {post: post_presenter},
-                                           formats: [:html])
+          element_footer:      render_to_string(partial: "streams/stream_element_footer",
+                                                locals:  {post: post_presenter},
+                                                formats: [:html]),
+          single_post_actions: render_to_string(partial: "posts/single_post_actions",
+                                                locals:  {post: post_presenter},
+                                                formats: [:html])
         }
       end
     end

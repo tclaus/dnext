@@ -57,7 +57,7 @@ export default class extends Controller {
 
     replaceInteractionHtml(data) {
         let actions = this.element.querySelector("#actions")
-        actions.outerHTML = data.sp_actions
+        actions.outerHTML = data.single_post_actions
     }
 
     getPostId() {
