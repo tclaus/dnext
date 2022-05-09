@@ -38,11 +38,6 @@ class LikesController < ApplicationController
     response_for_comment(like.parent)
   end
 
-  def create_for_post
-    like = like_service.create_for_post(post_id)
-    response_for_post(like.parent)
-  end
-
   def response_for_comment(comment)
     comment.reload
     respond_to do |format|
@@ -56,6 +51,11 @@ class LikesController < ApplicationController
         }
       end
     end
+  end
+
+  def create_for_post
+    like = like_service.create_for_post(post_id)
+    response_for_post(like.parent)
   end
 
   def response_for_post(post)
