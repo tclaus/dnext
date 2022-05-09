@@ -17,4 +17,4 @@ pin "popper", to: "popper.js", preload: true
 pin "bootstrap", to: "bootstrap.min.js", preload: true
 
 pin_all_from "app/javascript/custom", under: "custom"
-pin_all_from "app/javascript/custom/mixins", under: "custom/mixins"
+pin "queryHelper", to: "custom/mixins/queryHelper.js"

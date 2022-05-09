@@ -3,7 +3,7 @@ import "@hotwired/turbo-rails"
 
 import "popper"
 import "bootstrap"
-import "custom/mixins/queryHelper"
+
 import "controllers"
 
 import "custom/tooltips"
