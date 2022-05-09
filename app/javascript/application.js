@@ -5,7 +5,7 @@ import "popper"
 import "bootstrap"
 
 import "controllers"
-import "queryHelper"
+import "mixins"
 
 import "custom/tooltips"
 
