@@ -1,5 +1,5 @@
 import {Controller} from "@hotwired/stimulus"
-import {queryHelper} from "../mixins/queryHelper";
+import {queryHelper} from "../custom/mixins/queryHelper";
 
 export default class extends Controller {
     static targets = ["unlike"]
