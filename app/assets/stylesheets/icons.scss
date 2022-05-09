@@ -3,7 +3,22 @@
   color: #aaa;
 }
 
+[class^="entypo-"].red,
+[class*="entypo-"].red {
+  color: #b02a37;
+}
+
+[class^="entypo-"].small,
+[class*="entypo-"].small {
+  font-size: 1em
+}
+
 [class^="entypo-"].middle,
 [class*="entypo-"].middle {
   font-size: 1.5em;
+}
+
+[class^="entypo-"].large,
+[class*="entypo-"].large {
+  font-size: 2.5em
 }

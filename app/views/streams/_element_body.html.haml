@@ -1,0 +1,9 @@
+- if post.type === "Reshare"
+  = post.rendered_message.html_safe # Print shared post text, then embed original post
+  = render partial: "streams/stream_root_element", locals:{post: post.root, type: "reshare"} if post.root.present?
+  = t("post.reshare_removed") if post.root.nil?
+- else
+  = render partial: "streams/attached_photos", locals:{post: post} if post.photos.exists?
+  = post.rendered_message.html_safe
+  = render partial: "streams/oembed", locals:{post: post}
+  = render partial: "streams/opengraph", locals:{post: post}

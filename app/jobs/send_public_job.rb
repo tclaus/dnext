@@ -7,7 +7,7 @@ class SendPublicJob < SendBaseJob
     return if urls_to_retry.empty?
 
     schedule_retry(retry_count + 1, sender_id, obj_str, urls_to_retry) do |delay, new_retry_count|
-      SendPublicJob.perform_in(delay, sender_id, obj_str, urls_to_retry, xml, new_retry_count)
+      SendPublicJob.set(wait: delay).perform_later(sender_id, obj_str, urls_to_retry, xml, new_retry_count)
     end
   end
 end

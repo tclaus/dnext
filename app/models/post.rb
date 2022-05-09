@@ -54,6 +54,11 @@ class Post < ApplicationRecord
     broadcast_update_to_languages(:posts, partial: "streams/interactions/other_interactions",
                                           locals:  {entry: self},
                                           target:  "post_like_#{id}")
+
+    # for single post
+    broadcast_update_to :post, partial: "posts/single_post_interactions",
+                               locals:  {post: self},
+                               target:  "single_post_interactions_#{id}"
   end
 
   def broadcast_update_to_languages(*streamables, **rendering)

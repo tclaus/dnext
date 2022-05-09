@@ -1,6 +1,6 @@
 = link_to "#", rel: "nofollow", role: "button",
-  data:{action: "click->stream-interactions#destroyLike",
+  data:{action: "click->stream-interactions#unlike",
   stream_interactions_target: "unlike",
-  likeid: "#{post.own_like.id}"} do
+  likeid: post.own_like.id} do
   %i.bi.bi-heart
   = t("post-actions.unlike")

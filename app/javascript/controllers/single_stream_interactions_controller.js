@@ -10,18 +10,18 @@ export default class extends Controller {
     }
 
     initialized() {
-        console.debug("Started stream-interactions controller")
+        console.debug("Started single-stream-interactions controller")
     }
 
     like(event) {
-        console.info("Create like on: ", this.getType())
+        console.info("Like on post:", this.getPostId())
         event.preventDefault()
 
         fetch(this.controller_path, {
             signal: this.createAbortController().signal,
             method: 'POST',
             headers: this.defaultHeader(),
-            body: JSON.stringify(this.createLikeParams())
+            body: JSON.stringify({post_id: this.getPostId()})
         })
             .then(response => response.json())
             .then(data => {
@@ -34,7 +34,7 @@ export default class extends Controller {
     }
 
     unlike(event) {
-        console.info("Destroy like on: ", this.getType())
+        console.info("Unlike on single post", this.getPostId())
         event.preventDefault()
 
         const own_like_id = this.unlikeTarget.dataset.likeid
@@ -56,32 +56,11 @@ export default class extends Controller {
     }
 
     replaceInteractionHtml(data) {
-        if (this.getType() === "post" || this.getType() === "reshare") {
-            let parent = this.element.parentNode
-            parent.outerHTML = data.element_footer
-        }
-        if (this.getType() === "comment") {
-            let comment_interactions = this.element.querySelector(".comment-interactions")
-            comment_interactions.innerHTML = data.element_footer
-        }
+        let actions = this.element.querySelector("#actions")
+        actions.outerHTML = data.single_post_actions
     }
 
-    createLikeParams() {
-        if (this.getType() === "post" || this.getType() === "reshare") {
-            return {post_id: this.getId()}
-        }
-
-        if (this.getType() === "comment") {
-            return {comment_id: this.getId()}
-        }
-    }
-
-    // returns post or comment as a type
-    getType() {
-        return this.element.id.split("_")[0]
-    }
-
-    getId() {
+    getPostId() {
         return this.element.id.split("_")[1]
     }
 }

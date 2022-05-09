@@ -1,10 +1,10 @@
 .container-lg
+  = turbo_stream_from :post
   .row
     .col-md-6
-      %article{id: dom_id(post), class: "stream-element"}
-        = render partial: "streams/stream_element", locals: {post: post}
+      %article{id: dom_id(post), class: "stream-element", data:{controller: "single-stream-interactions"}}
+        = render partial: "posts/stream_element", locals: {post: post}
     .col-md-6
       .stream-element
-        = render partial: "posts/single_post_interactions", locals: {post: post}
+        = render partial: "posts/single_post_turbo_interactions", locals: {post: post}
         = render partial: "streams/comments/comments", locals: {comments: post.root_comments}
-     
