@@ -2,6 +2,8 @@
 
 class LikesController < ApplicationController
   include ApplicationHelper
+  include PostInteractionRender
+
   before_action :authenticate_user!, except: :index
 
   rescue_from Diaspora::Exceptions::NonPublic do
@@ -53,23 +55,6 @@ class LikesController < ApplicationController
           element_footer: render_to_string(partial: "streams/comments/comment_interactions",
                                            locals:  {comment: comment},
                                            formats: [:html])
-        }
-      end
-    end
-  end
-
-  def response_for_post(post)
-    respond_to do |format|
-      format.html { head :created }
-      format.json do
-        post_presenter = PostPresenter.new(post, current_user)
-        render json: {
-          element_footer:      render_to_string(partial: "streams/stream_element_footer",
-                                                locals:  {post: post_presenter},
-                                                formats: [:html]),
-          single_post_actions: render_to_string(partial: "posts/single_post_actions",
-                                                locals:  {post: post_presenter},
-                                                formats: [:html])
         }
       end
     end

@@ -284,6 +284,14 @@ class User < ApplicationRecord
     true
   end
 
+  ######## Posting ########
+  def build_post(class_name, opts={})
+    opts[:author] = person
+
+    model_class = class_name.to_s.camelize.constantize
+    model_class.diaspora_initialize(opts)
+  end
+
   ######### Mailer #######################
   def mail(job, *args)
     return unless job.present?

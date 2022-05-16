@@ -1,4 +1,4 @@
-!!!
+!!! 5
 %html{lang: I18n.locale.to_s}
   %head
     %title
@@ -15,4 +15,5 @@
     = render 'layouts/header'
     = render "layouts/flash_turbo_container"
     = content_for?(:content) ? yield(:content) : yield
+    = turbo_frame_tag "remote_modal", target: "_top"
     = yield :after_content

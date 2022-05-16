@@ -57,7 +57,9 @@ Rails.application.routes.draw do
     end
   end
 
+  # Interactions
   resource :likes, only: %i[create destroy]
+  resources :reshares, only: %i[new create]
 
   # Users and people
   resources :people, only: %i[show index] do

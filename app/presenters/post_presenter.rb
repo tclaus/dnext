@@ -54,6 +54,19 @@ class PostPresenter < BasePresenter
                   .limit(30)
   end
 
+  def user_can_reshare?
+    return false unless post.public # Dont reshare private posts
+    return false if post.author.eql?(current_user&.person) # Dont reshare own posts
+    #  Dont reshare if reshares root parent does not exist
+    return false if post.is_a?(Reshare) && post.root.nil?
+    # Dont reshare if root post is own post
+    return false if post.is_a?(Reshare) && post.root.author.eql?(current_user&.person)
+    # Dont reshare if already a share exists
+    return false if post.is_a?(StatusMessage) && post.reshares.exists?(author: current_user&.person)
+
+    true
+  end
+
   def participates?
     user_signed_in? && current_user.participations.exists?(target_id: @post)
   end
