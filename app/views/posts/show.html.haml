@@ -5,6 +5,6 @@
       %article{id: dom_id(post), class: "stream-element", data:{controller: "single-stream-interactions"}}
         = render partial: "posts/stream_element", locals: {post: post}
     .col-md-6
-      .stream-element
+      .stream-element{data: {turbo: "false"}}
         = render partial: "posts/single_post_turbo_interactions", locals: {post: post}
         = render partial: "streams/comments/comments", locals: {comments: post.root_comments}

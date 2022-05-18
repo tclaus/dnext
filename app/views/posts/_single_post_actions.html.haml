@@ -3,6 +3,8 @@
   = render partial: "posts/like_action", locals:{post: post} unless post.own_interaction_state[:liked]
   = link_to "#", rel: "nofollow", role: "button", data:{bs_toggle:"tooltip"} ,title: t("post-actions.comment") do
     %i.entypo-comment.gray.large
-  = link_to "#", rel: "nofollow", role: "button" do # if this is a reshare, mark it and dont let user reshare again (or reshare the original?)
-    %i.entypo-reshare.gray.large
-
+  - if post.user_can_reshare?
+    = link_to new_reshare_path(root_guid: post.guid), rel: "nofollow", role: "button",
+    data: { turbo_frame: "remote_modal",
+    turbo_action: "replace" } do
+      %i.entypo-reshare.gray.large

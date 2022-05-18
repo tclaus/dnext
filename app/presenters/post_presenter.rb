@@ -57,12 +57,9 @@ class PostPresenter < BasePresenter
   def user_can_reshare?
     return false unless post.public # Dont reshare private posts
     return false if post.author.eql?(current_user&.person) # Dont reshare own posts
-    #  Dont reshare if reshares root parent does not exist
-    return false if post.is_a?(Reshare) && post.root.nil?
-    # Dont reshare if root post is own post
-    return false if post.is_a?(Reshare) && post.root.author.eql?(current_user&.person)
     # Dont reshare if already a share exists
     return false if post.is_a?(StatusMessage) && post.reshares.exists?(author: current_user&.person)
+    return false if post.is_a?(Reshare) && !reshare_allowed?(post)
 
     true
   end
@@ -79,5 +76,16 @@ class PostPresenter < BasePresenter
     post.root_comments.map do |comment|
       CommentPresenter.new(comment, current_user)
     end
+  end
+
+  private
+
+  def reshare_allowed?(reshare)
+    #  Dont reshare if reshares root parent does not exist
+    return false if reshare.root.nil?
+    # Dont reshare if root post is own post
+    return false if reshare.root.author.eql?(current_user&.person)
+
+    true
   end
 end

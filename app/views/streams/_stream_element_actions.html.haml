@@ -10,6 +10,8 @@
     = t("post-actions.comment")
   - if post.user_can_reshare?
     &#8231
-    = link_to new_reshare_path(root_guid: post.guid), rel: "nofollow", role: "button", data: { turbo_frame: "remote_modal" } do
+    = link_to new_reshare_path(root_guid: post.guid), rel: "nofollow", role: "button",
+    data: { turbo_frame: "remote_modal",
+    turbo_action: "replace" } do
       %i.bi.bi-share
       = t("post-actions.share")
