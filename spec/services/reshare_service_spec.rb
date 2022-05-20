@@ -2,7 +2,7 @@
 
 describe ReshareService do
   # let(:post) { alice.post(:status_message, text: "hello", public: true) }
-  let(:post) { FactoryBot.create(:status_message, text: "hello", public: true) }
+  let(:post) { alice.post(:status_message, text: "hello", public: true) }
 
   describe "#create" do
     it "doesn't create a reshare of my own post" do
@@ -35,8 +35,7 @@ describe ReshareService do
     end
 
     it "fails if the post is not public" do
-      post = FactoryBot.create(:status_message, text: "hello", author: alice.person)
-
+      post = alice.post(:status_message, text: "hello", to: alice.aspects.first)
       expect {
         ReshareService.new(bob).create(post.id)
       }.to raise_error ActiveRecord::RecordInvalid
