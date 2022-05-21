@@ -15,8 +15,8 @@ export default class extends Controller {
     }
 
     updateElementFooter(json) {
-        let post = document.getElementById(json.element_id);
-        let post_footer = post.getElementsByClassName("post-interactions");
-        post_footer.outerHtml = json.element_footer;
+        let post = document.getElementById(json.element_id)
+        let post_footer = post.getElementsByClassName("stream-element-footer")[0]
+        post_footer.outerHTML = json.element_footer
     }
 }

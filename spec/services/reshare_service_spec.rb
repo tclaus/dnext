@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 describe ReshareService do
-  # let(:post) { alice.post(:status_message, text: "hello", public: true) }
   let(:post) { alice.post(:status_message, text: "hello", public: true) }
 
   describe "#create" do
@@ -36,6 +35,7 @@ describe ReshareService do
 
     it "fails if the post is not public" do
       post = alice.post(:status_message, text: "hello", to: alice.aspects.first)
+
       expect {
         ReshareService.new(bob).create(post.id)
       }.to raise_error ActiveRecord::RecordInvalid
@@ -96,7 +96,7 @@ describe ReshareService do
         post = alice.post(:status_message, text: "hello", to: alice.aspects.first)
         expect {
           ReshareService.new.find_for_post(post.id)
-        }.to raise_error Diaspora::NonPublic
+        }.to raise_error Diaspora::Exceptions::NonPublic
       end
     end
 

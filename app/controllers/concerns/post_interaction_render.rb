@@ -15,7 +15,7 @@ module PostInteractionRender
 
   def render_json_response(post_presenter)
     render json:   {
-      element_id:          "#{post_presenter.type.downcase}_#{post_presenter.id}",
+      element_id:          dom_id(post_presenter),
       element_footer:      render_to_string(partial: "streams/stream_element_footer",
                                             locals:  {post: post_presenter},
                                             formats: [:html]),
@@ -24,5 +24,15 @@ module PostInteractionRender
                                             formats: [:html])
     },
            status: :created
+  end
+
+  private
+
+  def dom_id(record)
+    "#{post_to_model_name(record)}_#{record.id}"
+  end
+
+  def post_to_model_name(record)
+    record.type.eql?("StatusMessage") ? "post" : "reshare"
   end
 end

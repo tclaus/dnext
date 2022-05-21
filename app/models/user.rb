@@ -292,6 +292,47 @@ class User < ApplicationRecord
     model_class.diaspora_initialize(opts)
   end
 
+  def dispatch_post(post, opts={})
+    logger.info "user:#{id} dispatching #{post.class}:#{post.guid}"
+    Diaspora::Federation::Dispatcher.defer_dispatch(self, post, opts)
+  end
+
+  def update_post(post, post_hash={})
+    if owns? post
+      post.update_attributes(post_hash)
+      dispatch_post(post)
+    end
+  end
+
+  def add_to_streams(post, aspects_to_insert)
+    aspects_to_insert.each do |aspect|
+      aspect << post
+    end
+  end
+
+  def aspects_from_ids(aspect_ids)
+    if ["all", :all].include?(aspect_ids)
+      aspects
+    else
+      aspects.where(id: aspect_ids).to_a
+    end
+  end
+
+  def post_default_aspects
+    if post_default_public
+      ["public"]
+    else
+      aspects.where(post_default: true).to_a
+    end
+  end
+
+  def update_post_default_aspects(post_default_aspect_ids)
+    aspects.each do |aspect|
+      enable = post_default_aspect_ids.include?(aspect.id.to_s)
+      aspect.update_attribute(:post_default, enable)
+    end
+  end
+
   ######### Mailer #######################
   def mail(job, *args)
     return unless job.present?

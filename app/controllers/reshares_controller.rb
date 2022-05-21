@@ -15,6 +15,7 @@ class ResharesController < ApplicationController
   rescue ActiveRecord::RecordNotFound, ActiveRecord::RecordInvalid
     respond_to do |format|
       format.turbo_stream { flash.now[:error] = t("reshares.create.error") }
+      format.json { render  status: :unprocessable_entity }
     end
   else
     post_presenter = PostPresenter.new(@reshare.root, current_user)
@@ -34,7 +35,7 @@ class ResharesController < ApplicationController
   end
 
   def param_root_guid
-    # in recent implementation the gud was send by javascript
+    # in recent implementation the guid was sent by javascript
     # in dnext ist send by a form.
     # This is for compatibility reasons
     params[:root_guid] || params[:reshare][:root_guid]
@@ -42,9 +43,5 @@ class ResharesController < ApplicationController
 
   def reshare_service
     @reshare_service ||= ReshareService.new(current_user)
-  end
-
-  def post_render_service
-    @post_render_service ||= PostRenderService.new
   end
 end

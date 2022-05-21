@@ -7,7 +7,7 @@ class ReshareService
     @user = user
   end
 
-  def create(post_id, text)
+  def create(post_id, text="")
     post = post_service.find!(post_id)
     post = post.absolute_root if post.is_a? Reshare
     user.reshare!(post, text: text)

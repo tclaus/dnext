@@ -2,7 +2,7 @@
   = render partial: "streams/comments/like_action", locals: {comment: comment} unless comment.own_interaction_state[:liked]
   = render partial: "streams/comments/unlike_action", locals: {comment: comment} if comment.own_interaction_state[:liked]
   &#8231
-  = link_to "#/", rel: "nofollow", role: "button" do
+  = link_to "#", rel: "nofollow", role: "button" do
     %i.bi.bi-chat
     = t("comment-actions.answer")
   %div
