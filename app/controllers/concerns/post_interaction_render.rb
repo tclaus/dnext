@@ -15,13 +15,17 @@ module PostInteractionRender
 
   def render_json_response(post_presenter)
     render json:   {
-      element_id:          dom_id(post_presenter),
-      element_footer:      render_to_string(partial: "streams/stream_element_footer",
-                                            locals:  {post: post_presenter},
-                                            formats: [:html]),
-      single_post_actions: render_to_string(partial: "posts/single_post_actions",
-                                            locals:  {post: post_presenter},
-                                            formats: [:html])
+      element_id:               dom_id(post_presenter),
+      element_footer:           render_to_string(partial: "streams/stream_element_footer",
+                                                 locals:  {post: post_presenter},
+                                                 formats: [:html]),
+      single_post_actions:      render_to_string(partial: "posts/single_post_actions",
+                                                 locals:  {post: post_presenter},
+                                                 formats: [:html]),
+      single_post_interactions: render_to_string(partial: "posts/single_post_interactions",
+                                                 locals:  {post:    post_presenter,
+                                                           formats: [:html]})
+
     },
            status: :created
   end

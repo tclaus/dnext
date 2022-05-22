@@ -10,13 +10,23 @@ export default class extends Controller {
         if (event.detail.fetchResponse.succeeded) {
             event.preventDefault()
             const json = await event.detail.fetchResponse.response.clone().json()
-            this.updateElementFooter(json)
+            this.updateStreamElementInteractions(json)
+            this.updateSinglePostViewInteractions(json)
         }
     }
 
-    updateElementFooter(json) {
+    updateStreamElementInteractions(json) {
         let post = document.getElementById(json.element_id)
         let post_footer = post.getElementsByClassName("stream-element-footer")[0]
-        post_footer.outerHTML = json.element_footer
+        if (post_footer !== undefined) {
+            post_footer.outerHTML = json.element_footer
+        }
+    }
+
+    updateSinglePostViewInteractions(json) {
+        let post_interactions = document.getElementsByClassName("single-post-interactions")[0]
+        if (post_interactions !== undefined) {
+            post_interactions.outerHTML = json.single_post_interactions;
+        }
     }
 }

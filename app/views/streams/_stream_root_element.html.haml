@@ -1,6 +1,7 @@
 %div{id: dom_id(post), class: "root-stream-element"}
   %div.post-sub-headline
     = render partial: "streams/stream_post_author", locals: {author: post.author, created_at: post.created_at, type: type}
+    = render partial: "streams/permanent_link_with_time", locals: {post: post}
   %div{class: classify(post.type)}
     = render partial: "streams/attached_photos", locals: {post: post} if post.photos.exists?
     = post.rendered_message.html_safe

@@ -6,5 +6,5 @@
   - if post.user_can_reshare?
     = link_to new_reshare_path(root_guid: post.guid), rel: "nofollow", role: "button",
     data: { turbo_frame: "remote_modal",
-    turbo_action: "replace" } do
+    turbolinks_action: "replace" } do
       %i.entypo-reshare.gray.large
