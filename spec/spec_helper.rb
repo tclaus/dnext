@@ -95,18 +95,11 @@ support_files.each {|f| require f }
 require fixture_builder_file
 
 RSpec.configure do |config|
-  config.fixture_path = Rails.root.join("spec", "fixtures")
-  config.global_fixtures = :all
-
-  config.include Devise::Test::ControllerHelpers, type: :controller
-  config.include Devise::Test::IntegrationHelpers, type: :request
   config.mock_with :rspec
 
   config.example_status_persistence_file_path = "tmp/rspec-persistance.txt"
 
   config.render_views
-  config.use_transactional_fixtures = true
-  config.infer_spec_type_from_file_location!
 
   config.before(:each) do
     I18n.locale = :en
@@ -150,12 +143,6 @@ RSpec.configure do |config|
   # Reset test mails
   config.after(:each) do
     ActionMailer::Base.deliveries.clear
-  end
-
-  # Reset gon
-  config.after(:each) do
-    # dnext should work without gon
-    # RequestStore.store[:gon].gon.clear unless RequestStore.store[:gon].nil?
   end
 
   config.include FactoryBot::Syntax::Methods

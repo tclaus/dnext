@@ -1,5 +1,4 @@
-= link_to post_path(post.guid) do
-  = local_time_ago post.created_at, class: "post-head-text"
-= range_tag(post)
+= render partial: "streams/permanent_link_with_time", locals: {post: post}
+= scope_of_post_tag(post)
 - if current_user&.podmin?
   = "Lang: #{post.language_id}" if post.language_id.present?

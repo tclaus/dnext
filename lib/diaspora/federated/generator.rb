@@ -20,7 +20,8 @@ module Diaspora
       end
 
       def build(options={})
-        self.class.federated_class.new(options.merge(relayable_options).merge(author_id: @user.person.id))
+        self.class.federated_class.new(options.merge(relayable_options)
+                                              .merge(author_id: @user.person.id))
       end
 
       protected

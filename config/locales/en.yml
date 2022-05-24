@@ -188,4 +188,10 @@ en:
       error: "Could not remove a like."
   pot-status:
     you_and_other_like_it: "You and :count people like it"
-
+  reshares:
+    comment_email_subject: "%{resharer}’s reshare of %{author}’s post"
+    create:
+      error: "Failed to reshare."
+    new_reshare: "Reshare post"
+  placeholder: "What do you think about this?"
+  add_a_text: "Add a message"

@@ -12,7 +12,7 @@ module ApplicationHelper
 
   # For the post range this function returns a icon for global, limited or personal visible posts
   # @return span tag with icon for posts range
-  def range_tag(post, *args)
+  def scope_of_post_tag(post, *args)
     if post.public?
       visibility = t("post.visibility.global")
       content = "<i class=\"bi bi-globe\" role=\"img\" aria-label=\"#{visibility}\"

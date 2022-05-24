@@ -3,14 +3,14 @@
 class ReshareService
   attr_accessor :user
 
-  def initialize(user = nil)
+  def initialize(user=nil)
     @user = user
   end
 
-  def create(post_id)
+  def create(post_id, text="")
     post = post_service.find!(post_id)
     post = post.absolute_root if post.is_a? Reshare
-    user.reshare!(post)
+    user.reshare!(post, text: text)
   end
 
   def find_for_post(post_id)

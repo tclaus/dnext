@@ -1,7 +1,7 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require "spec_helper"
 require "helper_methods"
-require_relative "support/fixture_builder"
+require "devise"
 
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
@@ -23,7 +23,8 @@ require "rspec/rails"
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-# Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
+# In spec_helper the fixture_builder file is loaded later
+# Dir[Rails.root.join("spec", "support", "**", "*.rb")].sort.each { |f| require f }
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
@@ -36,6 +37,9 @@ end
 RSpec.configure do |config|
   config.fixture_path = Rails.root.join("spec/fixtures")
   config.global_fixtures = :all
+
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Warden::Test::Helpers
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false

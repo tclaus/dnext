@@ -43,21 +43,23 @@ class PostService
            else
              find_public!(post_id)
            end
-    raise Diaspora::NotMine unless post.author == user.person
+    raise Diaspora::Exceptions::NotMine unless post.author == user.person
 
     user.retract(post)
   end
 
+  # rubocop:disable Rails/DynamicFindBy
   def mentionable_in_comment(post_id, query)
     post = find!(post_id)
     Person
       .allowed_to_be_mentioned_in_a_comment_to(post)
       .where.not(id: user.person_id)
-      .find_by(substring: query)
+      .find_by_substring(query)
       .sort_for_mention_suggestion(post, user)
       .for_json
       .limit(15)
   end
+  # rubocop:enable Rails/DynamicFindBy
 
   private
 
@@ -66,7 +68,7 @@ class PostService
   def find_public!(id_or_guid)
     Post.where(post_key(id_or_guid) => id_or_guid).first.tap do |post|
       raise ActiveRecord::RecordNotFound, "could not find a post with id #{id_or_guid}" unless post
-      raise Diaspora::NonPublic unless post.public?
+      raise Diaspora::Exceptions::NonPublic unless post.public?
     end
   end
 

@@ -3,4 +3,4 @@
 - elsif entry.likes_count == 2
   = t("post-status.you_and_one_other_person_like_it")
 - else
-  =  t("post-status.you_and_others_like_it", count: (entry.likes_count - 1).to_fs(:human))
+  = t("post-status.you_and_others_like_it", count: (entry.likes_count - 1).to_fs(:human))

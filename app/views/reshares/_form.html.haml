@@ -1,0 +1,8 @@
+%div{data: {controller: "reshare-interactions"}}
+  = form_with model: item, data: { action: "turbo:before-fetch-response->reshare-interactions#updateInteractions" } do | form |
+    = form.hidden_field :root_guid
+    .mb-3
+      = form.label t("add_a_text"), style: "display: block", class: "form-label"
+      = form.text_field :text, placeholder: t("placeholder"), class: "form-control"
+    .mb-3
+      = form.submit "Save", class: "btn btn-success btn-block", data: {bs_dismiss: "modal"}
