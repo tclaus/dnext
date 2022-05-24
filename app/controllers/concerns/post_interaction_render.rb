@@ -23,8 +23,8 @@ module PostInteractionRender
                                                  locals:  {post: post_presenter},
                                                  formats: [:html]),
       single_post_interactions: render_to_string(partial: "posts/single_post_interactions",
-                                                 locals:  {post:    post_presenter,
-                                                           formats: [:html]})
+                                                 locals:  {post: post_presenter},
+                                                 formats: [:html])
 
     },
            status: :created
