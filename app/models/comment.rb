@@ -34,8 +34,34 @@ dependent: :destroy
     text&.strip!
   end
 
+  after_save do
+    save_parent_comment_guid
+  end
+
   after_commit on: :create do
+    parent.update_comments_counter
     parent.touch(:interacted_at) if parent.respond_to?(:interacted_at)
+  end
+
+  after_destroy do
+    parent.update_comments_counter
+    participation = author.participations.find_by(target_id: post.id)
+    participation.unparticipate! if participation.present?
+  end
+
+  class Generator < Diaspora::Federated::Generator
+    def self.federated_class
+      Comment
+    end
+
+    def initialize(person, target, text)
+      @text = text
+      super(person, target)
+    end
+
+    def relayable_options
+      {post: @target, text: @text}
+    end
   end
 
   def broadcast_like_updates
@@ -43,7 +69,11 @@ dependent: :destroy
   end
 
   def text=(text)
-    @text = text.to_s.strip # to_s if for nil, for whatever reason
+    self[:text] = text.to_s.strip # to_s if for nil, for whatever reason
+  end
+
+  def add_mention_subscribers?
+    super && parent.author.local?
   end
 
   def rendered_text
@@ -56,5 +86,16 @@ dependent: :destroy
 
   def is_root_comment?
     thread_parent_guid.nil?
+  end
+
+  private
+
+  def save_parent_comment_guid
+    if thread_parent_guid.present?
+      self.signature = build_signature if signature.nil?
+      signature.additional_data[:parent_thread_guid] = thread_parent_guid
+      signature.save
+      logger.info "Write a new comment thread parent guid: #{thread_parent_guid}"
+    end
   end
 end

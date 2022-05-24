@@ -10,7 +10,7 @@ describe PostService do
         expect(PostService.new(alice).find(post.id)).to eq(post)
       end
 
-      it "returns the post, if the user can see the it" do
+      it "returns the post, if the user can see it" do
         expect(PostService.new(bob).find(post.id)).to eq(post)
       end
 

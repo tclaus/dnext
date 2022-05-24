@@ -402,6 +402,7 @@ GEM
     temple (0.8.2)
     thor (1.2.1)
     tilt (2.0.10)
+    timecop (0.9.5)
     timeout (0.2.0)
     timers (4.3.3)
     toml-rb (2.1.2)
@@ -496,6 +497,7 @@ DEPENDENCIES
   sidekiq (~> 6.4, >= 6.4.1)
   sprockets-rails
   stimulus-rails
+  timecop (~> 0.9.5)
   toml-rb (~> 2.1.0)
   turbo-rails
   twitter-text (~> 3.1.0)

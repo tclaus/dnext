@@ -106,6 +106,7 @@ gem "invisible_captcha", "~> 2.0"
 gem "sidekiq", "~> 6.4", ">= 6.4.1"
 # Federation
 gem "diaspora_federation", "~> 0.3"
+gem "timecop", "~> 0.9.5"
 
 # frozen_string_literal: true
 group :development, :test do
