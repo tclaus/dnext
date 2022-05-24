@@ -57,7 +57,7 @@ gem "haml"
 gem "pagy", "~> 5.6", ">= 5.6.6"
 
 # Rendering
-gem "entypo-rails", git: "git@github.com:wangliyao/entypo-rails" # Entypo-Rails can not directly used for Rails > 6
+gem "entypo-rails", git: "https://github.com/wangliyao/entypo-rails" # Entypo-Rails can not directly used for Rails > 6
 gem "local_time"
 gem "open_graph_reader", "~> 0.7.2"
 gem "ruby-oembed", "~> 0.15.0"
@@ -89,7 +89,7 @@ gem "addressable", "~> 2.8"
 
 # Authentication
 # See: https://pagertree.com/2021/04/13/rails-7-attr-encrypted-migration/
-gem "attr_encrypted", git: "git@github.com:PagerTree/attr_encrypted", branch: "rails-7-0-support"
+gem "attr_encrypted", git: "https://github.com/PagerTree/attr_encrypted", branch: "rails-7-0-support"
 gem "devise", "~>4.8.1"
 gem "devise-i18n", "~> 1.10", ">= 1.10.1"
 gem "devise_last_seen"
