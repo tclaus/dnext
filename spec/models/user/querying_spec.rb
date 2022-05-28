@@ -162,12 +162,12 @@ describe User::Querying, type: :model do
 
   describe '#find_visible_shareable_by_id' do
     it "returns a post if you can see it" do
-      bobs_post = bob.post(:status_message, :text => "hi", :to => @bobs_aspect.id, :public => false)
+      bobs_post = bob.post(:status_message, text: "hi", to: @bobs_aspect.id, public: false)
       expect(alice.find_visible_shareable_by_id(Post, bobs_post.id)).to eq(bobs_post)
     end
     it "returns nil if you can't see that post" do
       dogs = bob.aspects.create(:name => "dogs")
-      invisible_post = bob.post(:status_message, :text => "foobar", :to => dogs.id)
+      invisible_post = bob.post(:status_message, text: "foobar", to: dogs.id)
       expect(alice.find_visible_shareable_by_id(Post, invisible_post.id)).to be_nil
     end
   end

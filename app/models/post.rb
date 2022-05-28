@@ -23,7 +23,7 @@ class Post < ApplicationRecord
 
   has_many :participations, dependent: :delete_all, as: :target, inverse_of: :target
   has_many :participants, through: :participations, source: :author
-  has_many :reports, as: :item
+  has_many :reports, as: :item, foreign_key: :item_id, dependent: :destroy
 
   has_many :reshares, class_name: "Reshare", foreign_key: :root_guid, primary_key: :guid
   has_many :resharers, class_name: "Person", through: :reshares, source: :author
@@ -82,7 +82,7 @@ class Post < ApplicationRecord
   # all Posts from not blocked pods
   scope :all_not_blocked_pod, -> {
     left_outer_joins(author: [:pod])
-      .where("(pods.blocked = false or pods.blocked is null)")
+      .where("pods.blocked = false or pods.blocked is null")
   }
 
   # Public Posts from not blocked pods
@@ -90,7 +90,7 @@ class Post < ApplicationRecord
     includes({author: :profile})
       .where(public: true)
       .left_outer_joins(author: [:pod])
-      .where("(pods.blocked = false or pods.blocked is null)")
+      .where("pods.blocked = false or pods.blocked is null")
   }
 
   # Public posts from local Pod

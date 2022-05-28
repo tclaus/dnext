@@ -22,7 +22,7 @@ class Comment < ApplicationRecord
   delegate :author_name, to: :parent, prefix: true
 
   validates :text, presence: true, length: {maximum: 65_535}
-  has_many :reports, as: :reportable, dependent: :destroy
+  has_many :reports, as: :item, dependent: :destroy
   has_many :sub_comments, class_name: "Comment", foreign_key: :thread_parent_guid, primary_key: :guid,
 dependent: :destroy
 

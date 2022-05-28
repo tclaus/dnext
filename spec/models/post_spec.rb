@@ -46,11 +46,11 @@ describe Post, type: :model do
       end
 
       it "returns public and private posts from not blocked pods" do
-        blocked_pod_post = FactoryBot.create(:status_message, author: alice.person, public: true)
         post2 = FactoryBot.create(:status_message, author: bob.person, public: false)
-        blocked_pod = FactoryBot.create(:pod, blocked: true)
-        blocked_pod_post.author.pod = blocked_pod
 
+        blocked_pod = FactoryBot.create(:pod, blocked: true)
+        user_from_blocked_pod = FactoryBot.create(:person, pod: blocked_pod)
+        FactoryBot.create(:status_message, author: user_from_blocked_pod, public: true)
         expect(Post.all_not_blocked_pod.ids).to match_array([post2.id])
       end
     end
