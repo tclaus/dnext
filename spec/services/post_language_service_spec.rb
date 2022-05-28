@@ -16,7 +16,7 @@ describe "PostLanguageService" do
   describe "#root_post" do
     it "returns a root post if post is a reshare" do
       cut = PostLanguageService.new
-      root_post = FactoryBot.create(:status_message, author: alice.person)
+      root_post = FactoryBot.create(:status_message, author: alice.person, public: true)
       reshare = FactoryBot.create(:reshare, root: root_post, author: eve.person)
       post = cut.root_post(reshare)
       expect(post).to be_instance_of StatusMessage

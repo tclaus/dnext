@@ -12,8 +12,8 @@ class Report < ApplicationRecord
   belongs_to :user
   belongs_to :post, optional: true
   belongs_to :comment, optional: true
-  belongs_to :reportable, polymorphic: true
-  delegate :author, to: :reportable
+  belongs_to :item, polymorphic: true
+  delegate :author, to: :item
 
   STATUS_DELETED = "deleted"
   STATUS_NO_ACTION = "no action"

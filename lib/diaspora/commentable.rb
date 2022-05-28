@@ -22,5 +22,15 @@ module Diaspora
         .where(thread_parent_guid: nil)
         .order(created_at: :asc)
     end
+
+    # @return [Integer]
+    def update_comments_counter
+      self.class.where(id: id)
+          .update_all(comments_count: comments.count) # rubocop:disable Rails/SkipsModelValidations
+    end
+
+    def comments_authors
+      Person.where(id: comments.select(:author_id).distinct)
+    end
   end
 end

@@ -25,41 +25,6 @@ RSpec::Matchers.define_negated_matcher :remain, :change
 # ProcessedImage.enable_processing = false
 # UnprocessedImage.enable_processing = false
 
-# @return [User]
-def alice
-  @alice ||= User.find_by(username: "alice")
-end
-
-# @return [User]
-def bob
-  @bob ||= User.find_by(username: "bob")
-end
-
-# @return [User]
-def eve
-  @eve ||= User.find_by(username: "eve")
-end
-
-# @return [User]
-def local_luke
-  @local_luke ||= User.find_by(username: "luke")
-end
-
-# @return [User]
-def local_leia
-  @local_leia ||= User.find_by(username: "leia")
-end
-
-# @return [User]
-def remote_raphael
-  @remote_raphael ||= Person.find_by(diaspora_handle: "raphael@remote.net")
-end
-
-# @return [User]
-def peter
-  @peter ||= User.find_by(username: "peter")
-end
-
 def photo_fixture_name
   @photo_fixture_name = File.join(File.dirname(__FILE__), "fixtures", "button.png")
 end

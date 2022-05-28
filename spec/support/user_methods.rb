@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class User
+  alias_method :share_with_original, :share_with
+
   def share_with(*args)
     disable_send_workers
 
@@ -9,7 +11,6 @@ class User
     end
   end
 
-  alias share_with_original share_with
   def add_contact_to_aspect(contact, aspect)
     return if AspectMembership.exists?(contact_id: contact.id, aspect_id: aspect.id)
 

@@ -3,11 +3,14 @@
 require "rails_helper"
 
 describe "Post Interaction Render Concern", type: :controller do
+
   before do
     class RendererController < ApplicationController
       include PostInteractionRender
     end
-    sign_in bob
+
+    @user = FactoryBot.create :user
+    sign_in @user
   end
 
   let(:render_controller) { RendererController.new }
@@ -23,7 +26,7 @@ describe "Post Interaction Render Concern", type: :controller do
   describe "render_json_response" do
     it "returns a json" do
       post = FactoryBot.create(:status_message)
-      post_presenter = PostPresenter.new(post, bob)
+      post_presenter = PostPresenter.new(post, @user)
       json = render_controller.render_json_response(post_presenter)
     end
   end
