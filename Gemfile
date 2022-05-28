@@ -117,6 +117,11 @@ group :development, :test do
   gem "fixture_builder", "~> 0.5.2"
   gem "rspec-rails", "~> 5.1"
   gem "rubocop"
+
+  # see https://github.com/rubysec/bundler-audit#readme
+  gem "bundler-audit", "~> 0.9.1"
+
+  gem 'brakeman', '~> 5.2', '>= 5.2.3'
 end
 
 group :development do
