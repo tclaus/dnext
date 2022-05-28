@@ -9,19 +9,22 @@
 #
 # See https://docs.rubocop.org/rubocop/configuration
 
-require: rubocop-rails
+require:
+  - rubocop-rails
+  - rubocop-rspec
 
 AllCops:
   TargetRubyVersion: 3.0
   NewCops: enable
   Exclude:
+    - "tmp/**/*"
     - "bin/**/*"
     - "db/schema.rb"
     - "config/locales/cldr/plurals.rb"
 
 # Disable for rails 4
-Rails/HttpPositionalArguments:
-  Enabled: false
+# Rails/rubocop:
+#  Enabled: false
 
 # Commonly used screens these days easily fit more than 80 characters.
 Layout/LineLength:
@@ -50,7 +53,7 @@ Metrics/PerceivedComplexity:
 
 # Some blocks are longer.
 Metrics/BlockLength:
-  ExcludedMethods:
+  IgnoredMethods:
     - "namespace"
     - "create_table"
   Exclude:
