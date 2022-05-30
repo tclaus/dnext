@@ -141,7 +141,7 @@ end
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
 
-  # gem "capybara"
+  gem "capybara"
   gem "diaspora_federation-json_schema", "~> 0.3.0"
   gem "json-schema-rspec", "0.0.4"
   gem "rspec-json_expectations", "~> 2.1"
