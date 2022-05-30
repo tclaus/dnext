@@ -116,7 +116,15 @@ group :development, :test do
   gem "factory_bot_rails", "~> 6.2"
   gem "fixture_builder", "~> 0.5.2"
   gem "rspec-rails", "~> 5.1"
-  gem "rubocop"
+
+  gem "rubocop", require: false
+  gem "rubocop-rails", "~> 2.13", ">= 2.13.2", require: false
+  gem "rubocop-rspec", "~> 2.11", ">= 2.11.1", require: false
+
+  # see https://github.com/rubysec/bundler-audit#readme
+  gem "bundler-audit", "~> 0.9.1"
+
+  gem "brakeman", "~> 5.2", ">= 5.2.3"
 end
 
 group :development do
@@ -128,8 +136,6 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
-
-  gem "rubocop-rails", "~> 2.13", ">= 2.13.2"
 end
 
 group :test do
