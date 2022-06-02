@@ -110,7 +110,7 @@ en:
   devise:
     sessions:
       new:
-        sign_in: "Sign In"
+        sign_in: "Sign in"
     passwords:
       new:
         email: "Email"
@@ -122,7 +122,7 @@ en:
         confirm_password: "Confirm password"
     shared:
       links:
-        sign_in: "Sign In"
+        sign_in: "Sign in"
   users:
     edit:
       your_email_private: "EMAIL"

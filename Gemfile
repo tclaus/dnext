@@ -141,6 +141,14 @@ end
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
 
+  # Web Driver, references to a fix that spills unneeded entries in the log
+  gem "apparition", github: "twalpole/apparition", ref: "ca86be4d54af835d531dbcd2b86e7b2c77f85f34"
+
+  # see: https://github.com/cucumber/cucumber-rails
+  gem "cucumber-rails", require: false
+  # database_cleaner is not required, but highly recommended
+  gem "database_cleaner"
+
   gem "capybara"
   gem "diaspora_federation-json_schema", "~> 0.3.0"
   gem "json-schema-rspec", "0.0.4"
