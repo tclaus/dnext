@@ -141,20 +141,18 @@ end
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
 
-  # Web Deiver https://github.com/rubycdp/cuprite
-  gem "cuprite"
+  # Web Driver https://github.com/rubycdp/cuprite
+  gem "cuprite", require: false
 
   # see: https://github.com/cucumber/cucumber-rails
   gem "cucumber-rails", require: false
   # database_cleaner is not required, but highly recommended
-  gem "database_cleaner"
+  gem "database_cleaner", require: false
 
   gem "capybara"
   gem "diaspora_federation-json_schema", "~> 0.3.0"
   gem "json-schema-rspec", "0.0.4"
   gem "rspec-json_expectations", "~> 2.1"
-  gem "selenium-webdriver"
   gem "shoulda-matchers", "~> 5.1"
-  gem "webdrivers"
   gem "webmock", "3.14.0", require: false
 end
