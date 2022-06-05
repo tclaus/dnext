@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require Rails.root.join("spec/shared_behaviours/stream")
 
 describe Stream::Tag do
@@ -6,7 +8,7 @@ describe Stream::Tag do
   end
 
   describe "shared behaviors" do
-    it_should_behave_like "it is a stream"
+    it_behaves_like "it is a stream"
   end
 
   it "down-cases tags before processing" do

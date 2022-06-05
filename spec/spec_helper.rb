@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-#   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
-
 ENV["RAILS_ENV"] ||= "test"
 
 require File.join(File.dirname(__FILE__), "..", "config", "environment")
@@ -66,20 +62,21 @@ RSpec.configure do |config|
 
   config.render_views
 
-  config.before(:each) do
+  config.before do
     I18n.locale = :en
     stub_request(:post, "https://pubsubhubbub.appspot.com/")
     stub_request(
       :get,
       "https://example.com/.well-known/webfinger?resource=acct:bob@example.com"
     )
-    stub_request(:post, "http://example.net/receive/users/").
-      with(
+    stub_request(:post, "http://example.net/receive/users/")
+      .with(
         headers: {
-          'Content-Type'=>'application/json',
-          'Expect'=>'',
-        }).
-      to_return(status: 200, body: "", headers: {})
+          "Content-Type" => "application/json",
+          "Expect"       => ""
+        }
+      )
+      .to_return(status: 200, body: "", headers: {})
 
     stub_request(
       :get,
@@ -109,12 +106,12 @@ RSpec.configure do |config|
   end
 
   # Reset overridden settings
-  config.after(:each) do
+  config.after do
     AppConfig.reset_dynamic!
   end
 
   # Reset test mails
-  config.after(:each) do
+  config.after do
     ActionMailer::Base.deliveries.clear
   end
 
@@ -149,4 +146,5 @@ end
 begin
   require "factory_bot_rails"
 rescue LoadError
+  # Ignored
 end

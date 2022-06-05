@@ -1,12 +1,22 @@
+# frozen_string_literal: true
+
 require "rspec"
 
 describe PostPresenter do
   let(:status_message) { FactoryBot.create(:status_message, public: true) }
   let(:presenter) { PostPresenter.new(:status_message, bob) }
 
+  before do
+    @post = FactoryBot.create(:status_message, public: true)
+    @post_presenter = PostPresenter.new(@post, bob)
+    @reshare = FactoryBot.create(:reshare)
+    @reshare_presenter = PostPresenter.new(@reshare, bob)
+  end
+
   it "takes a post and an optional user" do
     expect(presenter).not_to be_nil
   end
+
   context "post with interactions" do
     before do
       bob.like!(:status_message)
@@ -16,13 +26,6 @@ describe PostPresenter do
     it "includes the users like" do
       expect(presenter.send(:own_like)).to be_present
     end
-  end
-
-  before do
-    @post = FactoryBot.create(:status_message, public: true)
-    @post_presenter = PostPresenter.new(@post, bob)
-    @reshare = FactoryBot.create(:reshare)
-    @reshare_presenter = PostPresenter.new(@reshare, bob)
   end
 
   describe "user_can_reshare?" do

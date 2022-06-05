@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rspec"
 
 describe PersonPresenter do
@@ -20,9 +22,6 @@ describe PersonPresenter do
     FactoryBot.create(:contact, user: current_user, person: person, sharing: false, receiving: false)
   }
 
-  after do
-    # Do nothing
-  end
   describe "#full_hash" do
     let(:current_user) { FactoryBot.create(:user) }
 
@@ -30,21 +29,21 @@ describe PersonPresenter do
       @person_presenter = PersonPresenter.new(person, current_user)
     end
 
-    it "should not show photos if none" do
+    it "does not show photos if none" do
       expect(@person_presenter.show_photos?).to be_falsey
     end
 
-    it "should show photos if present" do
+    it "shows photos if present" do
       current_user.photos.add(FactoryBot.create(:photo))
       expect(@person_presenter.show_photos?).to be_truthy
     end
 
-    it "should return true for own profile" do
+    it "returns true for own profile" do
       expect(@person_presenter.current_user).to receive(:person).and_return(current_user)
       expect(@person_presenter.own_profile?).to be_falsey
     end
 
-    it "should test for own profile" do
+    it "tests for own profile" do
       expect(@person_presenter.own_profile?).to be_falsey
     end
 

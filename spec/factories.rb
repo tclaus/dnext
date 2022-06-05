@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-#   Copyright (c) 2010-2011, Diaspora In  This file is
-#   licensed under the Affero General Public License version 3 or late  See
-#   the COPYRIGHT file.
-
 def r_str
   SecureRandom.hex(3)
 end
@@ -42,6 +38,7 @@ FactoryBot.define do
         person.profile.first_name = evaluator.first_name if evaluator.first_name
       end
     end
+
     after(:create) do |person|
       person.profile.save
     end
@@ -78,6 +75,7 @@ FactoryBot.define do
                                   diaspora_handle:       "#{u.username}#{User.diaspora_id_host}")
       u.person.profile = e.profile if e.profile
     end
+
     after(:create) do |u|
       u.person.save
       u.person.profile.save
@@ -272,7 +270,7 @@ FactoryBot.define do
     association :target, factory: :status_message
   end
 
-  factory(:notification, class: Notifications::AlsoCommented) do
+  factory(:notification, class: "Notifications::AlsoCommented") do
     association :recipient, factory: :user
     association :target, factory: :comment
 
@@ -281,7 +279,7 @@ FactoryBot.define do
     end
   end
 
-  factory(:notification_mentioned_in_comment, class: Notification) do
+  factory(:notification_mentioned_in_comment, class: "Notification") do
     association :recipient, factory: :user
     type { "Notifications::MentionedInComment" }
 
@@ -291,7 +289,7 @@ FactoryBot.define do
     end
   end
 
-  factory(:tag, class: ActsAsTaggableOn::Tag) do
+  factory(:tag, class: "ActsAsTaggableOn::Tag") do
     name { "partytimeexcellent" }
   end
 
@@ -329,7 +327,7 @@ FactoryBot.define do
     association(:mentions_container, factory: :status_message)
   end
 
-  factory(:mention_in_comment, class: Mention) do
+  factory(:mention_in_comment, class: "Mention") do
     association(:person, factory: :person)
     association(:mentions_container, factory: :comment)
   end
@@ -404,7 +402,7 @@ FactoryBot.define do
 
   # Factories for the DiasporaFederation-gem
 
-  factory(:federation_person_from_webfinger, class: DiasporaFederation::Entities::Person) do
+  factory(:federation_person_from_webfinger, class: "DiasporaFederation::Entities::Person") do
     sequence(:guid) { UUID.generate :compact }
     sequence(:diaspora_id) {|n| "bob-person-#{n}#{r_str}@example.net" }
     url { "https://example.net/" }
@@ -416,7 +414,7 @@ FactoryBot.define do
     }
   end
 
-  factory(:federation_profile_from_hcard, class: DiasporaFederation::Entities::Profile) do
+  factory(:federation_profile_from_hcard, class: "DiasporaFederation::Entities::Profile") do
     sequence(:diaspora_id) {|n| "bob-person-#{n}#{r_str}@example.net" }
     sequence(:first_name) {|n| "My Name#{n}#{r_str}" }
     last_name { nil }

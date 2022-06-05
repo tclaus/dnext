@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-#   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
 require "rails_helper"
 require "shared_behaviours/shareable"
 require "shared_behaviours/mentioned_container"
@@ -131,14 +128,14 @@ describe StatusMessage, type: :model do
     end
   end
 
-  it "should be postable through the user" do
+  it "is postable through the user" do
     message = "Users do things"
     status = user.post(:status_message, text: message, to: aspect.id)
     db_status = StatusMessage.find(status.id)
     expect(db_status.text).to eq(message)
   end
 
-  it "should require status messages not be more than 65535 characters long" do
+  it "requires status messages not be more than 65535 characters long" do
     message = "a" * (65_535 + 1)
     status_message = FactoryBot.build(:status_message, text: message)
     expect(status_message).not_to be_valid
@@ -189,7 +186,7 @@ describe StatusMessage, type: :model do
   end
 
   describe "tags" do
-    it_should_behave_like "it is taggable" do
+    it_behaves_like "it is taggable" do
       let(:object) { build(:status_message) }
     end
 
@@ -209,7 +206,7 @@ describe StatusMessage, type: :model do
       expect(msg_cp.tags).to match_array(tag_array)
     end
 
-    it "should require tag name not be more than 255 characters long" do
+    it "requires tag name not be more than 255 characters long" do
       message = "##{'a' * (255 + 1)}"
       status_message = FactoryBot.build(:status_message, text: message)
       expect(status_message).not_to be_valid
@@ -221,7 +218,7 @@ describe StatusMessage, type: :model do
     let(:message_text) { "#{youtube_url} is so cool. so is this link -> https://joindiaspora.com" }
     let(:status_message) { FactoryBot.build(:status_message, text: message_text) }
 
-    it "should queue a GatherOembedData if it includes a link" do
+    it "queues a GatherOembedData if it includes a link" do
       status_message
       expect(Workers::GatherOEmbedData).to receive(:perform_later).with(kind_of(Integer), instance_of(String))
       status_message.save
@@ -242,7 +239,7 @@ describe StatusMessage, type: :model do
     let(:oemessage_text) { "#{youtube_url} is so cool. so is this link -> https://joindiaspora.com" }
     let(:status_message) { build(:status_message, text: message_text) }
 
-    it "should queue a GatherOpenGraphData if it includes a link" do
+    it "queues a GatherOpenGraphData if it includes a link" do
       status_message
       expect(Workers::GatherOpenGraphData).to receive(:perform_later).with(kind_of(Integer), instance_of(String))
       status_message.save
@@ -253,6 +250,7 @@ describe StatusMessage, type: :model do
         expect(status_message.contains_open_graph_url_in_text?).not_to be_nil
         expect(status_message.open_graph_url).to eq(ninegag_url)
       end
+
       it "returns nil if the link is from trusted oembed provider" do
         status_message = FactoryBot.build(:status_message, text: oemessage_text)
         expect(status_message.contains_open_graph_url_in_text?).to be_nil
@@ -281,7 +279,7 @@ describe StatusMessage, type: :model do
   describe "validation" do
     let(:status_message) { build(:status_message, text: @message_text) }
 
-    it "should not be valid if the author is missing" do
+    it "is not valid if the author is missing" do
       status_message.author = nil
       expect(status_message).not_to be_valid
     end
@@ -293,14 +291,14 @@ describe StatusMessage, type: :model do
     context "with location" do
       let(:location) { build(:location) }
 
-      it "should deliver address and coordinates" do
+      it "delivers address and coordinates" do
         status_message.location = location
         expect(status_message.post_location).to include(address: location.address, lat: location.lat, lng: location.lng)
       end
     end
 
     context "without location" do
-      it "should deliver empty address and coordinates" do
+      it "delivers empty address and coordinates" do
         expect(status_message.post_location[:address]).to be_nil
         expect(status_message.post_location[:lat]).to be_nil
         expect(status_message.post_location[:lng]).to be_nil

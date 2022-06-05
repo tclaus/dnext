@@ -1,14 +1,8 @@
+# frozen_string_literal: true
+
 require "rspec"
 
 describe BasePresenter do
-  before do
-    # Do nothing
-  end
-
-  after do
-    # Do nothing
-  end
-
   context "when initialized with nil" do
     it "falls back to nil" do
       base_presenter = BasePresenter.new(nil)
