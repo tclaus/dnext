@@ -17,7 +17,7 @@ def with_scope(locator, &block)
 end
 
 Given("I click on my name in the header") do
-  find("#navbarDropdown").click
+  find("#user-menu").click
 end
 
 Given(/^(?:|I )am on (.+)$/) do |page_name|

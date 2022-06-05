@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 After do |scenario|
   Capybara.save_path = ENV.fetch("SCREENSHOT_PATH", nil)
   if scenario.failed? && ENV["SCREENSHOT_PATH"]

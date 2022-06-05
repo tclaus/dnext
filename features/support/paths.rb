@@ -10,7 +10,7 @@ def path_to(page_name)
     api_openid_connect_user_applications_path
   when /^the report page$/
     report_index_path
-  when /^the tag page for "([^\"]*)"$/
+  when /^the tag page for "([^"]*)"$/
     tag_path(Regexp.last_match(1))
   when /^its ([\w ]+) page$/
     send("#{Regexp.last_match(1).gsub(/\W+/, '_')}_path", @it)
@@ -24,14 +24,13 @@ def path_to(page_name)
     invite_code_path(InvitationCode.first)
   when /^the requestors profile$/
     person_path(Request.where(recipient_id: @me.person.id).first.sender)
-  when /^"([^\"]*)"'s page$/
-    p = User.find_by_email(Regexp.last_match(1)).person
-    { path: person_path(p),
-      # '#diaspora_handle' on desktop, '.description' on mobile
-      special_elem: { selector: "#diaspora_handle, .description", text: p.diaspora_handle }
-    }
-  when /^"([^\"]*)"'s photos page$/
-    p = User.find_by_email(Regexp.last_match(1)).person
+  when /^"([^"]*)"'s page$/
+    p = User.find_by(email: Regexp.last_match(1)).person
+    {path:         person_path(p),
+     # '#diaspora_handle' on desktop, '.description' on mobile
+     special_elem: {selector: "#diaspora_handle, .description", text: p.diaspora_handle}}
+  when /^"([^"]*)"'s photos page$/
+    p = User.find_by(email: Regexp.last_match(1)).person
     person_photos_path p
   when /^my account settings page$/
     edit_user_path
@@ -62,11 +61,19 @@ def navigate_to(page_name)
 end
 
 def confirm_on_page(page_name)
-  page.driver.send(:retry_if_wrong_world) do
+  wait_for_pageload do
     if page_name == "my profile page"
       expect(page).to have_path_in([person_path(@me.person), user_profile_path(@me.username)])
     else
       expect(page).to have_path(path_to(page_name))
     end
   end
+end
+
+private
+
+def wait_for_pageload
+  timer = Capybara::Helpers.timer(expire_in: Capybara.default_max_wait_time)
+  sleep 0.3 until page.execute_script("return document.readyState").eql?("complete") || timer.expired?
+  yield
 end

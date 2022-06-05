@@ -7,8 +7,8 @@ require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
   # Configure 'rails notes' to inspect Cucumber files
-  config.annotations.register_directories('features')
-  config.annotations.register_extensions('feature') { |tag| /#\s*(#{tag}):?\s*(.*)$/ }
+  config.annotations.register_directories("features")
+  config.annotations.register_extensions("feature") {|tag| /#\s*(#{tag}):?\s*(.*)$/ }
 
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -62,6 +62,6 @@ Rails.application.configure do
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
 
-   # Highlight code that triggered database queries in logs.
-   config.active_record.verbose_query_logs = true
+  # Highlight code that triggered database queries in logs.
+  config.active_record.verbose_query_logs = false
 end

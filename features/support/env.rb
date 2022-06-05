@@ -5,7 +5,7 @@
 # files.
 
 require "cucumber/rails"
-require "capybara/apparition"
+require "capybara/cuprite"
 
 # frozen_string_literal: true
 
@@ -31,10 +31,8 @@ require "capybara/apparition"
 #
 ActionController::Base.allow_rescue = false
 
-# Remove/comment out the lines below if your app doesn't have a database.
-# For some databases (like MongoDB and CouchDB) you may need to use :truncation instead.
 begin
-  DatabaseCleaner.strategy = :truncation
+  DatabaseCleaner.strategy = [:truncation, {except: %w[ar_internal_metadata]}] # Dont clean the ruby metadata
 rescue NameError
   raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
 end
@@ -60,14 +58,14 @@ end
 Cucumber::Rails::Database.javascript_strategy = :truncation
 
 Capybara.server_port = AppConfig.pod_uri.port
+puts AppConfig.pod_uri.host
 Rails.application.routes.default_url_options[:host] = AppConfig.pod_uri.host
 Rails.application.routes.default_url_options[:port] = AppConfig.pod_uri.port
 
-Capybara.server = :webrick
+Capybara.server = :puma
 
-Capybara.register_driver :apparition do |app|
-  # Pass headless: false here if you need to see the browser
-  Capybara::Apparition::Driver.new(app, headless: true)
+Capybara.javascript_driver = :cuprite
+Capybara.register_driver(:cuprite) do |app|
+  Capybara::Cuprite::Driver.new(app, window_size: [1200, 800])
 end
-Capybara.javascript_driver = :apparition
-Capybara.default_driver = :apparition
+Capybara.default_driver = :cuprite
