@@ -29,7 +29,7 @@
                 %li
                   = link_to t("devise.shared.links.sign_in"), new_user_session_path, class: "login"
         - if user_signed_in?
-          %li.nav-item.dropdown
+          %li.nav-item.dropdown#user-menu
             %a.nav-link.dropdown-toggle.hidden-xs.hidden-sm#navbarDropdown{href: "#",
              data:{bs_toggle:"dropdown"},
              role:"button",
@@ -55,5 +55,5 @@
               %li
                 %hr.dropdown-divider
               %li
-                = link_to destroy_user_session_path, data: {turbo_method: "delete"} do
+                = button_to destroy_user_session_path, method: :delete, class: "dropdown-item" do
                   = t("header.log_out")

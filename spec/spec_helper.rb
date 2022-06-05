@@ -73,11 +73,19 @@ RSpec.configure do |config|
       :get,
       "https://example.com/.well-known/webfinger?resource=acct:bob@example.com"
     )
+    stub_request(:post, "http://example.net/receive/users/").
+      with(
+        headers: {
+          'Content-Type'=>'application/json',
+          'Expect'=>'',
+        }).
+      to_return(status: 200, body: "", headers: {})
+
     stub_request(
       :get,
       "https://example.com/.well-known/host-meta"
     )
-    stub_request(:get, "https://api.deepl.com/v2/languages?auth_key=722b3fb8-fea5-6a9b-3e07-39bb102b972f")
+    stub_request(:get, "https://api.deepl.com/v2/languages")
       .with(
         headers: {
           "Accept"          => "*/*",
