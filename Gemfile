@@ -141,6 +141,9 @@ end
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
 
+  # Faking literaly everything https://github.com/faker-ruby/faker
+  gem "faker", "~> 2.21"
+
   # Web Driver https://github.com/rubycdp/cuprite
   gem "cuprite", require: false
 

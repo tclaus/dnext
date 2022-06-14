@@ -46,9 +46,10 @@ en:
     likes: "%{count} Likes"
     comments: "%{count} Comments"
     shares: "%{count} Shares"
-    you_like_it: "You like that."
-    you_and_others_like_it: "You and %{count} others like that."
-    you_and_one_other_person_like_it: "You and one other person like that."
+    you_like_it: "You like that"
+    you_and_others_like_it: "You and %{count} others like that"
+    you_and_one_other_person_like_it: "You and one other person like that"
+    like: "One person like that"
   post:
     visibility:
       global: "Post is globally visible"

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Like < ApplicationRecord
   include Diaspora::Federated::Base
   include Diaspora::Fields::Guid
@@ -21,6 +23,10 @@ class Like < ApplicationRecord
     def relayable_options
       {target: @target, positive: true}
     end
+  end
+
+  after_commit on: :create do
+    parent.update_likes_counter
   end
 
   after_destroy do

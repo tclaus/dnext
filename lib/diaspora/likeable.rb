@@ -18,7 +18,6 @@ module Diaspora
       return unless likeable
 
       likeable.update_all(likes_count: likes.count) # rubocop:disable Rails/SkipsModelValidations
-      likeable.first.broadcast_like_updates
     end
   end
 end

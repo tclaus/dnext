@@ -60,8 +60,8 @@ FactoryBot.define do
 
   factory :user do
     getting_started { false }
-    sequence(:username) {|n| "bob#{n}#{r_str}" }
-    sequence(:email) {|n| "bob#{n}#{r_str}@pivotallabs.com" }
+    username { Faker::Name.first_name }
+    email { "#{username}@pivotallabs.com" }
     password { "bluepin7" }
     password_confirmation(&:password)
     serialized_private_key { OpenSSL::PKey::RSA.generate(1024).export }
