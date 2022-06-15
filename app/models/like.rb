@@ -25,10 +25,6 @@ class Like < ApplicationRecord
     end
   end
 
-  after_commit on: :create do
-    parent.update_likes_counter
-  end
-
   after_destroy do
     parent.update_likes_counter
     participation = author.participations.find_by(target_id: target.id)
