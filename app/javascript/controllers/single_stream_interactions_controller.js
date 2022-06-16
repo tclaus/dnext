@@ -9,10 +9,6 @@ export default class extends Controller {
         queryHelper(this)
     }
 
-    initialized() {
-        console.debug("Started single-stream-interactions controller")
-    }
-
     like(event) {
         console.info("Like on post:", this.getPostId())
         event.preventDefault()

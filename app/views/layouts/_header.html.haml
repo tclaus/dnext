@@ -18,8 +18,8 @@
                 = t("my_activities")
         - if user_signed_in?
           %form.d-flex
-            %input.form-control.me-2{type: "search", placeholder: "Search", aria:{label: "Search"}}
-            %button.btn.btn-outline-success{type: "submit"} Search
+            %input.form-control.me-2{type: "search", placeholder: "Search", disabled: :true, aria:{label: "Search"}}
+            %button.btn.btn-outline-success{type: "submit", disabled: :true} Search
         %ul.navbar-nav.ms-auto
           - unless user_signed_in?
             - if display_registration_link? && !current_page?(controller: "/registrations", action: :new)

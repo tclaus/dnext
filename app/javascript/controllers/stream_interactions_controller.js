@@ -9,10 +9,6 @@ export default class extends Controller {
         queryHelper(this)
     }
 
-    initialized() {
-        console.debug("Started stream-interactions controller")
-    }
-
     like(event) {
         console.info("Create like on: ", this.getType())
         event.preventDefault()
