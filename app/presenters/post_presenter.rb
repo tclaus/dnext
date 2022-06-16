@@ -38,6 +38,7 @@ class PostPresenter < BasePresenter
     end
   end
 
+  # @return [A limited list of likes for this post]
   def likes
     LikeService.new(current_user)
                .find_for_post(@post.id)

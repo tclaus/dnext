@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe Post, type: :model do
@@ -33,7 +35,7 @@ describe Post, type: :model do
         expect(StatusMessage.owned_or_visible_by_user(@you)).not_to include(@post_from_stranger)
       end
 
-      it "should return the three visible posts" do
+      it "returns the three visible posts" do
         expect(StatusMessage.owned_or_visible_by_user(@you).count(:all)).to eq(3)
       end
     end
@@ -142,9 +144,11 @@ describe Post, type: :model do
         @other_post = FactoryBot.create(:status_message, author: eve.person)
         bob.toggle_hidden_shareable(@post)
       end
+
       it "excludes posts the user has hidden" do
         expect(Post.excluding_hidden_shareables(Post.all, bob)).not_to include(@post)
       end
+
       it "includes posts the user has not hidden" do
         expect(Post.excluding_hidden_shareables(Post.all, bob)).to include(@other_post)
       end
@@ -261,12 +265,12 @@ describe Post, type: :model do
   end
 
   describe "deletion" do
-    it "should delete a posts comments on delete" do
+    it "deletes a posts comments on delete" do
       post = FactoryBot.create(:status_message, author: alice.person)
       alice.comment!(post, "hey")
       post.destroy
-      expect(Post.where(id: post.id).empty?).to eq(true)
-      expect(Comment.where(text: "hey").empty?).to eq(true)
+      expect(Post.where(id: post.id).empty?).to be(true)
+      expect(Comment.where(text: "hey").empty?).to be(true)
     end
   end
 
@@ -368,7 +372,7 @@ describe Post, type: :model do
   end
 
   describe "#reshares_count" do
-    before :each do
+    before do
       @post = alice.post(:status_message, text: "hello", public: true)
       expect(@post.reshares.size).to eq(0)
     end
@@ -380,7 +384,7 @@ describe Post, type: :model do
     end
 
     describe "when post has been reshared exactly 1 time" do
-      before :each do
+      before do
         expect(@post.reshares.size).to eq(0)
         @reshare = FactoryBot.create(:reshare, root: @post)
         @post.reload
@@ -393,7 +397,7 @@ describe Post, type: :model do
     end
 
     describe "when post has been reshared more than once" do
-      before :each do
+      before do
         expect(@post.reshares.size).to eq(0)
         FactoryBot.create(:reshare, root: @post)
         FactoryBot.create(:reshare, root: @post)

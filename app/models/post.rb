@@ -23,7 +23,7 @@ class Post < ApplicationRecord
 
   has_many :participations, dependent: :delete_all, as: :target, inverse_of: :target
   has_many :participants, through: :participations, source: :author
-  has_many :reports, as: :item, foreign_key: :item_id, dependent: :destroy
+  has_many :reports, as: :item, dependent: :destroy
 
   has_many :reshares, class_name: "Reshare", foreign_key: :root_guid, primary_key: :guid
   has_many :resharers, class_name: "Person", through: :reshares, source: :author
@@ -40,35 +40,6 @@ class Post < ApplicationRecord
 
   before_destroy do
     reshares.update_all(root_guid: nil) # rubocop:disable Rails/SkipsModelValidations
-  end
-
-  after_update_commit -> {
-    broadcast_like_updates
-  }
-
-  def broadcast_like_updates
-    broadcast_update_to_languages(:posts, partial: "streams/interactions/own_interactions",
-                                          locals:  {entry: self},
-                                          target:  "post_own_like_#{id}")
-
-    broadcast_update_to_languages(:posts, partial: "streams/interactions/other_interactions",
-                                          locals:  {entry: self},
-                                          target:  "post_like_#{id}")
-
-    # for single post
-    broadcast_update_to :post, partial: "posts/single_post_interactions",
-                               locals:  {post: self},
-                               target:  "single_post_interactions_#{id}"
-  end
-
-  def broadcast_update_to_languages(*streamables, **rendering)
-    AVAILABLE_LANGUAGES.each do |language_id, _language_name|
-      cloned_renderings = rendering.clone
-      cloned_renderings[:target] = "#{rendering[:target]}_#{language_id}"
-      I18n.with_locale(language_id) do
-        broadcast_update_to(*streamables, **cloned_renderings)
-      end
-    end
   end
 
   # scopes

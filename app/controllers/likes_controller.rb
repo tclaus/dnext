@@ -25,6 +25,7 @@ class LikesController < ApplicationController
   def destroy
     like = Like.find(like_id)
     if like && like_service.destroy(like.id)
+      like.parent.reload
       return response_for_comment(like.parent) if like.target_type.eql?("Comment")
 
       return response_for_post(like.parent) if like.target_type.eql?("Post")
@@ -37,11 +38,13 @@ class LikesController < ApplicationController
 
   def create_for_comment
     like = like_service.create_for_comment(comment_id)
+    like.parent.reload
     response_for_comment(like.parent)
   end
 
   def create_for_post
     like = like_service.create_for_post(post_id)
+    like.parent.reload
     response_for_post(like.parent)
   end
 

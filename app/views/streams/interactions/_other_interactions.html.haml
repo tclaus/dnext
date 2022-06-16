@@ -1,1 +1,4 @@
-= t("post-status.likes", count: entry.likes_count.to_fs(:human))
+- if entry.likes_count == 1
+  = t("post-status.like")
+- else
+  = t("post-status.likes", count: entry.likes_count.to_fs(:human))

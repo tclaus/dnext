@@ -64,10 +64,6 @@ dependent: :destroy
     end
   end
 
-  def broadcast_like_updates
-    # Empty for comments,
-  end
-
   def text=(text)
     self[:text] = text.to_s.strip # to_s if for nil, for whatever reason
   end
