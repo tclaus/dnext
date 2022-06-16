@@ -2,10 +2,6 @@ import {Controller} from "@hotwired/stimulus"
 
 export default class extends Controller {
 
-    initialize() {
-        console.debug("Initialized reshare_controller")
-    }
-
     async updateInteractions(event) {
         if (event.detail.fetchResponse.succeeded) {
             event.preventDefault()
