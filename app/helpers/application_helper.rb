@@ -55,4 +55,10 @@ module ApplicationHelper
     label = current_user.username
     current_user.otp_provisioning_uri(label, issuer: AppConfig.environment.url)
   end
+
+  # @param [String] guid that references a globally unique person
+  # @param [Proc] block The html tag block that is surrounded by the link
+  def link_to_person(guid, &block)
+    link_to "/people/#{guid}", class: "img", data_controller: "hovercard", &block
+  end
 end
