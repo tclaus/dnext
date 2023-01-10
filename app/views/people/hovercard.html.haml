@@ -1,0 +1,14 @@
+.hovercard{data: {hovercard_target: "card"}}
+  = link_to("/person/#{@person.guid}", class: "img") do
+    = image_tag(@person.avatar_small, class: "avatar avatar-small", alt: @person.diaspora_handle)
+  %h4
+    = link_to("/person/#{@person.guid}", class: "person") do
+      = @person.name
+  .status-container
+    .handle
+      = @person.diaspora_handle
+  - # TODO: Sharing indicator here?
+  .card-footer
+    .footer-container
+      .hashtags
+        = tag_list(@person)
