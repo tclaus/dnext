@@ -162,8 +162,8 @@
 ## Settings affecting how ./script/server behaves.
 [configuration.server]
 
-## Where the appserver should listen to (default="unix://tmp/dnext.sock")
-#listen = "unix://tmp/diaspora.sock"
+## Where the appserver should listen to (default="unix:///tmp/dnext.sock")
+#listen = "unix:///tmp/diaspora.sock"
 #listen = "unix:///run/diaspora/diaspora.sock"
 #listen = "tcp://127.0.0.1:3000"
 
