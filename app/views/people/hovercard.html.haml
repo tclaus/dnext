@@ -11,4 +11,5 @@
   .card-footer
     .footer-container
       .hashtags
-        = tag_list(@person)
+        - @person.tags.each do |tag|
+          = tag_as_link(tag)
