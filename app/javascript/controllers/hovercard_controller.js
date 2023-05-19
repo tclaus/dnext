@@ -1,35 +1,43 @@
 import { Controller } from "@hotwired/stimulus"
-
-// Connects to data-controller="hovercard"
 export default class extends Controller {
-  static targets = ["card"];
-  static values = { url: String };
+  static targets = ['card', 'content']
+  static values = {
+    url: String
+  }
 
-  show() {
-    if (this.hasCardTarget) {
-      this.cardTarget.classList.remove("hidden");
+  async show (event) {
+    let content = null
+
+    if (this.hasContentTarget) {
+      content = this.contentTarget.innerHTML
     } else {
-      fetch(this.urlValue)
-          .then((r) => r.text())
-          .then((html) => {
-            const fragment = document
-                .createRange()
-                .createContextualFragment(html);
+      content = await this.fetch()
+    }
 
-            this.element.appendChild(fragment);
-          });
+    if (!content) return
+
+    const fragment = document.createRange().createContextualFragment(content)
+    event.target.appendChild(fragment)
+  }
+
+  hide () {
+    if (this.hasCardTarget) {
+      this.cardTarget.remove()
     }
   }
 
-  hide() {
-    if (this.hasCardTarget) {
-      this.cardTarget.classList.add("hidden");
-    }
-  }
+  async fetch () {
+    if (!this.remoteContent) {
 
-  disconnect() {
-    if (this.hasCardTarget) {
-      this.cardTarget.remove();
+      if (!this.hasUrlValue) {
+        console.error('[stimulus-popover] You need to pass an url to fetch the popover content.')
+        return
+      }
+
+      const response = await fetch(this.urlValue)
+      this.remoteContent = await response.text()
     }
+
+    return this.remoteContent
   }
 }
