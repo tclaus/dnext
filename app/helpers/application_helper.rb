@@ -25,6 +25,12 @@ module ApplicationHelper
     content_tag("span", content.html_safe, args)
   end
 
+  def tag_list(profile)
+    profile.tags.each do |tag|
+      tag_as_link(tag)
+    end
+  end
+
   # Returns a tag formatted as a link
   def tag_as_link(tag_name)
     link_to("##{tag_name}", "/tags/#{tag_name}", class: "tag")
@@ -54,5 +60,15 @@ module ApplicationHelper
   def qrcode_uri
     label = current_user.username
     current_user.otp_provisioning_uri(label, issuer: AppConfig.environment.url)
+  end
+
+  # @param [String] guid that references a globally unique person
+  # @param [Proc] block The html tag block that is surrounded by the link
+  def link_to_person(guid:, css_class:, &block)
+    data = {data: {controller:          "hovercard",
+                   hovercard_url_value: "/people/#{guid}/hovercard",
+                   action:              "mouseenter->hovercard#show mouseleave->hovercard#hide"}}
+    data.merge!(class: css_class) if css_class
+    link_to "/people/#{guid}", data, &block
   end
 end

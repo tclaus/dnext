@@ -103,6 +103,6 @@ module PeopleHelper
 
     return "#{css_class} self" if current_user.person == person
 
-    "#{css_class} hovercardable"
+    css_class
   end
 end

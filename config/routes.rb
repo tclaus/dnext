@@ -64,5 +64,6 @@ Rails.application.routes.draw do
   # Users and people
   resources :people, only: %i[show index] do
     resources :photos, except: %i[new update]
+    get :hovercard
   end
 end

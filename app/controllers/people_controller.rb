@@ -7,7 +7,7 @@ class PeopleController < ApplicationController
   include Pagy::Backend
 
   rescue_from ActiveRecord::RecordNotFound do
-    render file: Rails.root.join("public/404").to_s,
+    render file: Rails.public_path.join("404").to_s,
            format: :html, layout: false, status: :not_found
   end
 
@@ -87,18 +87,11 @@ class PeopleController < ApplicationController
     end
   end
 
-  # hovercards fetch some the persons public profile data via json and display
+  # Hovercards fetch some the persons public profile data and display
   # it next to the avatar image in a nice box
   def hovercard
-    respond_to do |format|
-      format.all do
-        redirect_to action: "show", id: params[:person_id]
-      end
-
-      format.json do
-        render json: PersonPresenter.new(@person, current_user).hovercard
-      end
-    end
+    @person = PersonPresenter.new(@person, current_user)
+    render layout: false
   end
 
   private

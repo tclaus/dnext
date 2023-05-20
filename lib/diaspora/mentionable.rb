@@ -10,7 +10,7 @@ module Diaspora
     REGEX = /@\{(?:([^}]+?); )?([^} ]+)\}/
 
     # Class attribute that will be added to all mention html links
-    PERSON_HREF_CLASS = 'mention hovercardable'
+    PERSON_HREF_CLASS = "mention"
 
     def self.mention_attrs(mention_str)
       name, diaspora_id = mention_str.match(REGEX).captures
@@ -26,12 +26,12 @@ module Diaspora
     # @param [Array<Person>] list of mentioned people
     # @param [Hash] formatting options
     # @return [String] formatted message
-    def self.format(msg_text, people, opts = {})
+    def self.format(msg_text, people, opts={})
       people = [*people]
 
       msg_text.to_s.gsub(REGEX) do |match_str|
         name, diaspora_id = mention_attrs(match_str)
-        person = people.find { |p| p.diaspora_handle == diaspora_id }
+        person = people.find {|p| p.diaspora_handle == diaspora_id }
 
         "@#{ERB::Util.h(MentionsInternal.mention_link(person, name, diaspora_id, opts))}"
       end
@@ -43,9 +43,9 @@ module Diaspora
     # @param [String] text containing mentions
     # @return [Array<Person>] array of people
     def self.people_from_string(msg_text)
-      identifiers = msg_text.to_s.scan(REGEX).map { |match_str| match_str.second.strip }
+      identifiers = msg_text.to_s.scan(REGEX).map {|match_str| match_str.second.strip }
 
-      identifiers.compact.uniq.map { |identifier| find_or_fetch_person_by_identifier(identifier) }.compact
+      identifiers.compact.uniq.map {|identifier| find_or_fetch_person_by_identifier(identifier) }.compact
     end
 
     # Takes a message text and converts mentions for people that are not in the
@@ -60,7 +60,7 @@ module Diaspora
 
       msg_text.to_s.gsub(REGEX) do |match_str|
         name, diaspora_id = mention_attrs(match_str)
-        person = mentioned_ppl.find { |p| p.diaspora_handle == diaspora_id }
+        person = mentioned_ppl.find {|p| p.diaspora_handle == diaspora_id }
 
         if person && allowed_people.include?(person.id)
           match_str

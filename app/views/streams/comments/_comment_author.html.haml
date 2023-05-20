@@ -1,5 +1,6 @@
-= link_to "/people/#{author.guid}", class: "img hovercardable" do
+= link_to_person(guid: author.guid, css_class: "img") do
   = image_tag(author.avatar_small, class: "avatar small", alt: author.diaspora_handle)
   .person-name
-    = link_to author_full_name(author),  "/people/#{author.guid}", class: "author-name"
+    = link_to_person(guid: author.guid, css_class: "author-name") do
+      author_full_name(author)
   = local_time_ago created_at, class: "post-head-text"

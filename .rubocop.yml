@@ -49,9 +49,6 @@ Metrics/PerceivedComplexity:
 
 # Some blocks are longer.
 Metrics/BlockLength:
-  IgnoredMethods:
-    - "namespace"
-    - "create_table"
   Exclude:
     - "config/**/*.rb"
     - "spec/**/*.rb"
