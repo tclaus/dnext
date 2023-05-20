@@ -7,7 +7,7 @@ require "configurate/provider/toml"
 
 module Rails
   def self.root
-    @__root ||= Pathname.new File.expand_path("../../", __FILE__)
+    @__root ||= Pathname.new File.expand_path("..", __dir__)
   end
 end
 
@@ -31,28 +31,28 @@ AppConfig ||= Configurate::Settings.create do
   if File.exist?(File.join(config_dir, "diaspora.toml"))
 
     add_provider Configurate::Provider::TOML,
-      File.join(config_dir, "diaspora.toml"),
-      namespace: rails_env, required: false
+                 File.join(config_dir, "diaspora.toml"),
+                 namespace: rails_env, required: false
     add_provider Configurate::Provider::TOML,
-      File.join(config_dir, "diaspora.toml"),
-      namespace: "configuration", required: false
+                 File.join(config_dir, "diaspora.toml"),
+                 namespace: "configuration", required: false
   end
 
   add_provider Configurate::Provider::YAML,
-    File.join(config_dir, "defaults.yml"),
-    namespace: rails_env
+               File.join(config_dir, "defaults.yml"),
+               namespace: rails_env
   add_provider Configurate::Provider::YAML,
-    File.join(config_dir, "defaults.yml"),
-    namespace: "defaults", raise_on_missing: true
+               File.join(config_dir, "defaults.yml"),
+               namespace: "defaults", raise_on_missing: true
 
   extend Configuration::Methods
 
   if rails_env == "production" &&
-      (environment.certificate_authorities.nil? ||
-        environment.certificate_authorities.empty? ||
+    (environment.certificate_authorities.nil? ||
+      environment.certificate_authorities.empty? ||
         !File.file?(environment.certificate_authorities.get))
-    warn "FATAL: Diaspora doesn't know where your certificate authorities are." \
-         " Please ensure they are set to a valid path in diaspora.toml"
+    warn "FATAL: Diaspora doesn't know where your certificate authorities are. " \
+         "Please ensure they are set to a valid path in diaspora.toml"
     exit!
   end
 end

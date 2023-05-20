@@ -36,3 +36,4 @@ end
 
 Rails.application.routes.default_url_options[:host] = AppConfig.pod_uri.host
 Rails.application.routes.default_url_options[:port] = AppConfig.pod_uri.port
+Rails.application.config.hosts << AppConfig.pod_uri.hostname
