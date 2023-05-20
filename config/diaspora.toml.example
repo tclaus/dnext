@@ -55,7 +55,7 @@
 #require_ssl = true
 
 ## Single-process mode (default=false).
-## If set to true, Diaspora will work with just the appserver (Unicorn by
+## If set to true, Diaspora will work with just the appserver (puma by
 ## default) running. However, this makes it quite slow as intensive jobs
 ## must be run all the time inside the request cycle. We strongly
 ## recommended you leave this disabled for production setups.
@@ -67,11 +67,6 @@
 ## add its URL here. All requests made to images under /uploads/images
 ## will be redirected to https://images.example.org/uploads/images/
 #image_redirect_url = "https://images.example.org"
-
-## Pubsub server (default="https://pubsubhubbub.appspot.com/"").
-## Diaspora is only tested against the default pubsub server.
-## You probably don't want to uncomment or change this.
-#pubsub_server = "https://pubsubhubbub.appspot.com/"
 
 ## Sidekiq - background processing
 [configuration.environment.sidekiq]
@@ -163,11 +158,11 @@
 [configuration.server]
 
 ## Where the appserver should listen to (default="unix:///tmp/dnext.sock")
-#listen = "unix:///tmp/diaspora.sock"
-#listen = "unix:///run/diaspora/diaspora.sock"
+#listen = "unix:///tmp/dnext.sock"
+#listen = "unix:///run/dnext/dnext.sock"
 #listen = "tcp://127.0.0.1:3000"
 
-## Set the path for the PID file of the unicorn master process (default=tmp/pids/web.pid)
+## Set the path for the PID file of the puma master process (default=tmp/pids/web.pid)
 #pid = "tmp/pids/web.pid"
 
 ## Rails environment (default="development").
@@ -175,21 +170,11 @@
 ## Change this to "production" if you wish to run a production environment.
 #rails_environment = "production"
 
-## Write unicorn stderr and stdout log.
+## Write puma stderr and stdout log.
 #stderr_log = "log/unicorn-stderr.log"
 #stdout_log = "log/unicorn-stdout.log"
 
-## Number of Unicorn worker processes (default=2).
-## Increase this if you have many users.
-#unicorn_worker = 2
-
-## Number of seconds before a request is aborted (default=90).
-## Increase if you get empty responses, or if large image uploads fail.
-## Decrease if you're under heavy load and don't care if some
-## requests fail.
-#unicorn_timeout = 90
-
-## Embed a Sidekiq worker inside the unicorn process (default=false).
+## Embed a Sidekiq worker inside the puma process (default=false).
 ## Useful for minimal Heroku setups.
 #embed_sidekiq_worker = false
 
