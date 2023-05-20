@@ -24,7 +24,7 @@ class StreamsController < ApplicationController
 
   private
 
-  def stream_responder(stream_builder=nil)
+  def stream_responder(stream_builder)
     @stream_builder_object = stream_builder.new(current_user)
     @pagy, @stream = pagy_countless(@stream_builder_object.stream_posts)
     respond_to do |format|
