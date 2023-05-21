@@ -2,3 +2,5 @@
 = scope_of_post_tag(post)
 - if current_user&.podmin?
   = "Lang: #{post.language_id}" if post.language_id.present?
+  = "Lang: unknown" if post.language_id.nil?
+  = ", is Closed" if post.author.closed_account
