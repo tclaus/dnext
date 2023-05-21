@@ -85,7 +85,10 @@ gem "acts-as-taggable-on", "~> 9.0", ">= 9.0.1"
 gem "eye", "~> 0.10.0"
 
 # Uris and HTTP
-gem "addressable", "~> 2.8"
+gem "addressable", "~> 2.8", require: "addressable/uri"
+gem "faraday", "~> 2.7", ">= 2.7.4"
+gem "faraday-cookie_jar",       "0.0.7"
+gem "faraday-follow_redirects", "0.3.0"
 
 # Authentication
 # See: https://pagertree.com/2021/04/13/rails-7-attr-encrypted-migration/
@@ -103,9 +106,11 @@ gem "rqrcode", "~> 2.1", ">= 2.1.1"
 gem "invisible_captcha", "~> 2.0"
 
 # Background processing
-gem "sidekiq", "~> 6.4", ">= 6.4.1"
+gem "sidekiq", "~> 7.1"
+gem "sidekiq-cron", "~> 1.10", ">= 1.10.1"
+
 # Federation
-gem "diaspora_federation", "~> 0.3"
+gem "diaspora_federation", "~> 1.0", ">= 1.0.1"
 gem "timecop", "~> 0.9.5"
 
 # frozen_string_literal: true

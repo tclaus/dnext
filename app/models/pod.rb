@@ -1,33 +1,25 @@
 # frozen_string_literal: true
 
 class Pod < ApplicationRecord
-  enum status: %i(
-    unchecked
-    no_errors
-    dns_failed
-    net_failed
-    ssl_failed
-    http_failed
-    version_failed
-    unknown_error
-  )
+  enum status: {unchecked: 0, no_errors: 1, dns_failed: 2, net_failed: 3, ssl_failed: 4,
+http_failed: 5, version_failed: 6, unknown_error: 7}
 
   ERROR_MAP = {
-    ConnectionTester::AddressFailure => :dns_failed,
-    ConnectionTester::DNSFailure => :dns_failed,
-    ConnectionTester::NetFailure => :net_failed,
-    ConnectionTester::SSLFailure => :ssl_failed,
-    ConnectionTester::HTTPFailure => :http_failed,
+    ConnectionTester::AddressFailure  => :dns_failed,
+    ConnectionTester::DNSFailure      => :dns_failed,
+    ConnectionTester::NetFailure      => :net_failed,
+    ConnectionTester::SSLFailure      => :ssl_failed,
+    ConnectionTester::HTTPFailure     => :http_failed,
     ConnectionTester::NodeInfoFailure => :version_failed
   }
 
   # this are only the most common errors, the rest will be +unknown_error+
   CURL_ERROR_MAP = {
-    couldnt_resolve_host: :dns_failed,
-    couldnt_connect: :net_failed,
-    operation_timedout: :net_failed,
-    ssl_cipher: :ssl_failed,
-    ssl_cacert: :ssl_failed,
+    couldnt_resolve_host:         :dns_failed,
+    couldnt_connect:              :net_failed,
+    operation_timedout:           :net_failed,
+    ssl_cipher:                   :ssl_failed,
+    ssl_cacert:                   :ssl_failed,
     redirected_to_other_hostname: :http_failed
   }.freeze
 
@@ -62,7 +54,13 @@ class Pod < ApplicationRecord
     end
 
     def check_all!
-      Pod.find_in_batches(batch_size: 20) { |batch| batch.each(&:test_connection!) }
+      Pod.find_in_batches(batch_size: 20) {|batch| batch.each(&:test_connection!) }
+    end
+
+    # Checks all seed pods without any check so far.
+    def check_all_unchecked!
+      Pod.where(checked_at: "1970-01-01 00:00:00")
+         .find_in_batches(batch_size: 20) {|batch| batch.each(&:test_connection!) }
     end
 
     def check_scheduled!
@@ -76,7 +74,7 @@ class Pod < ApplicationRecord
 
   # a pod is active if it is online or was online less than 14 days ago
   def active?
-    !offline? || offline_since.try { |date| date > DateTime.now.utc - 14.days }
+    !offline? || offline_since.try {|date| date > DateTime.now.utc - 14.days }
   end
 
   def to_s
@@ -89,7 +87,7 @@ class Pod < ApplicationRecord
 
   def test_connection!
     result = ConnectionTester.check uri.to_s
-    logger.debug "tested pod: '#{uri}' - #{result.inspect}"
+    logger.debug "Tested pod: '#{uri}' - #{result.inspect}"
 
     transaction do
       update_from_result(result)
@@ -99,7 +97,7 @@ class Pod < ApplicationRecord
   # @param path [String]
   # @return [String]
   def url_to(path)
-    uri.tap { |uri| uri.path = path }.to_s
+    uri.tap {|uri| uri.path = path }.to_s
   end
 
   def update_offline_since
@@ -126,7 +124,9 @@ class Pod < ApplicationRecord
 
   def attributes_from_result(result)
     self.ssl ||= result.ssl
+    self.port = 443 if result.ssl
     self.error = result.failure_message[0..254] if result.error?
+    self.error = nil if result.error.nil?
     self.software = result.software_version[0..254] if result.software_version.present?
     self.response_time = result.rt
   end
