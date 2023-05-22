@@ -117,7 +117,10 @@ DiasporaFederation.configure do |config|
       else
         if Diaspora::Federation::Entities.should_perform(entity)
           persisted = Diaspora::Federation::Receive.perform(entity)
-          ReceiveLocalJob.perform_async(persisted.class.to_s, persisted.id, [recipient_id].compact) if persisted
+          if persisted
+            Workers::ReceiveLocalJob.perform_later(persisted.class.to_s, persisted.id,
+                                                   [recipient_id].compact)
+          end
         end
       end
     end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DeletePostFromServiceJob < ApplicationJob
+class Workers::DeletePostFromServiceJob < Workers::ApplicationJob
   sidekiq_options queue: :high
 
   def perform(service_id, opts)

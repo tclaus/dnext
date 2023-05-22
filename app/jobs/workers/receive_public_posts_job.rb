@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ReceivePublicPostsJob < ReceiveBaseJob
+class Workers::ReceivePublicPostsJob < Workers::ReceiveBaseJob
   def perform
     Pod.check_all_unchecked!
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ReceivePublicJob < ReceiveBaseJob
+class Workers::ReceivePublicJob < Workers::ReceiveBaseJob
   def perform(data, legacy: false)
     filter_errors_for_retry do
       DiasporaFederation::Federation::Receiver.receive_public(data)

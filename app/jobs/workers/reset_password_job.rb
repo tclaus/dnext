@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ResetPasswordJob < ApplicationJob
+class Workers::ResetPasswordJob < Workers::ApplicationJob
   queue_as :urgent
 
   def perform(user)

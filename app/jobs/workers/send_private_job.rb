@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SendPrivateJob < SendBaseJob
+class Workers::SendPrivateJob < Workers::SendBaseJob
   def perform(sender_id, obj_str, targets, retry_count=0)
     targets_to_retry = DiasporaFederation::Federation::Sender.private(sender_id, obj_str, targets)
 

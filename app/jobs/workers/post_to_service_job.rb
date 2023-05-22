@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PostToServiceJob < ApplicationJob
+class Workers::PostToServiceJob < Workers::ApplicationJob
   sidekiq_options queue: :medium
 
   def perform(service_id, post_id, url)

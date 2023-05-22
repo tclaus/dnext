@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SendBaseJob < ApplicationJob
+class Workers::SendBaseJob < Workers::ApplicationJob
   sidekiq_options queue: :medium, retry: 0
 
   MAX_RETRIES = AppConfig.environment.sidekiq.retry.get.to_i

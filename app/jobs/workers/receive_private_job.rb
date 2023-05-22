@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ReceivePrivateJob < ReceiveBaseJob
+class Workers::ReceivePrivateJob < Workers::ReceiveBaseJob
   def perform(user_id, data, _legacy)
     filter_errors_for_retry do
       user_private_key = User.where(id: user_id).pluck(:serialized_private_key).first

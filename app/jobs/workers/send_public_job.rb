@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SendPublicJob < SendBaseJob
+class Workers::SendPublicJob < Workers::SendBaseJob
   def perform(sender_id, obj_str, urls, xml, retry_count=0)
     urls_to_retry = DiasporaFederation::Federation::Sender.public(sender_id, obj_str, urls, xml)
 

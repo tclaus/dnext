@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ReceiveLocalJob < ApplicationJob
+class Workers::ReceiveLocalJob < Workers::ApplicationJob
   sidekiq_options queue: :high
 
   def perform(object_class_string, object_id, recipient_user_ids)

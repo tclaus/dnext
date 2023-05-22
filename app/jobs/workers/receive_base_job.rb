@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ReceiveBaseJob < ApplicationJob
+class Workers::ReceiveBaseJob < Workers::ApplicationJob
   sidekiq_options queue: :urgent
 
   include Diaspora::Logging

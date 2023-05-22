@@ -11,7 +11,7 @@ http_failed: 5, version_failed: 6, unknown_error: 7}
     ConnectionTester::SSLFailure      => :ssl_failed,
     ConnectionTester::HTTPFailure     => :http_failed,
     ConnectionTester::NodeInfoFailure => :version_failed
-  }
+  }.freeze
 
   # this are only the most common errors, the rest will be +unknown_error+
   CURL_ERROR_MAP = {
@@ -23,7 +23,7 @@ http_failed: 5, version_failed: 6, unknown_error: 7}
     redirected_to_other_hostname: :http_failed
   }.freeze
 
-  DEFAULT_PORTS = [URI::HTTP::DEFAULT_PORT, URI::HTTPS::DEFAULT_PORT]
+  DEFAULT_PORTS = [URI::HTTP::DEFAULT_PORT, URI::HTTPS::DEFAULT_PORT].freeze
 
   has_many :people
 
@@ -108,6 +108,12 @@ http_failed: 5, version_failed: 6, unknown_error: 7}
     end
   end
 
+  # @return [URI]
+  def uri
+    @uri ||= (ssl ? URI::HTTPS : URI::HTTP).build(host: host, port: port)
+    @uri.dup
+  end
+
   private
 
   def update_from_result(result)
@@ -137,12 +143,6 @@ http_failed: 5, version_failed: 6, unknown_error: 7}
     else
       :no_errors
     end
-  end
-
-  # @return [URI]
-  def uri
-    @uri ||= (ssl ? URI::HTTPS : URI::HTTP).build(host: host, port: port)
-    @uri.dup
   end
 
   def not_own_pod

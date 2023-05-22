@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DeferredRetractionJob < ApplicationJob
+class Workers::DeferredRetractionJob < Workers::ApplicationJob
   sidekiq_options queue: :high
 
   def perform(user_id, retraction_class, retraction_data, recipient_ids, opts)
