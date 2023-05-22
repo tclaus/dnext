@@ -365,7 +365,8 @@ GEM
     rainbow (3.1.1)
     rake (13.0.6)
     redcarpet (3.6.0)
-    redis (4.8.1)
+    redis (5.0.6)
+      redis-client (>= 0.9.0)
     redis-client (0.14.1)
       connection_pool
     regexp_parser (2.8.0)
@@ -549,7 +550,7 @@ DEPENDENCIES
   rails (~> 7.0)
   rails-i18n (~> 7.0, >= 7.0.3)
   redcarpet (~> 3.5, >= 3.5.1)
-  redis (~> 4.6)
+  redis (~> 5.0, >= 5.0.6)
   rqrcode (~> 2.1, >= 2.1.1)
   rspec-json_expectations (~> 2.1)
   rspec-rails (~> 5.1)
