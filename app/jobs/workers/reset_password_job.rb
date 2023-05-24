@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
-class Workers::ResetPasswordJob < Workers::ApplicationJob
-  queue_as :urgent
+module Workers
+  class ResetPasswordJob < Workers::ApplicationJob
+    queue_as :urgent
 
-  def perform(user)
-    user.send_reset_password_instructions!
+    def perform(user)
+      user.send_reset_password_instructions!
+    end
   end
 end

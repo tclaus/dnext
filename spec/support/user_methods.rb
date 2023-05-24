@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User
-  alias_method :share_with_original, :share_with
+  alias share_with_original share_with
 
   def share_with(*args)
     disable_send_workers
@@ -54,8 +54,8 @@ class User
 
   def disable_send_workers
     RSpec.current_example&.example_group_instance&.instance_eval do
-      allow(SendPrivateJob).to receive(:perform_async)
-      allow(SendPublicJob).to receive(:perform_async)
+      allow(SendPrivateJob).to receive(:perform_later)
+      allow(SendPublicJob).to receive(:perform_later)
     end
   end
 end

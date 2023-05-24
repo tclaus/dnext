@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'oembed'
-require 'uri'
+require "oembed"
+require "uri"
 
 #
 # SECURITY NOTICE! CROSS-SITE SCRIPTING!
@@ -17,11 +17,11 @@ oembed_provider_list = [
   OEmbed::Providers::Flickr
 ]
 
-oembed_providers = YAML.load_file(Rails.root.join('config', 'oembed_providers.yml'))
+oembed_providers = YAML.load_file(Rails.root.join("config", "oembed_providers.yml"))
 
 oembed_providers.each do |_provider_name, provider|
-  oembed_provider = OEmbed::Provider.new(provider['endpoint'])
-  provider['urls']&.each do |provider_url|
+  oembed_provider = OEmbed::Provider.new(provider["endpoint"])
+  provider["urls"]&.each do |provider_url|
     oembed_provider << provider_url
   end
   oembed_provider_list << oembed_provider
