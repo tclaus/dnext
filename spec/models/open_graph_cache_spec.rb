@@ -60,7 +60,7 @@ describe OpenGraphCache do
       end
     end
 
-    context "a mixed case hostname" do
+    context "with a mixed case hostname" do
       it "downcases the hostname" do
         stub_request(:head, "http:///wetter.com")
           .with(headers: {
@@ -77,17 +77,43 @@ describe OpenGraphCache do
       end
     end
 
-    context "it gets the content language" do
-      it "reads the language" do
-        stub_request(:head, "http:///wetter.com")
-          .with(headers: {
-                  "Accept"     => "text/html",
-                  "User-Agent" => "OpenGraphReader/0.7.2 (+https://github.com/jhass/open_graph_reader)"
-                })
-          .to_return(status: 200, body: "", headers:
-            {"Set-Cookie" => "Dabgroup=A;path=/;Expires=Thu, 23 May 2019 16:12:01 GMT;httpOnly"})
+    context "with language detection" do
+      it "reads the language from provided data" do
+        expect(OpenGraphReader).to receive(:fetch!).with(URI.parse("https://example.com/article/123")).and_return(
+          double(
+            og: double(
+              description: "This is the article lead",
+              image:       double(url: "https://example.com/image/123.jpg"),
+              title:       "Some article",
+              type:        "article",
+              url:         "https://example.com/acticle/123-seo-foo",
+              video:       double(secure_url: "https://example.com/videos/123.html"),
+              locale:      double(content: "en")
+            )
+          )
+        )
+        ogc = OpenGraphCache.new(url: "https://example.com/article/123")
+        ogc.fetch_and_save_opengraph_data!
 
-        ogc = OpenGraphCache.new(url: "Wetter.com")
+        expect(ogc.locale).to eq "en"
+      end
+
+      it "reads the language" do
+        expect(OpenGraphReader).to receive(:fetch!).with(URI.parse("https://example.com/article/123")).and_return(
+          double(
+            og: double(
+              description: "This is the article lead",
+              image:       double(url: "https://example.com/image/123.jpg"),
+              title:       "Some article",
+              type:        "article",
+              url:         "https://example.com/acticle/123-seo-foo",
+              video:       double(secure_url: "https://example.com/videos/123.html"),
+              locale:      double(content: "en")
+            )
+          )
+        )
+        ogc = OpenGraphCache.new(url: "https://example.com/article/123")
+        ogc.fetch_and_save_opengraph_data!
 
         expect {
           ogc.detect_language_by_description
