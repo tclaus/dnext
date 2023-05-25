@@ -2,7 +2,7 @@
 
 module Workers
   class PostToServiceJob < Workers::ApplicationJob
-    sidekiq_options queue: :medium
+    queue_as :medium
 
     def perform(service_id, post_id, url)
       service = Service.find_by(id: service_id)

@@ -2,7 +2,7 @@
 
 module Workers
   class RecheckScheduledPods < Workers::ApplicationJob
-    sidekiq_options queue: :low
+    queue_as :low
 
     def perform
       Pod.check_scheduled!

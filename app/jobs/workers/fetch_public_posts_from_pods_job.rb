@@ -4,7 +4,7 @@ module Workers
   class FetchPublicPostsFromPodsJob < Workers::ApplicationJob
     include Diaspora::Logging
 
-    sidekiq_options queue: :medium
+    queue_as :low
 
     def perform
       retrieve_public_posts_for_all

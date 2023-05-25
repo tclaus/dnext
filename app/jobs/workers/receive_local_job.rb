@@ -2,7 +2,7 @@
 
 module Workers
   class ReceiveLocalJob < Workers::ApplicationJob
-    sidekiq_options queue: :high
+    queue_as :high
 
     def perform(object_class_string, object_id, recipient_user_ids)
       object = object_class_string.constantize.find(object_id)

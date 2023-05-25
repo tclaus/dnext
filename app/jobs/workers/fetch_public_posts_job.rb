@@ -3,7 +3,7 @@
 # Fetches public posts from a diaspora Id
 module Workers
   class FetchPublicPostsJob < Workers::ApplicationJob
-    sidekiq_options queue: :medium
+    queue_as :medium
 
     def perform(diaspora_id)
       Diaspora::Fetcher::Public.new.fetch!(diaspora_id)

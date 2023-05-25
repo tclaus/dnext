@@ -2,7 +2,7 @@
 
 module Workers
   class DeferredRetractionJob < Workers::ApplicationJob
-    sidekiq_options queue: :high
+    queue_as :high
 
     def perform(user_id, retraction_class, retraction_data, recipient_ids, opts)
       user = User.find(user_id)

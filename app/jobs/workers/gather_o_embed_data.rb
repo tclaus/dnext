@@ -2,7 +2,7 @@
 
 module Workers
   class GatherOEmbedData < Workers::ApplicationJob
-    sidekiq_options queue: :medium
+    queue_as :medium
 
     def perform(post_id, url, retry_count=1)
       post = Post.find(post_id)

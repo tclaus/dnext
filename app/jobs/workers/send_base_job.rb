@@ -3,6 +3,7 @@
 module Workers
   class SendBaseJob < Workers::ApplicationJob
     sidekiq_options queue: :medium, retry: 0
+    # Its possible to change this to active_job mechanics
 
     MAX_RETRIES = AppConfig.environment.sidekiq.retry.get.to_i
 

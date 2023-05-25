@@ -2,7 +2,7 @@
 
 module Workers
   class DeletePostFromServiceJob < Workers::ApplicationJob
-    sidekiq_options queue: :high
+    queue_as :high
 
     def perform(service_id, opts)
       service = Service.find_by(id: service_id)
