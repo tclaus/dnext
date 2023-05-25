@@ -110,27 +110,6 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
-    celluloid (0.17.4)
-      celluloid-essentials
-      celluloid-extras
-      celluloid-fsm
-      celluloid-pool
-      celluloid-supervision
-      timers (>= 4.1.1)
-    celluloid-essentials (0.20.5)
-      timers (>= 4.1.1)
-    celluloid-extras (0.20.5)
-      timers (>= 4.1.1)
-    celluloid-fsm (0.20.5)
-      timers (>= 4.1.1)
-    celluloid-io (0.17.3)
-      celluloid (>= 0.17.2)
-      nio4r (>= 1.1)
-      timers (>= 4.1.1)
-    celluloid-pool (0.20.5)
-      timers (>= 4.1.1)
-    celluloid-supervision (0.20.6)
-      timers (>= 4.1.1)
     chunky_png (1.4.0)
     citrus (3.0.2)
     cld3 (3.5.3)
@@ -216,12 +195,6 @@ GEM
     ethon (0.16.0)
       ffi (>= 1.15.0)
     execjs (2.8.1)
-    eye (0.10.0)
-      celluloid (~> 0.17.3)
-      celluloid-io (~> 0.17.0)
-      kostya-sigar (~> 2.0.0)
-      state_machines
-      thor
     factory_bot (6.2.1)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.2.0)
@@ -278,7 +251,6 @@ GEM
     json-schema-rspec (0.0.4)
       json-schema (~> 2.5)
       rspec
-    kostya-sigar (2.0.10)
     local_time (2.1.0)
     loofah (2.21.2)
       crass (~> 1.0.2)
@@ -454,7 +426,6 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
-    state_machines (0.5.0)
     stimulus-rails (1.2.1)
       railties (>= 6.0.0)
     sys-uname (1.2.3)
@@ -464,7 +435,6 @@ GEM
     tilt (2.1.0)
     timecop (0.9.6)
     timeout (0.3.2)
-    timers (4.3.5)
     toml-rb (2.1.2)
       citrus (~> 3.0, > 3.0)
     turbo-rails (1.4.0)
@@ -528,7 +498,6 @@ DEPENDENCIES
   diaspora_federation-json_schema (~> 0.3.0)
   dotenv (~> 2.7, >= 2.7.6)
   entypo-rails!
-  eye (~> 0.10.0)
   factory_bot_rails (~> 6.2)
   faker (~> 2.21)
   faraday (~> 2.7, >= 2.7.4)
