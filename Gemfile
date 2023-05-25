@@ -81,9 +81,6 @@ gem "toml-rb", "~> 2.1.0"
 # Taggable Posts
 gem "acts-as-taggable-on", "~> 9.0", ">= 9.0.1"
 
-# Process Management
-gem "eye", "~> 0.10.0"
-
 # Uris and HTTP
 gem "addressable", "~> 2.8", require: "addressable/uri"
 gem "faraday", "~> 2.7", ">= 2.7.4"
