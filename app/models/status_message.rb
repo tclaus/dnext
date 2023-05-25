@@ -15,8 +15,8 @@ class StatusMessage < Post
 
   has_many :photos, dependent: :destroy, foreign_key: :status_message_guid, primary_key: :guid
 
-  has_one :location, foreign_key: :status_message_id, dependent: :destroy
-  has_one :poll, foreign_key: :status_message_id, autosave: true, dependent: :destroy
+  has_one :location, dependent: :destroy
+  has_one :poll, autosave: true, dependent: :destroy
   has_many :poll_participations, through: :poll
 
   attr_accessor :oembed_url
@@ -102,11 +102,11 @@ class StatusMessage < Post
   end
 
   def queue_gather_oembed_data
-    Workers::GatherOEmbedData.perform_async(id, oembed_url)
+    Workers::GatherOEmbedData.perform_later(id, oembed_url)
   end
 
   def queue_gather_open_graph_data
-    Workers::GatherOpenGraphData.perform_async(id, open_graph_url)
+    Workers::GatherOpenGraphData.perform_later(id, open_graph_url)
   end
 
   def contains_oembed_url_in_text?

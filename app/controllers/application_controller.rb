@@ -21,13 +21,12 @@ class ApplicationController < ActionController::Base
   def set_diaspora_header
     headers["X-Diaspora-Version"] = AppConfig.version_string
 
-    if AppConfig.git_available?
-      headers["X-Git-Update"] = AppConfig.git_update if AppConfig.git_update.present?
-      headers["X-Git-Revision"] = AppConfig.git_revision if AppConfig.git_revision.present?
-    end
+    return unless AppConfig.git_available?
+
+    headers["X-Git-Update"] = AppConfig.git_update if AppConfig.git_update.present?
+    headers["X-Git-Revision"] = AppConfig.git_revision if AppConfig.git_revision.present?
   end
 
-  # rubocop:disable Naming/AccessorMethodName
   def set_locale(&action)
     if user_signed_in?
       locale = current_user.try(:language) || I18n.default_locale
@@ -38,7 +37,6 @@ class ApplicationController < ActionController::Base
     end
     I18n.with_locale(locale, &action)
   end
-  # rubocop:enable Naming/AccessorMethodName
 
   def redirect_unless_admin
     return if current_user.admin?

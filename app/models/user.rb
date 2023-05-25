@@ -38,7 +38,7 @@ class User < ApplicationRecord
     raise "Never destroy users!"
   end
 
-  validates :username, presence: true, uniqueness: true, format: {with: /\A[A-Za-z0-9_.\-]+\z/},
+  validates :username, presence: true, uniqueness: true, format: {with: /\A[A-Za-z0-9_.-]+\z/},
             length: {maximum: 32}, exclusion: {in: AppConfig.settings.username_blacklist}
 
   validates :unconfirmed_email, format: {with: Devise.email_regexp, allow_blank: true}
@@ -106,9 +106,9 @@ class User < ApplicationRecord
 
   # Ensure that the unconfirmed email isn't already someone's email
   def unconfirmed_email_quasiuniqueness
-    if User.exists?(["id != ? AND email = ?", id, unconfirmed_email])
-      errors.add(:unconfirmed_email, I18n.t("errors.messages.taken"))
-    end
+    return unless User.exists?(["id != ? AND email = ?", id, unconfirmed_email])
+
+    errors.add(:unconfirmed_email, I18n.t("errors.messages.taken"))
   end
 
   def guard_unconfirmed_email
@@ -132,9 +132,9 @@ class User < ApplicationRecord
 
     self.serialized_private_key = OpenSSL::PKey::RSA.generate(key_size).to_s if serialized_private_key.blank?
 
-    if person && person.serialized_public_key.blank?
-      person.serialized_public_key = OpenSSL::PKey::RSA.new(serialized_private_key).public_key.to_s
-    end
+    return unless person && person.serialized_public_key.blank?
+
+    person.serialized_public_key = OpenSSL::PKey::RSA.new(serialized_private_key).public_key.to_s
   end
 
   def no_person_with_same_username
@@ -249,17 +249,17 @@ class User < ApplicationRecord
   end
 
   def strip_and_downcase_username
-    if username.present?
-      username.strip!
-      username.downcase!
-    end
+    return unless username.present?
+
+    username.strip!
+    username.downcase!
   end
 
   def strip_and_downcase_email
-    if email.present?
-      email.strip!
-      email.downcase!
-    end
+    return unless email.present?
+
+    email.strip!
+    email.downcase!
   end
 
   def set_current_language
@@ -299,10 +299,10 @@ class User < ApplicationRecord
   end
 
   def update_post(post, post_hash={})
-    if owns? post
-      post.update_attributes(post_hash)
-      dispatch_post(post)
-    end
+    return unless owns? post
+
+    post.update_attributes(post_hash)
+    dispatch_post(post)
   end
 
   def add_to_streams(post, aspects_to_insert)
@@ -339,13 +339,13 @@ class User < ApplicationRecord
     return unless job.present?
 
     pref = job.to_s.gsub("Workers::Mail::", "").underscore
-    job.perform_async(*args) if disable_mail == false && !user_preferences.exists?(email_type: pref)
+    job.perform_later(*args) if disable_mail == false && !user_preferences.exists?(email_type: pref)
   end
 
   def send_confirm_email
     return if unconfirmed_email.blank?
 
-    Workers::Mail::ConfirmEmail.perform_async(id)
+    Workers::Mail::ConfirmEmail.perform_later(id)
   end
 
   ######### Posts and Such ###############

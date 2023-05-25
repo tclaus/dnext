@@ -2,7 +2,7 @@
 
 class HomeController < ApplicationController
   def show
-    partial_dir = Rails.root.join("app", "views", "home")
+    partial_dir = Rails.root.join("app/views/home")
     if user_signed_in?
       redirect_to public_stream_path # remove public stream and redirect to users stream path
     elsif partial_dir.join("_show.html.haml").exist? ||

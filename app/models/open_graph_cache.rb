@@ -6,7 +6,7 @@ class OpenGraphCache < ApplicationRecord
   validates :image, presence: true
   validates :url, presence: true
 
-  has_many :posts
+  has_many :posts, dependent: :nullify
 
   def image
     if AppConfig.privacy.camo.proxy_opengraph_thumbnails?
@@ -48,6 +48,8 @@ class OpenGraphCache < ApplicationRecord
   end
 
   def detect_language_by_description
+    return
+    # TODO: Language Service not implemented
     result = language_service.language_for_text(description) if description.present?
     self.locale = result.language.to_s.split("_").first if result.present? && result.reliable?
   end
@@ -56,5 +58,9 @@ class OpenGraphCache < ApplicationRecord
     return locale.content.split("_").first unless locale.nil?
 
     locale
+  end
+
+  def language_service
+    @language_service ||= LanguageService.new
   end
 end

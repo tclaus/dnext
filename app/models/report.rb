@@ -30,15 +30,15 @@ class Report < ApplicationRecord
   end
 
   def entry_does_not_exist
-    if Report.where(item_id: item_id, item_type: item_type).exists?(user_id: user_id)
-      errors[:base] << "You cannot report the same post twice."
-    end
+    return unless Report.where(item_id: item_id, item_type: item_type).exists?(user_id: user_id)
+
+    errors[:base] << "You cannot report the same post twice."
   end
 
   def post_or_comment_does_exist
-    if Post.find_by_id(item_id).nil? && Comment.find_by_id(item_id).nil?
-      errors[:base] << "Post or comment was already deleted or doesn't exists."
-    end
+    return unless Post.find_by_id(item_id).nil? && Comment.find_by_id(item_id).nil?
+
+    errors[:base] << "Post or comment was already deleted or doesn't exists."
   end
 
   def destroy_reported_item
@@ -82,6 +82,6 @@ class Report < ApplicationRecord
   end
 
   def send_report_notification
-    # Workers::Mail::ReportWorker.perform_async(id) #TODO: Send notification
+    # Workers::Mail::ReportWorker.perform_later(id) #TODO: Send notification
   end
 end

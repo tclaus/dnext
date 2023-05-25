@@ -52,6 +52,7 @@ Metrics/BlockLength:
   Exclude:
     - "config/**/*.rb"
     - "spec/**/*.rb"
+  AllowedMethods: ['describe', 'context', 'it']
 
 # No space makes the method definition shorter and differentiates
 # from a regular assignment.
