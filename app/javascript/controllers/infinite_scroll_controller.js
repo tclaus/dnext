@@ -7,7 +7,6 @@ export default class extends Controller {
         let options = {
             rootMargin: '200px',
         }
-
         this.intersectionObserver = new IntersectionObserver(entries => this.processIntersectionEntries(entries), options)
     }
 
