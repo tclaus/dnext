@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
 
     return unless AppConfig.git_available?
 
-    headers["X-Git-Update"] = AppConfig.git_update if AppConfig.git_update.present?
+    headers["X-Git-Update"]   = AppConfig.git_update if AppConfig.git_update.present?
     headers["X-Git-Revision"] = AppConfig.git_revision if AppConfig.git_revision.present?
   end
 
@@ -78,7 +78,8 @@ class ApplicationController < ActionController::Base
   # @param [Pagy] pagy
   # @return [String] A html tag with a next marker
   def countless_stream_next_tag(pagy)
-    "<a href='#{request.path}?#{pagy.vars[:page_param]}=#{pagy.vars[:page].to_i + 1}' rel='next'>Next</a>"
+    "<a href='#{request.path}?#{pagy.vars[:page_param]}=#{pagy.vars[:page].to_i + 1}' class='stream_pagination_links'
+        rel='next'>Next</a>"
       .html_safe # rubocop:disable Rails/OutputSafety
   end
 end
