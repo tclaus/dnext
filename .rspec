@@ -1,2 +1,2 @@
---require spec_helper
---require fixture_builder
+--color
+--require rails_helper

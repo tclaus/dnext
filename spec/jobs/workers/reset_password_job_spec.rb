@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Workers::ResetPasswordJob do
   it "sends password reset instructions" do
     user = create(:user)

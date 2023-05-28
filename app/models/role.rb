@@ -9,7 +9,7 @@ class Role < ApplicationRecord
   scope :admins, -> { where(name: "admin") }
   scope :moderators, -> { where(name: %w[moderator admin]) }
 
-  def self.is_admin?(person)
+  def self.admin?(person)
     exists?(person_id: person.id, name: "admin")
   end
 

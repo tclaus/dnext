@@ -249,14 +249,14 @@ class User < ApplicationRecord
   end
 
   def strip_and_downcase_username
-    return unless username.present?
+    return if username.blank?
 
     username.strip!
     username.downcase!
   end
 
   def strip_and_downcase_email
-    return unless email.present?
+    return if email.blank?
 
     email.strip!
     email.downcase!
@@ -271,18 +271,15 @@ class User < ApplicationRecord
   end
 
   def admin?
-    # TODO: return if admin
-    false
+    Role.admin?(person)
   end
 
   def moderator?
-    # TODO: return if moderator
-    false
+    Role.moderator?(person)
   end
 
   def podmin?
-    # TODO: return if podmin
-    true
+    username == AppConfig.admins.account
   end
 
   ######## Posting ########
@@ -336,7 +333,7 @@ class User < ApplicationRecord
 
   ######### Mailer #######################
   def mail(job, *args)
-    return unless job.present?
+    return if job.blank?
 
     pref = job.to_s.gsub("Workers::Mail::", "").underscore
     job.perform_later(*args) if disable_mail == false && !user_preferences.exists?(email_type: pref)

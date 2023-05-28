@@ -14,46 +14,46 @@ describe Role do
       expect(role.errors.full_messages).to include "Person must exist"
     end
 
-    it { should validate_uniqueness_of(:name).scoped_to(:person_id) }
-    it { should validate_inclusion_of(:name).in_array(%w[admin spotlight moderator]) }
+    it { is_expected.to validate_uniqueness_of(:name).scoped_to(:person_id) }
+    it { is_expected.to validate_inclusion_of(:name).in_array(%w[admin spotlight moderator]) }
   end
 
   describe "associations" do
-    it { should belong_to(:person) }
+    it { is_expected.to belong_to(:person) }
   end
 
   describe "scopes" do
     describe ".admins" do
       it "includes admin roles" do
-        expect(Role.admins).to match_array([admin_role])
+        expect(Role.admins).to contain_exactly(admin_role)
       end
     end
 
     describe ".moderators" do
-      it "should include admins" do
+      it "includes admins" do
         expect(Role.moderators).to include(admin_role)
       end
 
-      it "should include moderators" do
+      it "includes moderators" do
         expect(Role.moderators).to include(moderator_role)
       end
     end
   end
 
-  describe ".is_admin?" do
+  describe ".admin?" do
     it "defaults to false" do
-      expect(Role.is_admin?(person)).to be false
+      expect(Role.admin?(person)).to be false
     end
 
     context "when the person is an admin" do
       it "is true" do
-        expect(Role.is_admin?(admin)).to be true
+        expect(Role.admin?(admin)).to be true
       end
     end
 
     context "when the person is a moderator" do
       it "is false" do
-        expect(Role.is_admin?(moderator)).to be false
+        expect(Role.admin?(moderator)).to be false
       end
     end
   end

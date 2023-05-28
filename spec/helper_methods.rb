@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require Rails.root.join("spec", "support", "inlined_jobs")
+require Rails.root.join("spec/support/inlined_jobs")
 
 module HelperMethods
   def connect_users_with_aspects(u1, u2)
