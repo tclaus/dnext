@@ -84,6 +84,9 @@ RSpec.configure do |config|
     $process_queue = false
   end
 
+  config.fixture_path = Rails.root.join("spec", "fixtures")
+  config.global_fixtures = :all
+
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.

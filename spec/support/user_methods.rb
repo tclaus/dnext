@@ -5,7 +5,6 @@ class User
 
   def share_with(*args)
     disable_send_workers
-
     inlined_jobs do
       share_with_original(*args)
     end

@@ -36,14 +36,14 @@ def create_basic_users
   peter.contacts.create!(person: alice.person, aspects: [peters_aspect], sharing: false, receiving: true)
 end
 
-FixtureBuilder.configure do |fbuilder|
-  # rebuild fixtures automatically when these files change:
-  fbuilder.files_to_check += Dir[
-    "app/models/*.rb", "lib/**/*.rb", "spec/factories/*.rb", "spec/support/fixture_builder.rb"
-  ] - ["lib/diaspora/exporter.rb"]
-
-  # now declare objects
-  fbuilder.factory do
-    create_basic_users
-  end
-end
+# FixtureBuilder.configure do |fbuilder|
+#   # rebuild fixtures automatically when these files change:
+#   fbuilder.files_to_check += Dir[
+#     "app/models/*.rb", "lib/**/*.rb", "spec/factories/*.rb", "spec/support/fixture_builder.rb"
+#   ] - ["lib/diaspora/exporter.rb"]
+#
+#   # now declare objects
+#   fbuilder.factory do
+#     create_basic_users
+#   end
+# end
