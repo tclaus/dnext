@@ -2,16 +2,15 @@
 
 class User
   module Connecting
-
     # This will create a contact on the side of the sharer and the sharee.
     # @param [Person] person The person to start sharing with.
     # @param [Aspect] aspect The aspect to add them to.
     # @return [Contact] The newly made contact for the passed in person.
     def share_with(person, aspect)
-      return if blocks.where(person_id: person.id).exists?
+      return if blocks.exists?(person_id: person.id)
 
       contact = contacts.find_or_initialize_by(person_id: person.id)
-      return false unless contact.valid?
+      return nil unless contact.valid?
 
       needs_dispatch = !contact.receiving?
       contact.receiving = true
@@ -34,6 +33,7 @@ class User
 
       if contact.person.local?
         raise "FATAL: user entry is missing from the DB. Aborting" if contact.person.owner.nil?
+
         contact.person.owner.disconnected_by(contact.user.person)
       else
         Diaspora::Federated::ContactRetraction.for(contact).defer_dispatch(self)
@@ -46,7 +46,9 @@ class User
 
     def disconnected_by(person)
       logger.info "event=disconnected_by user=#{diaspora_handle} target=#{person.diaspora_handle}"
-      contact_for(person).try { |contact| disconnect_contact(contact, direction: :sharing, destroy: !contact.receiving) }
+      contact_for(person).try {|contact|
+        disconnect_contact(contact, direction: :sharing, destroy: !contact.receiving)
+      }
     end
 
     private

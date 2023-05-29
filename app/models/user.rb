@@ -62,10 +62,6 @@ class User < ApplicationRecord
     User.joins(:contacts).where(contacts: {person_id: person.id})
   end
 
-  def basic_profile_present?
-    tag_followings.any? || profile[:image_url]
-  end
-
   ### Helpers ############
   def self.build(opts={})
     user = User.new(opts.except(:person, :id))
