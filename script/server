@@ -96,9 +96,6 @@ fi
 
 os=$(uname -s)
 vars=$(bin/bundle exec ruby ./script/get_config.rb \
-  single_process_mode=environment.single_process_mode? \
-  embed_sidekiq_worker=server.embed_sidekiq_worker \
-  workers=server.sidekiq_workers \
   redis_url=environment.redis \
   | grep -vE "is not writable|as your home directory temporarily"
 )
@@ -151,8 +148,6 @@ application, run:
 fi
 
 # Check if redis is running
-if [ "$single_process_mode" = "false" ]
-then
   if [ -n "$redis_url" ]
   then
     redis_param="url: '$redis_url'"
@@ -161,7 +156,6 @@ then
   then
     fatal "Can't connect to redis. Please check if it's running and if environment.redis is configured correctly in $CONFIG_FILE."
   fi
-fi
 
 # Check for old curl versions (see https://github.com/diaspora/diaspora/issues/4202)
 if [ `curl -V | grep AsynchDNS | wc -l` -ne 1 ]
@@ -196,17 +190,7 @@ if [ -n "$PORT" ]
 then
   printf "on port $PORT "
 fi
-if [ "$embed_sidekiq_worker" = "true" ]
-then
-  echo "with a Sidekiq worker embedded into puma."
-  workers=0
-elif [ "$single_process_mode" = "true" ]
-then
-  echo "with job processing inside the request cycle."
-  workers=0
-else
-  echo "with $workers Sidekiq worker(s)."
-fi
+
 echo ""
 echo "You should run puma as systemctl service."
 
