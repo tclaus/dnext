@@ -11,7 +11,6 @@ defaults:
     certificate_authorities:
     redis:
     require_ssl: true
-    single_process_mode: false
     sidekiq:
       concurrency: 5
       retry: 10
@@ -45,9 +44,6 @@ defaults:
     pid: "tmp/pids/web.pid"
     stderr_log:
     stdout_log:
-    unicorn_worker: 2
-    unicorn_timeout: 90
-    embed_sidekiq_worker: false
     sidekiq_workers: 1
   map:
     mapbox:
@@ -174,13 +170,10 @@ development:
   environment:
     assets:
       serve: true
-    single_process_mode: true
     require_ssl: false
     logging:
       debug:
         sql: true
-  server:
-    unicorn_worker: 1
   settings:
     autofollow_on_join: false
     autofollow_on_join_user: ''
@@ -190,7 +183,6 @@ production:
 test:
   environment:
     url: 'http://localhost:9887/'
-    single_process_mode: true
     require_ssl: false
     assets:
       serve: true

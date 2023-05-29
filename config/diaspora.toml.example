@@ -54,14 +54,6 @@
 ## Do not change this default unless you are sure!
 #require_ssl = true
 
-## Single-process mode (default=false).
-## If set to true, Diaspora will work with just the appserver (puma by
-## default) running. However, this makes it quite slow as intensive jobs
-## must be run all the time inside the request cycle. We strongly
-## recommended you leave this disabled for production setups.
-## Set to true to enable.
-#single_process_mode = false
-
 ## Set redirect URL for an external image host (Amazon S3 or other).
 ## If hosting images for your pod on an external server (even your own),
 ## add its URL here. All requests made to images under /uploads/images
@@ -173,10 +165,6 @@
 ## Write puma stderr and stdout log.
 #stderr_log = "log/unicorn-stderr.log"
 #stdout_log = "log/unicorn-stdout.log"
-
-## Embed a Sidekiq worker inside the puma process (default=false).
-## Useful for minimal Heroku setups.
-#embed_sidekiq_worker = false
 
 ## Number of Sidekiq worker processes (default=1).
 ## In most cases it is better to
