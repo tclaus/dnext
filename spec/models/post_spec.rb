@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Post, type: :model do
   describe "scopes" do
     describe ".owned_or_visible_by_user" do
@@ -44,7 +42,7 @@ describe Post, type: :model do
       it "returns public and private posts from any pod" do
         post1 = FactoryBot.create(:status_message, author: alice.person, public: true)
         post2 = FactoryBot.create(:status_message, author: bob.person, public: false)
-        expect(Post.all_not_blocked_pod.ids).to match_array([post1.id, post2.id])
+        expect(Post.all_not_blocked_pod.ids).to contain_exactly(post1.id, post2.id)
       end
 
       it "returns public and private posts from not blocked pods" do
@@ -53,7 +51,7 @@ describe Post, type: :model do
         blocked_pod = FactoryBot.create(:pod, blocked: true)
         user_from_blocked_pod = FactoryBot.create(:person, pod: blocked_pod)
         FactoryBot.create(:status_message, author: user_from_blocked_pod, public: true)
-        expect(Post.all_not_blocked_pod.ids).to match_array([post2.id])
+        expect(Post.all_not_blocked_pod.ids).to contain_exactly(post2.id)
       end
     end
 
@@ -62,7 +60,7 @@ describe Post, type: :model do
         post1 = FactoryBot.create(:status_message, author: alice.person, public: true)
         post2 = FactoryBot.create(:status_message, author: bob.person, public: true)
         post3 = FactoryBot.create(:status_message, author: eve.person, public: true)
-        expect(Post.all_public.ids).to match_array([post1.id, post2.id, post3.id])
+        expect(Post.all_public.ids).to contain_exactly(post1.id, post2.id, post3.id)
       end
 
       it "doesn't include any private posts" do
@@ -85,7 +83,7 @@ describe Post, type: :model do
       it "includes all public posts from local" do
         post1 = FactoryBot.create(:status_message, author: alice.person, public: true)
         post2 = FactoryBot.create(:status_message, author: bob.person, public: true)
-        expect(Post.all_local_public.ids).to match_array([post1.id, post2.id])
+        expect(Post.all_local_public.ids).to contain_exactly(post1.id, post2.id)
       end
 
       it "doesn't include any posts from other pods" do
@@ -94,7 +92,7 @@ describe Post, type: :model do
         FactoryBot.create(:status_message, author: alice.person, public: true)
         FactoryBot.create(:status_message, author: bob.person, public: true)
         post_from_extern = FactoryBot.create(:status_message, author: external_person, public: true)
-        expect(Post.all_local_public.ids).not_to match_array([post_from_extern.id])
+        expect(Post.all_local_public.ids).not_to contain_exactly(post_from_extern.id)
       end
     end
 
@@ -311,26 +309,26 @@ describe Post, type: :model do
       it "returns the author to ensure local delivery" do
         lonely_user = FactoryBot.create(:user)
         lonely_post = lonely_user.post(:status_message, text: "anyone?", public: true)
-        expect(lonely_post.subscribers).to match_array([lonely_user.person])
+        expect(lonely_post.subscribers).to contain_exactly(lonely_user.person)
       end
 
       it "returns all a users contacts if the post is public" do
         second_aspect = user.aspects.create(name: "winners")
         user.share_with(bob.person, second_aspect)
 
-        expect(post.subscribers).to match_array([alice.person, bob.person, user.person])
+        expect(post.subscribers).to contain_exactly(alice.person, bob.person, user.person)
       end
 
       it "adds resharers to subscribers" do
         FactoryBot.create(:reshare, root: post, author: eve.person)
 
-        expect(post.subscribers).to match_array([alice.person, eve.person, user.person])
+        expect(post.subscribers).to contain_exactly(alice.person, eve.person, user.person)
       end
 
       it "adds participants to subscribers" do
         eve.participate!(post)
 
-        expect(post.subscribers).to match_array([alice.person, eve.person, user.person])
+        expect(post.subscribers).to contain_exactly(alice.person, eve.person, user.person)
       end
     end
   end

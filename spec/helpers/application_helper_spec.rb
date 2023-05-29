@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 RSpec.describe ApplicationHelper do
   it "Generate peoples links for hovercards" do
     link = link_to_person(guid: "123", css_class: "a_class") do

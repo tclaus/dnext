@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
 describe "PostLanguageService" do
   describe "#detect_post_language" do
     it "sets a language Id for post" do

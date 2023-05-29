@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
 require "shared_behaviours/shareable"
 require "shared_behaviours/mentioned_container"
 require "shared_behaviours/reference_target"
@@ -28,7 +27,7 @@ describe StatusMessage, type: :model do
         FactoryBot.create(:status_message, text: @test_string)
         FactoryBot.create(:status_message, public: true)
 
-        expect(StatusMessage.where_person_is_mentioned(@bob).ids).to match_array([post1.id, post2.id])
+        expect(StatusMessage.where_person_is_mentioned(@bob).ids).to contain_exactly(post1.id, post2.id)
       end
     end
 
@@ -60,7 +59,7 @@ describe StatusMessage, type: :model do
           test_tag_id = ActsAsTaggableOn::Tag.where(name: "test").first.id
 
           expect(StatusMessage.public_any_tag_stream([@tag_id, test_tag_id]))
-            .to match_array([@status_message1, status_message])
+            .to contain_exactly(@status_message1, status_message)
         end
       end
 
@@ -150,7 +149,7 @@ describe StatusMessage, type: :model do
       sm.author.owner.share_with(eve.person, sm.author.owner.aspects.first)
       sm.save!
 
-      expect(sm.people_allowed_to_be_mentioned).to match_array([alice.person_id, eve.person_id])
+      expect(sm.people_allowed_to_be_mentioned).to contain_exactly(alice.person_id, eve.person_id)
     end
 
     it "returns :all for public posts" do
@@ -191,7 +190,7 @@ describe StatusMessage, type: :model do
     end
 
     it "associates different-case tags to the same tag entry" do
-      assert_equal ActsAsTaggableOn.force_lowercase, true
+      expect(ActsAsTaggableOn.force_lowercase).to eq(true)
 
       msg_lc = FactoryBot.build(:status_message, text: "#newhere")
       msg_uc = FactoryBot.build(:status_message, text: "#NewHere")

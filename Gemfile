@@ -157,6 +157,6 @@ group :test do
   gem "diaspora_federation-json_schema", "~> 0.3.0"
   gem "json-schema-rspec", "0.0.4"
   gem "rspec-json_expectations", "~> 2.1"
-  gem "shoulda-matchers", "~> 5.1"
+  gem "shoulda-matchers", "~> 5.3"
   gem "webmock", "3.14.0", require: false
 end

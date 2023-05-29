@@ -4,8 +4,6 @@
 #   licensed under the Affero General Public License version 3 or later.  See
 #   the COPYRIGHT file.
 
-require 'rails_helper'
-
 describe User::Connecting, type: :model do
   let(:aspect1) { alice.aspects.first }
   let(:aspect2) { alice.aspects.create(name: "other") }
@@ -98,7 +96,7 @@ describe User::Connecting, type: :model do
         local_leia.disconnect(contact)
       end
 
-      it "should remove the contact from all aspects they are in" do
+      it "removes the contact from all aspects they are in" do
         contact = alice.contact_for(bob.person)
         alice.add_contact_to_aspect(contact, aspect2)
 
@@ -201,7 +199,7 @@ describe User::Connecting, type: :model do
       expect(alice.contact_for(eve.person)).to be_receiving
     end
 
-    it "should mark the corresponding notification as 'read'" do
+    it "marks the corresponding notification as 'read'" do
       FactoryBot.create(:notification, target: eve.person, recipient: alice, type: "Notifications::StartedSharing")
       expect(Notifications::StartedSharing.find_by(recipient_id: alice.id, target: eve.person).unread).to be_truthy
 

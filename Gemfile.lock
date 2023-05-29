@@ -522,7 +522,7 @@ DEPENDENCIES
   rubocop-rspec (~> 2.11, >= 2.11.1)
   ruby-oembed (~> 0.15.0)
   sassc-rails (~> 2.1, >= 2.1.2)
-  shoulda-matchers (~> 5.1)
+  shoulda-matchers (~> 5.3)
   sidekiq (~> 7.1)
   sidekiq-cron (~> 1.10, >= 1.10.1)
   sprockets-rails

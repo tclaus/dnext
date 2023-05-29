@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 RSpec.describe PostsHelper, type: :helper do
   describe "#post_page_title" do
     before do
