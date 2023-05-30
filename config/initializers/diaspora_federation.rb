@@ -93,14 +93,14 @@ DiasporaFederation.configure do |config|
     end
 
     on :queue_public_receive do |xml, legacy=false|
-      ReceivePublicJob.perform_later(xml, legacy)
+      Workers::ReceivePublicJob.perform_later(xml, legacy)
     end
 
     on :queue_private_receive do |guid, xml, legacy=false|
       person = Person.find_by(guid: guid)
 
       (person.present? && person.owner_id.present?).tap do |user_found|
-        ReceivePrivateJob.perform_later(person.owner.id, xml, legacy) if user_found
+        Workers::ReceivePrivateJob.perform_later(person.owner.id, xml, legacy) if user_found
       end
     end
 

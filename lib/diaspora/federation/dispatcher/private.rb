@@ -9,7 +9,7 @@ module Diaspora
         def deliver_to_remote(people)
           return if people.empty?
 
-          SendPrivateJob.perform_later(sender.id, entity.to_s, targets(people))
+          Workers::SendPrivateJob.perform_later(sender.id, entity.to_s, targets(people))
         end
 
         def targets(people)

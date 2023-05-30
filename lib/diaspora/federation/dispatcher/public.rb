@@ -16,7 +16,7 @@ module Diaspora
 
           return if targets.empty?
 
-          SendPublicJob.perform_later(sender.id, entity.to_s, targets, magic_envelope.to_xml)
+          Workers::SendPublicJob.perform_later(sender.id, entity.to_s, targets, magic_envelope.to_xml)
         end
 
         def target_urls(people)

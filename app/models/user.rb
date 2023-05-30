@@ -241,7 +241,7 @@ class User < ApplicationRecord
   alias send_reset_password_instructions! send_reset_password_instructions
 
   def send_reset_password_instructions
-    ResetPasswordJob.perform_later(self)
+    Workers::ResetPasswordJob.perform_later(self)
   end
 
   def strip_and_downcase_username

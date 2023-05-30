@@ -2,6 +2,8 @@
 
 class User
   module Profile
+    # TODO: test here - can this be called?
+    # Better: Write this as service files?
     def update_profile(params)
       if photo = params.delete(:photo)
         photo.update(pending: false) if photo.pending

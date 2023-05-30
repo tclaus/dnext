@@ -59,8 +59,8 @@ class ApplicationController < ActionController::Base
     new_user_session_path
   end
 
+  # If getting started is active AND the users has not completed the getting_started page
   def current_user_redirect_path
-    # If getting started is active AND the users has not completed the getting_started page
     if current_user.getting_started? && !current_user.basic_profile_present?
       getting_started_path
     else

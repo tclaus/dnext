@@ -12,8 +12,7 @@ module Diaspora
         return if pod&.blocked
         return if pod&.status != Pod.no_errors
 
-        # TODO: Create a job for this
-        FetchPublicPostsJob.perform_later(pod)
+        Workers::FetchPublicPostsJob.perform_later(pod)
       end
 
       def fetch!(pod)
