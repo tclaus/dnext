@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 
-class User
-  module Querying
+module UserServices
+  class Querying
+    # @param [User] user
+    def initialize(user)
+      @user = user
+    end
+
     def find_visible_shareable_by_id(klass, id, opts={})
       key = (opts.delete(:key) || :id)
-      find_visible_shareable_by_id = EvilQuery::VisibleShareableById.new(self, klass, key, id, opts)
+      find_visible_shareable_by_id = EvilQuery::VisibleShareableById.new(user, klass, key, id, opts)
       find_visible_shareable_by_id.post!
     end
 
@@ -15,12 +20,8 @@ class User
            .limit(opts[:limit]).order(opts[:order_with_table])
     end
 
-    # @param [TrueClass] with_order
-    def posts_from(person, with_order: true)
-      base_query = Post.from_person_visible_by_user(self, person)
-      return base_query.order("posts.created_at desc") if with_order
-
-      base_query
+    def visible_shareable_ids(klass, opts={})
+      visible_ids_from_sql(klass, prep_opts(klass, opts))
     end
 
     def photos_from(person, opts={})
@@ -32,13 +33,13 @@ class User
     def contact_for(person)
       return nil unless person
 
-      contact_for_person_id(person.id)
+      user.contact_for_person_id(person.id)
     end
 
     def block_for(person)
       return nil unless person
 
-      blocks.find_by(person_id: person.id)
+      user.blocks.find_by(person_id: person.id)
     end
 
     def aspects_with_shareable(base_class_name_or_class, shareable_id)
@@ -50,17 +51,17 @@ class User
 
     def contact_for_person_id(person_id)
       Contact.includes(person: :profile)
-             .find_by(user_id: id, person_id: person_id)
+             .find_by(user_id: user.id, person_id: person_id)
     end
 
     # @param [Person] person
     # @return [Boolean] whether person is a contact of this user
     def has_contact_for?(person)
-      Contact.exists?(user_id: id, person_id: person.id)
+      Contact.exists?(user_id: user.id, person_id: person.id)
     end
 
     def people_in_aspects(requested_aspects, opts={})
-      allowed_aspects = aspects & requested_aspects
+      allowed_aspects = user.aspects & requested_aspects
       aspect_ids = allowed_aspects.map(&:id)
 
       people = Person.in_aspects(aspect_ids)
@@ -77,18 +78,11 @@ class User
       contact_for(person).aspects
     end
 
-    def posts_from(person, with_order=true)
+    def posts_from(person, with_order: true)
       base_query = Post.from_person_visible_by_user(self, person)
       return base_query.order("posts.created_at desc") if with_order
 
       base_query
-    end
-
-    def photos_from(person, opts={})
-      opts = prep_opts(Photo, opts)
-      Photo.from_person_visible_by_user(self, person)
-           .by_max_time(opts[:max_time])
-           .limit(opts[:limit])
     end
 
     protected
@@ -111,5 +105,9 @@ class User
       opts[:max_time] ||= Time.zone.now + 1
       opts
     end
+
+    private
+
+    attr_reader :user
   end
 end

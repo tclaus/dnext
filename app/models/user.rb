@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  include Connecting
-  include Querying
-  include SocialActions
-
   # attr_accessor :plain_otp_secret
 
   # encrypts :otp_secret
@@ -167,6 +163,82 @@ class User < ApplicationRecord
       end
     end
     aq
+  end
+
+  def share_with(person, aspect)
+    UserServices::Connecting.new(self).share_with(person, aspect)
+  end
+
+  def disconnect(contact)
+    UserServices::Connecting.new(self).disconnect(contact)
+  end
+
+  def disconnected_by(person)
+    UserServices::Connecting.new(self).disconnected_by(person)
+  end
+
+  def comment!(target, text, opts={})
+    UserServices::SocialActions.new(self).comment!(target, text, opts)
+  end
+
+  def participate!(target, opts={})
+    UserServices::SocialActions.new(self).participate!(target, opts)
+  end
+
+  def participate_in_poll!(target, answer, opts={})
+    UserServices::SocialActions.new(self).participate_in_poll!(target, answer, opts)
+  end
+
+  def like!(target, opts={})
+    UserServices::SocialActions.new(self).like!(target, opts)
+  end
+
+  def like_comment!(target, opts={})
+    UserServices::SocialActions.new(self).like_comment!(target, opts)
+  end
+
+  def reshare!(target, opts={})
+    UserServices::SocialActions.new(self).reshare!(target, opts)
+  end
+
+  def find_visible_shareable_by_id(klass, id, opts={})
+    UserServices::Querying.new(self).find_visible_shareable_by_id(klass, id, opts)
+  end
+
+  def visible_shareables(klass, opts={})
+    UserServices::Querying.new(self).visible_shareables(klass, opts)
+  end
+
+  def posts_from(person, with_order: true)
+    UserServices::Querying.new(self).posts_from(person, with_order)
+  end
+
+  def photos_from(_person, opts={})
+    UserServices::Querying.new(self).photos_from(person(opts))
+  end
+
+  def contact_for(person)
+    UserServices::Querying.new(self).contact_for(person)
+  end
+
+  def block_for(person)
+    UserServices::Querying.new(self).block_for(person)
+  end
+
+  def aspects_with_shareable(base_class_name_or_class, shareable_id)
+    UserServices::Querying.new(self).aspects_with_shareable(base_class_name_or_class, shareable_id)
+  end
+
+  def contact_for_person_id(person_id)
+    UserServices::Querying.new(self).contact_for_person_id(person_id)
+  end
+
+  def people_in_aspects(requested_aspects, opts={})
+    UserServices::Querying.new(self).people_in_aspects(requested_aspects, opts)
+  end
+
+  def aspects_with_person(person)
+    UserServices::Querying.new(self).aspects_with_person(person)
   end
 
   def send_welcome_message

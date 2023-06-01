@@ -61,7 +61,9 @@ class ApplicationController < ActionController::Base
 
   # If getting started is active AND the users has not completed the getting_started page
   def current_user_redirect_path
-    if current_user.getting_started? && !current_user.basic_profile_present?
+    user_profile = UserServices::Profile.new(current_user)
+
+    if user_profile.onboard_user?
       getting_started_path
     else
       stream_path
