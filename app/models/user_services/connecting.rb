@@ -47,7 +47,7 @@ module UserServices
     end
 
     def disconnected_by(person)
-      contact_for(person).try {|contact|
+      user.contact_for(person).try {|contact|
         disconnect_contact(contact, direction: :sharing, destroy: !contact.receiving)
       }
     end

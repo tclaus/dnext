@@ -45,8 +45,8 @@ module UserServices
     def aspects_with_shareable(base_class_name_or_class, shareable_id)
       base_class_name = base_class_name_or_class
       base_class_name = base_class_name_or_class.base_class.to_s if base_class_name_or_class.is_a?(Class)
-      aspects.joins(:aspect_visibilities).where(aspect_visibilities: {shareable_id:   shareable_id,
-                                                                      shareable_type: base_class_name})
+      user.aspects.joins(:aspect_visibilities).where(aspect_visibilities: {shareable_id:   shareable_id,
+                                                                           shareable_type: base_class_name})
     end
 
     def contact_for_person_id(person_id)

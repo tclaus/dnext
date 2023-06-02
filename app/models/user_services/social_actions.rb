@@ -35,7 +35,7 @@ module UserServices
     def reshare!(target, opts={})
       raise I18n.t("reshares.create.error") if target.author.guid == user.guid
 
-      build_post(:reshare, root_guid: target.guid).tap do |reshare|
+      user.build_post(:reshare, root_guid: target.guid).tap do |reshare|
         reshare.text = opts[:text]
         reshare.save!
         update_or_create_participation!(target)

@@ -335,9 +335,9 @@ describe UserServices::Querying do
   end
 
   describe "#posts_from" do
-    before do
-      let(:user_charley) { create(:user) }
+    let(:user_charley) { create(:user) }
 
+    before do
       @aspect3 = user_charley.aspects.create(name: "bros")
 
       @public_message = user_charley.post(:status_message, text: "hey there", to: "all", public: true)
