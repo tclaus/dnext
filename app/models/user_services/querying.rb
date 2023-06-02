@@ -26,7 +26,7 @@ module UserServices
 
     def photos_from(person, opts={})
       opts = prep_opts(Photo, opts)
-      Photo.from_person_visible_by_user(self, person)
+      Photo.from_person_visible_by_user(user, person)
            .limit(opts[:limit])
     end
 
@@ -78,8 +78,10 @@ module UserServices
       contact_for(person).aspects
     end
 
+    # @param [Person] person
+    # @param [TrueClass] with_order
     def posts_from(person, with_order: true)
-      base_query = Post.from_person_visible_by_user(self, person)
+      base_query = Post.from_person_visible_by_user(user, person)
       return base_query.order("posts.created_at desc") if with_order
 
       base_query

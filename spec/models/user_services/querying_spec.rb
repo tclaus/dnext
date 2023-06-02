@@ -336,40 +336,41 @@ describe UserServices::Querying do
 
   describe "#posts_from" do
     before do
-      @user3 = create(:user)
-      @aspect3 = @user3.aspects.create(name: "bros")
+      let(:user_charley) { create(:user) }
 
-      @public_message = @user3.post(:status_message, text: "hey there", to: "all", public: true)
-      @private_message = @user3.post(:status_message, text: "hey there", to: @aspect3.id)
+      @aspect3 = user_charley.aspects.create(name: "bros")
+
+      @public_message = user_charley.post(:status_message, text: "hey there", to: "all", public: true)
+      @private_message = user_charley.post(:status_message, text: "hey there", to: @aspect3.id)
     end
 
     it "displays public posts for a non-contact" do
-      expect(alice.posts_from(@user3.person)).to include @public_message
+      expect(alice.posts_from(user_charley.person)).to include @public_message
     end
 
     it "does not display private posts for a non-contact" do
-      expect(alice.posts_from(@user3.person)).not_to include @private_message
+      expect(alice.posts_from(user_charley.person)).not_to include @private_message
     end
 
     it "displays private and public posts for a non-contact after connecting" do
-      connect_users(alice, @alices_aspect, @user3, @aspect3)
-      new_message = @user3.post(:status_message, text: "hey there", to: @aspect3.id)
+      connect_users(alice, @alices_aspect, user_charley, @aspect3)
+      new_message = user_charley.post(:status_message, text: "hey there", to: @aspect3.id)
 
       alice.reload
 
-      expect(alice.posts_from(@user3.person)).to include @public_message
-      expect(alice.posts_from(@user3.person)).to include new_message
+      expect(alice.posts_from(user_charley.person)).to include @public_message
+      expect(alice.posts_from(user_charley.person)).to include new_message
     end
 
     it "displays recent posts first" do
-      msg3 = @user3.post(:status_message, text: "hey there", to: "all", public: true)
-      msg4 = @user3.post(:status_message, text: "hey there", to: "all", public: true)
+      msg3 = user_charley.post(:status_message, text: "hey there", to: "all", public: true)
+      msg4 = user_charley.post(:status_message, text: "hey there", to: "all", public: true)
       msg3.created_at = Time.now + 10
       msg3.save!
       msg4.created_at = Time.now + 14
       msg4.save!
 
-      expect(alice.posts_from(@user3.person).map {|p| p.id }).to eq([msg4, msg3, @public_message].map {|p| p.id })
+      expect(alice.posts_from(user_charley.person).map {|p| p.id }).to eq([msg4, msg3, @public_message].map {|p| p.id })
     end
   end
 end

@@ -22,13 +22,13 @@ module Diaspora
 
         # scopes
         scope :with_visibility, lambda {
-          joins("LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = #{table_name}.id AND "\
+          joins("LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = #{table_name}.id AND " \
                 "share_visibilities.shareable_type = '#{base_class}'")
         }
 
         scope :with_aspects, lambda {
-          joins("LEFT OUTER JOIN aspect_visibilities ON aspect_visibilities.shareable_id = #{table_name}.id AND "\
-                " aspect_visibilities.shareable_type = '#{base_class}'")
+          joins("LEFT OUTER JOIN aspect_visibilities ON aspect_visibilities.shareable_id = #{table_name}.id AND  " \
+                "aspect_visibilities.shareable_type = '#{base_class}'")
         }
       end
       model.extend Diaspora::Shareable::QueryMethods
@@ -68,6 +68,8 @@ module Diaspora
         ).select("DISTINCT #{table_name}.*")
       end
 
+      # @param [User] user
+      # @param [Person] person
       def from_person_visible_by_user(user, person)
         return owned_by_user(user) if person == user.person
 

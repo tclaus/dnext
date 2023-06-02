@@ -22,11 +22,11 @@ module UserServices
       contact.save
 
       if needs_dispatch
-        Diaspora::Federation::Dispatcher.defer_dispatch(self, contact)
+        Diaspora::Federation::Dispatcher.defer_dispatch(user, contact)
         deliver_profile_update(subscriber_ids: [person.id]) unless person.local?
       end
 
-      Notifications::StartedSharing.where(recipient_id: id, target: person.id, unread: true)
+      Notifications::StartedSharing.where(recipient_id: user.id, target: person.id, unread: true)
                                    .update_all(unread: false)
 
       contact
@@ -38,7 +38,7 @@ module UserServices
 
         contact.person.owner.disconnected_by(contact.user.person)
       else
-        Diaspora::Federated::ContactRetraction.for(contact).defer_dispatch(self)
+        Diaspora::Federated::ContactRetraction.for(contact).defer_dispatch(user)
       end
 
       contact.aspect_memberships.delete_all

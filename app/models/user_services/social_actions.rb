@@ -33,7 +33,7 @@ module UserServices
     end
 
     def reshare!(target, opts={})
-      raise I18n.t("reshares.create.error") if target.author.guid == guid
+      raise I18n.t("reshares.create.error") if target.author.guid == user.guid
 
       build_post(:reshare, root_guid: target.guid).tap do |reshare|
         reshare.text = opts[:text]

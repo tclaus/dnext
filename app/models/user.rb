@@ -210,11 +210,11 @@ class User < ApplicationRecord
   end
 
   def posts_from(person, with_order: true)
-    UserServices::Querying.new(self).posts_from(person, with_order)
+    UserServices::Querying.new(self).posts_from(person, with_order: with_order)
   end
 
   def photos_from(_person, opts={})
-    UserServices::Querying.new(self).photos_from(person(opts))
+    UserServices::Querying.new(self).photos_from(person, opts)
   end
 
   def contact_for(person)
