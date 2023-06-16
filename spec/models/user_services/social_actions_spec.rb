@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-
-describe User::SocialActions, type: :model do
-  let(:status) { FactoryBot.create(:status_message, public: true, author: bob.person) }
+describe UserServices::SocialActions do
+  let(:status) { create(:status_message, public: true, author: bob.person) }
 
   describe "User#comment!" do
     it "sets the comment text" do
@@ -51,12 +49,12 @@ describe User::SocialActions, type: :model do
       alice.like!(status)
     end
 
-    it "should be able to like on one's own status" do
+    it "is able to like on one's own status" do
       like = bob.like!(status)
       expect(status.reload.likes.first).to eq(like)
     end
 
-    it "should be able to like on a contact's status" do
+    it "is able to like on a contact's status" do
       like = alice.like!(status)
       expect(status.reload.likes.first).to eq(like)
     end
@@ -71,7 +69,7 @@ describe User::SocialActions, type: :model do
   end
 
   describe "User#participate_in_poll!" do
-    let(:poll) { FactoryBot.create(:poll, status_message: status) }
+    let(:poll) { create(:poll, status_message: status) }
     let(:answer) { poll.poll_answers.first }
 
     it "federates" do

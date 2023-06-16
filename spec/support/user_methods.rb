@@ -53,8 +53,8 @@ class User
 
   def disable_send_workers
     RSpec.current_example&.example_group_instance&.instance_eval do
-      allow(SendPrivateJob).to receive(:perform_later)
-      allow(SendPublicJob).to receive(:perform_later)
+      allow(Workers::SendPrivateJob).to receive(:perform_later)
+      allow(Workers::SendPublicJob).to receive(:perform_later)
     end
   end
 end

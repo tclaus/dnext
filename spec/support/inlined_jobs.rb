@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "sidekiq/testing"
+
 module HelperMethods
   def inlined_jobs
     Sidekiq::Worker.clear_all

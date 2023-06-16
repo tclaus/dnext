@@ -21,7 +21,7 @@ module Diaspora
       end
 
       def self.defer_dispatch(sender, object, opts={})
-        DeferredDispatchJob.perform_later(sender.id, object.class.to_s, object.id, opts)
+        Workers::DeferredDispatchJob.perform_later(sender.id, object.class.to_s, object.id, opts)
       end
 
       def dispatch
@@ -69,9 +69,9 @@ module Diaspora
       def deliver_to_user_services
         case object
         when StatusMessage
-          each_service {|service| PostToServiceJob.perform_later(service.id, object.id, opts[:url]) }
+          each_service {|service| Workers::PostToServiceJob.perform_later(service.id, object.id, opts[:url]) }
         when Retraction
-          each_service {|service| DeletePostFromServiceJob.perform_later(service.id, opts) }
+          each_service {|service| Workers::DeletePostFromServiceJob.perform_later(service.id, opts) }
         end
       end
 

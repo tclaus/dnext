@@ -85,7 +85,7 @@ describe PostService do
       it "NonPublic if the post is private" do
         expect {
           PostService.new.find!(post.id)
-        }.to raise_error D Diaspora::Exceptions::NonPublic
+        }.to raise_error Diaspora::Exceptions::NonPublic
       end
 
       it "RecordNotFound if the post cannot be found" do

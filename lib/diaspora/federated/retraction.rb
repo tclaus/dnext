@@ -34,11 +34,11 @@ module Diaspora
 
       def defer_dispatch(user, include_target_author=true)
         subscribers = dispatch_subscribers(include_target_author)
-        DeferredRetractionJob.perform_later(user.id,
-                                            self.class.to_s,
-                                            data,
-                                            subscribers.map(&:id),
-                                            service_opts(user))
+        Workers::DeferredRetractionJob.perform_later(user.id,
+                                                     self.class.to_s,
+                                                     data,
+                                                     subscribers.map(&:id),
+                                                     service_opts(user))
       end
 
       def perform

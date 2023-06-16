@@ -4,11 +4,11 @@
 #   licensed under the Affero General Public License version 3 or later.  See
 #   the COPYRIGHT file.
 
-describe User::Connecting, type: :model do
-  let(:aspect1) { alice.aspects.first }
-  let(:aspect2) { alice.aspects.create(name: "other") }
+describe UserServices::Connecting do
+  let(:aspect_first) { alice.aspects.first }
+  let(:aspect_other) { alice.aspects.create(name: "other") }
 
-  let(:person) { FactoryBot.create(:person) }
+  let(:person) { create(:person) }
 
   describe "disconnecting" do
     describe "#disconnected_by" do
@@ -98,7 +98,7 @@ describe User::Connecting, type: :model do
 
       it "removes the contact from all aspects they are in" do
         contact = alice.contact_for(bob.person)
-        alice.add_contact_to_aspect(contact, aspect2)
+        alice.add_contact_to_aspect(contact, aspect_other)
 
         expect {
           alice.disconnect(contact)
@@ -175,7 +175,7 @@ describe User::Connecting, type: :model do
         allow(Diaspora::Federation::Dispatcher).to receive(:defer_dispatch).with(alice, instance_of(Profile))
         expect(Diaspora::Federation::Dispatcher).not_to receive(:defer_dispatch).with(alice, instance_of(Contact))
 
-        alice.share_with(eve.person, aspect2)
+        alice.share_with(eve.person, aspect_other)
       end
 
       it "delivers profile for remote persons" do
@@ -200,10 +200,10 @@ describe User::Connecting, type: :model do
     end
 
     it "marks the corresponding notification as 'read'" do
-      FactoryBot.create(:notification, target: eve.person, recipient: alice, type: "Notifications::StartedSharing")
+      create(:notification, target: eve.person, recipient: alice, type: "Notifications::StartedSharing")
       expect(Notifications::StartedSharing.find_by(recipient_id: alice.id, target: eve.person).unread).to be_truthy
 
-      alice.share_with(eve.person, aspect1)
+      alice.share_with(eve.person, aspect_first)
       expect(Notifications::StartedSharing.find_by(recipient_id: alice.id, target: eve.person).unread).to be_falsey
     end
   end

@@ -4,7 +4,7 @@ class LikesController < ApplicationController
   include ApplicationHelper
   include PostInteractionRender
 
-  before_action :authenticate_user!, except: :index
+  before_action :authenticate_user!
 
   rescue_from Diaspora::Exceptions::NonPublic do
     authenticate_user!

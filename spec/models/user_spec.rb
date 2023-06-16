@@ -81,7 +81,7 @@ describe User do
   describe "send password instructions" do
     it "sends instructions async" do
       user = create(:user)
-      assert_enqueued_with(job: ResetPasswordJob, args: [user]) do
+      assert_enqueued_with(job: Workers::ResetPasswordJob, args: [user]) do
         user.send_reset_password_instructions
       end
     end
